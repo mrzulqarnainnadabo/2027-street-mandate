@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <circle cx="100" cy="100" r="96" fill="#0f4d34"/>
+  <circle cx="100" cy="100" r="88" fill="#fdfaf2"/>
+  <circle cx="100" cy="100" r="84" fill="none" stroke="#c99a2e" stroke-width="2.5"/>
+  <path id="ring" d="M100,22 a78,78 0 1,1 0,156 a78,78 0 1,1 0,-156" fill="none"/>
+  <text fill="#0f4d34" font-family="Georgia,serif" font-size="7.2" font-weight="600" letter-spacing="0.8">
+    <textPath href="#ring" startOffset="2%">INITIATIVE FOR SUSTAINABLE EVOLUTION · YOUTH AND COMMUNITY</textPath>
+  </text>
+  <g transform="translate(100,105)">
+    <path d="M0,28 C-8,18 -18,8 -12,-8 C-20,-2 -22,12 -16,22 C-28,10 -26,-8 -14,-18 C-18,-28 -8,-36 0,-38 C8,-36 18,-28 14,-18 C26,-8 28,10 16,22 C22,12 20,-2 12,-8 C18,8 8,18 0,28 Z" fill="#1a6b45"/>
+    <path d="M0,28 L0,42 M-6,42 L6,42" stroke="#8B5A2B" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <ellipse cx="-10" cy="-8" rx="8" ry="10" fill="#2d8a5e" opacity="0.9"/>
+    <ellipse cx="10" cy="-6" rx="9" ry="11" fill="#2d8a5e" opacity="0.9"/>
+    <ellipse cx="0" cy="-18" rx="10" ry="12" fill="#3a9d6b"/>
+  </g>
+  <path d="M72,125 Q85,115 100,119 Q115,115 128,125 Q118,135 100,133 Q82,135 72,125" fill="#3b5bdb" opacity="0.85"/>
+  <text x="100" y="158" text-anchor="middle" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#0f4d34">ISEYC</text>
+</svg>
