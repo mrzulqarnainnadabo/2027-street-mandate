@@ -14,9 +14,9 @@ export default function Hero({ total, states }: { total: number; states: number 
         <img
           src={ISEYC_SEAL_SRC}
           alt="ISEYC"
-          width={80}
-          height={80}
-          className="h-20 w-20 rounded-full bg-white object-contain shadow-md ring-2 ring-gold-400/50"
+          width={88}
+          height={88}
+          className="h-[88px] w-[88px] rounded-full bg-white object-contain p-0.5 shadow-md ring-2 ring-gold-400/50"
         />
       </motion.div>
 
@@ -67,6 +67,16 @@ export default function Hero({ total, states }: { total: number; states: number 
         </div>
       </motion.div>
 
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="mx-auto mt-4 max-w-sm text-[11px] text-forest-600/70"
+      >
+        Goal: at least one clear demand from every state before 2027.
+        {states < 37 ? ` ${37 - states} states still silent.` : " All states heard."}
+      </motion.p>
+
       <motion.a
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -74,7 +84,7 @@ export default function Hero({ total, states }: { total: number; states: number 
         href={CIVIC_BRAIN_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-forest-500/20 bg-white/80 px-3 py-1.5 text-[11px] font-medium text-forest-600 shadow-sm transition hover:border-forest-500/40"
+        className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-forest-500/20 bg-white/80 px-3 py-1.5 text-[11px] font-medium text-forest-600 shadow-sm transition hover:border-forest-500/40"
       >
         Explore insights on ISEYC Civic Brain
         <span aria-hidden>↗</span>
