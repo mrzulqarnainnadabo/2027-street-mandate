@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { WILL_VOTE, STATES, AGE_BANDS, GENDERS, MAX_SENTENCE } from "@/lib/constants";
+import {
+  WILL_VOTE,
+  STATES,
+  AGE_BANDS,
+  GENDERS,
+  MAX_SENTENCE,
+  PROMPT_EXAMPLES,
+} from "@/lib/constants";
 import { getDeviceId } from "@/lib/fingerprint";
 
 export default function FormPanel({
@@ -18,6 +25,8 @@ export default function FormPanel({
   const [gender, setGender] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const examples = PROMPT_EXAMPLES[mandate] || PROMPT_EXAMPLES["Other"];
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -97,28 +106,51 @@ export default function FormPanel({
           >
             <option value="">Select state…</option>
             {STATES.map((s) => (
-              <option key={s} value={s}>{s}</option>
+              <option key={s} value={s}>
+                {s}
+              </option>
             ))}
           </select>
         </div>
 
         <div>
           <label className="mb-1.5 block text-xs font-medium text-forest-700">
-            In 12 months, good would look like… ({sentence.length}/{MAX_SENTENCE})
+            What must leaders deliver?{" "}
+            <span className="font-normal text-forest-500">
+              ({sentence.length}/{MAX_SENTENCE})
+            </span>
           </label>
+          <p className="mb-2 text-[11px] leading-snug text-forest-600/75">
+            One clear demand in plain English — not a party slogan. Speak as if
+            they are listening.
+          </p>
           <textarea
             value={sentence}
             onChange={(e) => setSentence(e.target.value.slice(0, MAX_SENTENCE))}
             required
             rows={3}
-            placeholder="One clear sentence about what must improve…"
+            placeholder="e.g. Power that stays on so small shops can open every day…"
             className="w-full resize-none rounded-lg border border-forest-500/20 bg-white px-3 py-2.5 text-sm outline-none focus:border-forest-500"
           />
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {examples.map((ex) => (
+              <button
+                key={ex}
+                type="button"
+                onClick={() => setSentence(ex.slice(0, MAX_SENTENCE))}
+                className="rounded-full border border-forest-500/15 bg-forest-50/80 px-2.5 py-1 text-left text-[10px] leading-snug text-forest-700 transition active:bg-forest-100"
+              >
+                {ex}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="mb-1 block text-[10px] font-medium text-forest-700/70">Age (optional)</label>
+            <label className="mb-1 block text-[10px] font-medium text-forest-700/70">
+              Age (optional)
+            </label>
             <select
               value={ageBand}
               onChange={(e) => setAgeBand(e.target.value)}
@@ -126,12 +158,16 @@ export default function FormPanel({
             >
               <option value="">—</option>
               {AGE_BANDS.map((a) => (
-                <option key={a} value={a}>{a}</option>
+                <option key={a} value={a}>
+                  {a}
+                </option>
               ))}
             </select>
           </div>
           <div>
-            <label className="mb-1 block text-[10px] font-medium text-forest-700/70">Gender (optional)</label>
+            <label className="mb-1 block text-[10px] font-medium text-forest-700/70">
+              Gender (optional)
+            </label>
             <select
               value={gender}
               onChange={(e) => setGender(e.target.value)}
@@ -139,14 +175,18 @@ export default function FormPanel({
             >
               <option value="">—</option>
               {GENDERS.map((g) => (
-                <option key={g} value={g}>{g}</option>
+                <option key={g} value={g}>
+                  {g}
+                </option>
               ))}
             </select>
           </div>
         </div>
 
         {error && (
-          <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">{error}</p>
+          <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
+            {error}
+          </p>
         )}
 
         <button

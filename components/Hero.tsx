@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ISEYC_SEAL_SRC, CIVIC_BRAIN_URL } from "@/lib/brand";
 
 export default function Hero({ total, states }: { total: number; states: number }) {
   return (
@@ -11,11 +12,11 @@ export default function Hero({ total, states }: { total: number; states: number 
         className="mb-4 flex justify-center"
       >
         <img
-          src="/iseyc-seal.svg"
+          src={ISEYC_SEAL_SRC}
           alt="ISEYC"
-          width={72}
-          height={72}
-          className="h-[72px] w-[72px] rounded-full shadow-md ring-2 ring-gold-400/50"
+          width={80}
+          height={80}
+          className="h-20 w-20 rounded-full bg-white object-contain shadow-md ring-2 ring-gold-400/50"
         />
       </motion.div>
 
@@ -65,6 +66,19 @@ export default function Hero({ total, states }: { total: number; states: number 
           </div>
         </div>
       </motion.div>
+
+      <motion.a
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.35 }}
+        href={CIVIC_BRAIN_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-forest-500/20 bg-white/80 px-3 py-1.5 text-[11px] font-medium text-forest-600 shadow-sm transition hover:border-forest-500/40"
+      >
+        Explore insights on ISEYC Civic Brain
+        <span aria-hidden>↗</span>
+      </motion.a>
     </section>
   );
 }
