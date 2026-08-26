@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  overflow-x: hidden;
+  background: #fdfaf2;
+}
+
+::selection {
+  background: #c99a2e;
+  color: #16201b;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #0f4d34;
+  outline-offset: 3px;
+}
+
+.paper-card {
+  background-color: #fdfaf2;
+  background-image: radial-gradient(rgba(15, 77, 52, 0.05) 1px, transparent 1px);
+  background-size: 14px 14px;
+  box-shadow: 0 1px 0 rgba(22, 32, 27, 0.04), 0 10px 24px -12px rgba(22, 32, 27, 0.25);
+}
+
+.tally-track {
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(15, 77, 52, 0.08),
+    rgba(15, 77, 52, 0.08) 1px,
+    transparent 1px,
+    transparent 8px
+  );
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
