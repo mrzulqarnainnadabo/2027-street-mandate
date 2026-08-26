@@ -28,3 +28,38 @@ export const AGE_BANDS = ["18-24","25-34","35-44","45+","Prefer not"] as const;
 export const GENDERS = ["Male","Female","Prefer not"] as const;
 
 export const MAX_SENTENCE = 140;
+
+export const PROMPT_EXAMPLES: Record<string, string[]> = {
+  "Security & Safety": [
+    "Neighbourhood patrols that actually respond before midnight.",
+    "Safe roads so girls can return from school without fear.",
+  ],
+  "Jobs & Economy": [
+    "Skills centres that lead to real paid work for young people.",
+    "Local factories open so our graduates stop leaving the state.",
+  ],
+  "Credible Candidates": [
+    "Leaders with public asset declarations and clean records.",
+    "Candidates who debate policy, not just party slogans.",
+  ],
+  "Honest Elections": [
+    "Results announced at the polling unit before they leave.",
+    "BVAS that works and paper trails anyone can check.",
+  ],
+  "Education & Youth": [
+    "Public schools with teachers present every school day.",
+    "Scholarships tied to skills Nigeria actually needs.",
+  ],
+  "Health & Basic Services": [
+    "Primary health centres stocked with basic medicines.",
+    "Clean water that reaches every ward, not only the LGA HQ.",
+  ],
+  "Electricity & Infrastructure": [
+    "Power that stays on long enough for small shops to work.",
+    "Roads that do not wash away every rainy season.",
+  ],
+  "Other": [
+    "One clear promise kept within the first 100 days.",
+    "Public dashboards that show where our money went.",
+  ],
+};

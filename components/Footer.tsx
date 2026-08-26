@@ -1,12 +1,14 @@
+import { ISEYC_LOGO_SRC, CIVIC_BRAIN_URL } from "@/lib/brand";
+
 export default function Footer() {
   return (
     <footer className="border-t border-forest-500/10 bg-forest-900 px-4 py-10 text-center text-cream">
       <img
-        src="/iseyc-seal.svg"
+        src={ISEYC_LOGO_SRC}
         alt="ISEYC"
-        width={72}
-        height={72}
-        className="mx-auto mb-4 h-[72px] w-[72px] rounded-full ring-2 ring-gold-400/40"
+        width={160}
+        height={108}
+        className="mx-auto mb-4 h-auto w-40 object-contain"
       />
       <p className="font-display text-base font-bold tracking-wide">ISEYC</p>
       <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-gold-400">
@@ -20,14 +22,24 @@ export default function Footer() {
         <br />
         The 2027 Street Mandate is a public civic instrument owned by ISEYC.
       </p>
-      <a
-        href="https://www.iseyc.com.ng"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-5 inline-block text-[11px] font-medium text-gold-400 underline-offset-2 hover:underline"
-      >
-        www.iseyc.com.ng
-      </a>
+      <div className="mt-6 flex flex-col items-center gap-2 text-[11px]">
+        <a
+          href="https://www.iseyc.com.ng"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-medium text-gold-400 underline-offset-2 hover:underline"
+        >
+          www.iseyc.com.ng
+        </a>
+        <a
+          href={CIVIC_BRAIN_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-full border border-gold-400/40 bg-forest-800 px-3 py-1.5 font-medium text-gold-400 transition hover:bg-forest-700"
+        >
+          Open ISEYC Civic Brain →
+        </a>
+      </div>
     </footer>
   );
 }
