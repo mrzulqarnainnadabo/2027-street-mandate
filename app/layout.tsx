@@ -4,14 +4,23 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "The 2027 Street Mandate | ISEYC",
   description:
-    "Don't tell us who you'll vote for. Tell them what they must deliver. A non-partisan civic voice wall by ISEYC.",
+    "Don't tell us who you'll vote for. Tell them what they must deliver. A non-partisan civic voice wall by ISEYC — Initiative for Sustainable Evolution for the Youth and Community.",
   icons: {
-    icon: "/icon.png",
+    icon: "/iseyc-seal.svg",
+    apple: "/iseyc-seal.svg",
   },
   openGraph: {
     title: "The 2027 Street Mandate | ISEYC",
-    description: "Don't tell us who you'll vote for. Tell them what they must deliver.",
+    description:
+      "Don't tell us who you'll vote for. Tell them what they must deliver. One sentence. One issue. Your state.",
     type: "website",
+    siteName: "ISEYC",
+  },
+  twitter: {
+    card: "summary",
+    title: "The 2027 Street Mandate | ISEYC",
+    description:
+      "Don't tell us who you'll vote for. Tell them what they must deliver.",
   },
 };
 
