@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { ISEYC_SEAL_SRC, CIVIC_BRAIN_URL } from "@/lib/brand";
 
-export default function Hero({ total, states }: { total: number; states: number }) {
+export default function Hero({ total, lgas }: { total: number; lgas: number }) {
   return (
     <section className="px-4 pb-6 pt-8 text-center">
       <motion.div
@@ -63,9 +63,9 @@ export default function Hero({ total, states }: { total: number; states: number 
         </div>
 
         <div className="paper-card min-w-[110px] rounded-xl px-5 py-3">
-          <div className="font-display text-2xl font-bold text-forest-500">{states}</div>
+          <div className="font-display text-2xl font-bold text-forest-500">{lgas}</div>
           <div className="text-[10px] uppercase tracking-wider text-forest-700/60">
-            States heard
+            LGAs heard
           </div>
         </div>
       </motion.div>
