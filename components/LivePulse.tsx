@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { DUTIES } from "@/lib/constants";
 
 type Voice = {
@@ -85,7 +86,11 @@ export default function LivePulse() {
       ) : (
         <div className="space-y-3">
           {voices.map((v) => (
-            <div key={v.id} className="paper-card rounded-xl px-4 py-3">
+            <Link
+              key={v.id}
+              href={`/mandate/${v.id}`}
+              className="paper-card block rounded-xl px-4 py-3 transition hover:ring-1 hover:ring-forest-500/30"
+            >
               <p className="text-sm leading-snug text-forest-900">“{v.sentence}”</p>
               <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] text-forest-500">
                 <span>
@@ -98,8 +103,9 @@ export default function LivePulse() {
                 <span className="rounded bg-forest-50 px-1.5 py-0.5">
                   {v.duty || v.mandate}
                 </span>
+                <span className="ml-auto text-forest-400">Open →</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

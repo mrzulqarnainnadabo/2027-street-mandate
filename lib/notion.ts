@@ -18,6 +18,59 @@ export type PulseVoice = {
   created: string;
 };
 
+function extractFromFingerprint(
+  rich: any[] | undefined,
+  key: "office" | "lga"
+): string {
+  const text = rich?.[0]?.plain_text || "";
+  const re = key === "office" ? /office:([^|]+)/ : /lga:([^|]+)/;
+  const m = text.match(re);
+  return (m?.[1] || "").trim();
+}
+
+function mapPageToVoice(page: any): PulseVoice | null {
+  const props = page.properties;
+  const sentence =
+    props.Name?.title?.[0]?.plain_text ||
+    props.Sentence?.title?.[0]?.plain_text ||
+    "";
+  if (!sentence) return null;
+
+  const rawMandate =
+    props["Top Mandate"]?.select?.name ||
+    props.Duty?.select?.name ||
+    props.Mandate?.select?.name ||
+    "Other";
+  const duty = normalizeDuty(rawMandate);
+  const office =
+    props.Office?.select?.name ||
+    extractFromFingerprint(props["Device Fingerprint"]?.rich_text, "office") ||
+    "";
+  const lga =
+    props.LGA?.rich_text?.[0]?.plain_text ||
+    extractFromFingerprint(props["Device Fingerprint"]?.rich_text, "lga") ||
+    "";
+  const state = props.State?.select?.name || "";
+
+  return {
+    id: page.id.replace(/-/g, ""),
+    sentence,
+    mandate: duty,
+    duty,
+    office,
+    state,
+    lga,
+    created: page.created_time,
+  };
+}
+
+/** Notion page ids may be with or without dashes */
+function notionPageId(id: string): string {
+  const clean = id.replace(/-/g, "");
+  if (clean.length !== 32) return id;
+  return `${clean.slice(0, 8)}-${clean.slice(8, 12)}-${clean.slice(12, 16)}-${clean.slice(16, 20)}-${clean.slice(20)}`;
+}
+
 export async function submitVoice(data: {
   sentence: string;
   duty: string;
@@ -49,7 +102,6 @@ export async function submitVoice(data: {
     core["Gender"] = { select: { name: data.gender } };
   }
 
-  // Try full Phase 0 properties first
   const full = {
     ...core,
     Duty: { select: { name: data.duty } },
@@ -66,8 +118,7 @@ export async function submitVoice(data: {
     });
     return page.id;
   } catch (err: any) {
-    const msg = String(err?.body || err?.message || err);
-    console.error("Notion full submit failed, trying core:", msg);
+    console.error("Notion full submit failed, trying core:", String(err?.body || err?.message || err));
     try {
       const page = await notion.pages.create({
         parent: { database_id: DATABASE_ID },
@@ -109,41 +160,11 @@ export async function getPublishedPulse(): Promise<{
     const stateSet = new Set<string>();
 
     for (const page of response.results as any[]) {
-      const props = page.properties;
-      const sentence =
-        props.Name?.title?.[0]?.plain_text ||
-        props.Sentence?.title?.[0]?.plain_text ||
-        "";
-      const rawMandate =
-        props["Top Mandate"]?.select?.name ||
-        props.Duty?.select?.name ||
-        props.Mandate?.select?.name ||
-        "Other";
-      const duty = normalizeDuty(rawMandate);
-      const office =
-        props.Office?.select?.name ||
-        extractFromFingerprint(props["Device Fingerprint"]?.rich_text, "office") ||
-        "";
-      const lga =
-        props.LGA?.rich_text?.[0]?.plain_text ||
-        extractFromFingerprint(props["Device Fingerprint"]?.rich_text, "lga") ||
-        "";
-      const state = props.State?.select?.name || "";
-
-      if (sentence) {
-        voices.push({
-          id: page.id,
-          sentence,
-          mandate: duty,
-          duty,
-          office,
-          state,
-          lga,
-          created: page.created_time,
-        });
-      }
-      tally[duty] = (tally[duty] || 0) + 1;
-      if (state) stateSet.add(state);
+      const v = mapPageToVoice(page);
+      if (!v) continue;
+      voices.push(v);
+      tally[v.duty] = (tally[v.duty] || 0) + 1;
+      if (v.state) stateSet.add(v.state);
     }
 
     let total = voices.length;
@@ -164,12 +185,23 @@ export async function getPublishedPulse(): Promise<{
   }
 }
 
-function extractFromFingerprint(
-  rich: any[] | undefined,
-  key: "office" | "lga"
-): string {
-  const text = rich?.[0]?.plain_text || "";
-  const re = key === "office" ? /office:([^|]+)/ : /lga:([^|]+)/;
-  const m = text.match(re);
-  return (m?.[1] || "").trim();
+/** Only returns a mandate if Status is Published */
+export async function getPublishedMandate(id: string): Promise<PulseVoice | null> {
+  if (!process.env.NOTION_TOKEN || !DATABASE_ID) return null;
+
+  try {
+    const page = (await notion.pages.retrieve({
+      page_id: notionPageId(id),
+    })) as any;
+
+    if (page.object !== "page" || page.archived) return null;
+
+    const status = page.properties?.Status?.select?.name;
+    if (status !== "Published") return null;
+
+    return mapPageToVoice(page);
+  } catch (err: any) {
+    console.error("getPublishedMandate:", err?.message || err);
+    return null;
+  }
 }
