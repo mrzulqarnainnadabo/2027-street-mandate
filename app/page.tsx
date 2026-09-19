@@ -17,12 +17,12 @@ export default function Home() {
   const [lastLga, setLastLga] = useState("");
   const [lastDuty, setLastDuty] = useState("");
   const [lastOffice, setLastOffice] = useState("");
-  const [stats, setStats] = useState({ total: 0, states: 0 });
+  const [stats, setStats] = useState({ total: 0, lgas: 0 });
 
   useEffect(() => {
     fetch("/api/pulse")
       .then((r) => r.json())
-      .then((d) => setStats({ total: d.total || 0, states: d.states || 0 }))
+      .then((d) => setStats({ total: d.total || 0, lgas: d.lgas || 0 }))
       .catch(() => {});
   }, [done]);
 
@@ -57,7 +57,7 @@ export default function Home() {
       <Header />
 
       <main>
-        <Hero total={stats.total} states={stats.states} />
+        <Hero total={stats.total} lgas={stats.lgas} />
 
         {!done ? (
           <>
