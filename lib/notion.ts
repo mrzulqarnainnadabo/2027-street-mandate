@@ -9,18 +9,20 @@ const DATABASE_ID = (process.env.NOTION_DATABASE_ID || "").replace(/-/g, "");
 export type PulseVoice = {
   id: string;
   sentence: string;
-  mandate: string;
+  office: string;
+  duty: string;
   state: string;
+  lga: string;
   created: string;
 };
 
 export async function submitVoice(data: {
   sentence: string;
-  mandate: string;
-  willVote: string;
+  office: string;
+  duty: string;
   state: string;
-  ageBand?: string;
-  gender?: string;
+  lga: string;
+  source?: string;
   deviceId: string;
 }) {
   if (!process.env.NOTION_TOKEN || !DATABASE_ID) {
@@ -28,20 +30,18 @@ export async function submitVoice(data: {
   }
 
   const properties: any = {
-    Name: { title: [{ text: { content: data.sentence.slice(0, 140) } }] },
-    "Top Mandate": { select: { name: data.mandate } },
-    "Will You Vote": { select: { name: data.willVote } },
+    Name: { title: [{ text: { content: data.sentence.slice(0, 180) } }] },
+    "One Sentence": { rich_text: [{ text: { content: data.sentence.slice(0, 180) } }] },
+    Office: { select: { name: data.office } },
+    Duty: { select: { name: data.duty } },
     State: { select: { name: data.state } },
+    LGA: { rich_text: [{ text: { content: data.lga } }] },
+    Source: { select: { name: data.source || "Direct Link" } },
     Status: { select: { name: "New" } },
-    "Device Fingerprint": { rich_text: [{ text: { content: data.deviceId } }] },
+    "Device Fingerprint": {
+      rich_text: [{ text: { content: data.deviceId.slice(0, 160) } }],
+    },
   };
-
-  if (data.ageBand) {
-    properties["Age Band"] = { select: { name: data.ageBand } };
-  }
-  if (data.gender) {
-    properties["Gender"] = { select: { name: data.gender } };
-  }
 
   try {
     const page = await notion.pages.create({
@@ -60,73 +60,107 @@ export async function submitVoice(data: {
 export async function getPublishedPulse(): Promise<{
   voices: PulseVoice[];
   tally: Record<string, number>;
+  officeTally: Record<string, number>;
+  lgaTally: Record<string, number>;
+  dutyTally: Record<string, number>;
   total: number;
   states: number;
 }> {
-  // Never throw — return empty data so the site still builds and loads
   if (!process.env.NOTION_TOKEN || !DATABASE_ID) {
-    return { voices: [], tally: {}, total: 0, states: 0 };
+    return {
+      voices: [],
+      tally: {},
+      officeTally: {},
+      lgaTally: {},
+      dutyTally: {},
+      total: 0,
+      states: 0,
+    };
   }
 
   try {
-    const response = await notion.databases.query({
-      database_id: DATABASE_ID,
-      filter: {
-        property: "Status",
-        select: { equals: "Published" },
-      },
-      sorts: [{ timestamp: "created_time", direction: "descending" }],
-      page_size: 40,
-    });
+    const rows: any[] = [];
+    let cursor: string | undefined;
+
+    do {
+      const response = await notion.databases.query({
+        database_id: DATABASE_ID,
+        filter: {
+          property: "Status",
+          select: { equals: "Published" },
+        },
+        sorts: [{ timestamp: "created_time", direction: "descending" }],
+        page_size: 100,
+        ...(cursor ? { start_cursor: cursor } : {}),
+      });
+
+      rows.push(...(response.results as any[]));
+      cursor = response.has_more ? response.next_cursor || undefined : undefined;
+
+      if (rows.length >= 1000) break;
+    } while (cursor);
 
     const voices: PulseVoice[] = [];
     const tally: Record<string, number> = {};
+    const officeTally: Record<string, number> = {};
+    const lgaTally: Record<string, number> = {};
+    const dutyTally: Record<string, number> = {};
     const stateSet = new Set<string>();
 
-    for (const page of response.results as any[]) {
+    for (const page of rows) {
       const props = page.properties;
-      const sentence =
-        props.Name?.title?.[0]?.plain_text ||
-        props.Sentence?.title?.[0]?.plain_text ||
-        "";
-      const mandate =
-        props["Top Mandate"]?.select?.name ||
-        props.Mandate?.select?.name ||
-        "Other";
-      const state = props.State?.select?.name || "";
 
-      if (sentence) {
-        voices.push({
-          id: page.id,
-          sentence,
-          mandate,
-          state,
-          created: page.created_time,
-        });
-      }
-      tally[mandate] = (tally[mandate] || 0) + 1;
+      const sentence =
+        props["One Sentence"]?.rich_text?.[0]?.plain_text ||
+        props.Name?.title?.[0]?.plain_text ||
+        "";
+
+      const office = props.Office?.select?.name || "";
+      const duty = props.Duty?.select?.name || "";
+      const state = props.State?.select?.name || "";
+      const lga =
+        props.LGA?.rich_text?.[0]?.plain_text ||
+        props.LGA?.title?.[0]?.plain_text ||
+        "";
+
+      if (!sentence) continue;
+
+      voices.push({
+        id: page.id,
+        sentence,
+        office,
+        duty,
+        state,
+        lga,
+        created: page.created_time,
+      });
+
+      if (duty) tally[duty] = (tally[duty] || 0) + 1;
+      if (office) officeTally[office] = (officeTally[office] || 0) + 1;
+      if (lga) lgaTally[lga] = (lgaTally[lga] || 0) + 1;
+      if (duty) dutyTally[duty] = (dutyTally[duty] || 0) + 1;
       if (state) stateSet.add(state);
     }
 
-    let total = voices.length;
-    try {
-      const all = await notion.databases.query({
-        database_id: DATABASE_ID,
-        page_size: 1,
-      });
-      total = (all as any).has_more ? Math.max(voices.length, 1) : all.results.length;
-    } catch {
-      // ignore count failure
-    }
-
     return {
-      voices,
+      voices: voices.slice(0, 60),
       tally,
-      total,
+      officeTally,
+      lgaTally,
+      dutyTally,
+      total: voices.length,
       states: stateSet.size,
     };
   } catch (err: any) {
     console.error("Pulse error (non-fatal):", err?.message || err);
-    return { voices: [], tally: {}, total: 0, states: 0 };
+    return {
+      voices: [],
+      tally: {},
+      officeTally: {},
+      lgaTally: {},
+      dutyTally: {},
+      total: 0,
+      states: 0,
+    };
   }
 }
