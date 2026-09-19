@@ -16,7 +16,7 @@ export default function FormPanel({
   onSuccess,
 }: {
   duty: string;
-  onSuccess: (sentence: string, state: string) => void;
+  onSuccess: (sentence: string, state: string, mandateId?: string) => void;
 }) {
   const [office, setOffice] = useState("");
   const [state, setState] = useState("");
@@ -55,7 +55,8 @@ export default function FormPanel({
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
-      onSuccess(sentence.trim(), state);
+      const rawId = typeof data.id === "string" ? data.id.replace(/-/g, "") : undefined;
+      onSuccess(sentence.trim(), state, rawId);
     } catch (err: any) {
       setError(err.message || "Something went wrong. Try again.");
     } finally {

@@ -14,6 +14,7 @@ export default function Home() {
   const [done, setDone] = useState(false);
   const [lastSentence, setLastSentence] = useState("");
   const [lastState, setLastState] = useState("");
+  const [lastMandateId, setLastMandateId] = useState<string | undefined>(undefined);
   const [stats, setStats] = useState({ total: 0, states: 0 });
 
   useEffect(() => {
@@ -23,9 +24,10 @@ export default function Home() {
       .catch(() => {});
   }, [done]);
 
-  function handleSuccess(sentence: string, state: string) {
+  function handleSuccess(sentence: string, state: string, mandateId?: string) {
     setLastSentence(sentence);
     setLastState(state);
+    setLastMandateId(mandateId);
     setDone(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -35,6 +37,7 @@ export default function Home() {
     setDone(false);
     setLastSentence("");
     setLastState("");
+    setLastMandateId(undefined);
   }
 
   return (
@@ -49,7 +52,12 @@ export default function Home() {
             {duty && <FormPanel duty={duty} onSuccess={handleSuccess} />}
           </>
         ) : (
-          <SuccessPanel sentence={lastSentence} state={lastState} onReset={reset} />
+          <SuccessPanel
+            sentence={lastSentence}
+            state={lastState}
+            mandateId={lastMandateId}
+            onReset={reset}
+          />
         )}
 
         <LivePulse />

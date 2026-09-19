@@ -3,16 +3,30 @@
 export default function SuccessPanel({
   sentence,
   state,
+  mandateId,
   onReset,
 }: {
   sentence: string;
   state: string;
+  mandateId?: string;
   onReset: () => void;
 }) {
-  const siteUrl =
-    typeof window !== "undefined" ? window.location.origin + window.location.pathname : "";
+  const origin =
+    typeof window !== "undefined" ? window.location.origin : "https://2027-street-mandate.vercel.app";
+  const homeUrl = origin + "/";
+  // Public detail URL only works after Notion Status = Published
+  const detailUrl = mandateId ? `${origin}/mandate/${mandateId}` : null;
 
-  const shareBody = `I just submitted a civic mandate on ISEYC’s 2027 Civic Mandate.\n\n"${sentence}"\n— from ${state}\n\nDon’t tell them who you’ll vote for. Tell them what they must deliver.\n\nAdd yours: ${siteUrl}`;
+  const shareBody = [
+    "I just submitted a civic mandate on ISEYC’s 2027 Civic Mandate.",
+    "",
+    `"${sentence}"`,
+    `— from ${state}`,
+    "",
+    "Don’t tell them who you’ll vote for. Tell them what they must deliver.",
+    "",
+    `Add yours: ${homeUrl}`,
+  ].join("\n");
 
   async function shareNative() {
     if (navigator.share) {
@@ -20,7 +34,7 @@ export default function SuccessPanel({
         await navigator.share({
           title: "ISEYC 2027 Civic Mandate",
           text: shareBody,
-          url: siteUrl,
+          url: homeUrl,
         });
         return;
       } catch {
@@ -47,11 +61,22 @@ export default function SuccessPanel({
     window.open(
       "https://twitter.com/intent/tweet?text=" +
         encodeURIComponent(
-          `I submitted a civic mandate with ISEYC.\n\n"${sentence}" — ${state}\n\nTell them what they must deliver → ${siteUrl}`
+          `I submitted a civic mandate with ISEYC.\n\n"${sentence}" — ${state}\n\nTell them what they must deliver → ${homeUrl}`
         ),
       "_blank",
       "noopener,noreferrer"
     );
+  }
+
+  async function copyDetailHint() {
+    if (!detailUrl) return;
+    const msg = `After review, this mandate will be public at:\n${detailUrl}\n\n(Only works once Status is Published in moderation.)`;
+    try {
+      await navigator.clipboard.writeText(detailUrl);
+      alert("Detail link copied. It opens publicly only after the mandate is Published.");
+    } catch {
+      alert(msg);
+    }
   }
 
   return (
@@ -74,6 +99,11 @@ export default function SuccessPanel({
           </footer>
         </blockquote>
 
+        <p className="mt-3 text-[11px] leading-snug text-forest-500">
+          Share the campaign now. Your personal mandate link becomes public only after moderation
+          marks it <strong className="font-semibold text-forest-700">Published</strong>.
+        </p>
+
         <div className="mt-4 grid gap-2">
           <button
             type="button"
@@ -94,8 +124,17 @@ export default function SuccessPanel({
             onClick={shareNative}
             className="w-full rounded-xl border border-forest-500/25 bg-cream py-2.5 text-sm font-semibold text-forest-700"
           >
-            Share / Copy link
+            Share / Copy campaign link
           </button>
+          {detailUrl ? (
+            <button
+              type="button"
+              onClick={copyDetailHint}
+              className="w-full rounded-xl border border-dashed border-forest-500/20 py-2 text-xs font-medium text-forest-600"
+            >
+              Copy future mandate link (after publish)
+            </button>
+          ) : null}
         </div>
 
         <button
