@@ -12,46 +12,46 @@ export default function SuccessPanel({
   const siteUrl =
     typeof window !== "undefined" ? window.location.origin + window.location.pathname : "";
 
-  const shareBody = `I just added my voice to The 2027 Street Mandate by ISEYC.\n\n"${sentence}"\n— from ${state}\n\nDon't tell them who you'll vote for. Tell them what they must deliver.\n\nAdd yours: ${siteUrl}`;
+  const shareBody = `I just submitted a civic mandate on ISEYC’s 2027 Civic Mandate.\n\n"${sentence}"\n— from ${state}\n\nDon’t tell them who you’ll vote for. Tell them what they must deliver.\n\nAdd yours: ${siteUrl}`;
 
   async function shareNative() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "2027 Street Mandate — ISEYC",
+          title: "ISEYC 2027 Civic Mandate",
           text: shareBody,
           url: siteUrl,
         });
         return;
       } catch {
-        /* user cancelled */
+        /* cancelled */
       }
     }
-    await copyText();
-  }
-
-  async function copyText() {
     try {
       await navigator.clipboard.writeText(shareBody);
-      alert("Copied. Paste it into WhatsApp, X, or anywhere.");
+      alert("Copied. Paste into WhatsApp, X, or anywhere.");
     } catch {
       alert(shareBody);
     }
   }
 
   function shareWhatsApp() {
-    const url =
-      "https://wa.me/?text=" + encodeURIComponent(shareBody);
-    window.open(url, "_blank", "noopener,noreferrer");
+    window.open(
+      "https://wa.me/?text=" + encodeURIComponent(shareBody),
+      "_blank",
+      "noopener,noreferrer"
+    );
   }
 
   function shareX() {
-    const url =
+    window.open(
       "https://twitter.com/intent/tweet?text=" +
-      encodeURIComponent(
-        `I just spoke on The 2027 Street Mandate by ISEYC.\n\n"${sentence}" — ${state}\n\nTell them what they must deliver → ${siteUrl}`
-      );
-    window.open(url, "_blank", "noopener,noreferrer");
+        encodeURIComponent(
+          `I submitted a civic mandate with ISEYC.\n\n"${sentence}" — ${state}\n\nTell them what they must deliver → ${siteUrl}`
+        ),
+      "_blank",
+      "noopener,noreferrer"
+    );
   }
 
   return (
@@ -60,13 +60,11 @@ export default function SuccessPanel({
         <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-forest-500 text-2xl text-cream">
           ✓
         </div>
-        <h2 className="font-display text-xl font-bold text-forest-700">
-          Your voice is in.
-        </h2>
+        <h2 className="font-display text-xl font-bold text-forest-700">Your mandate is in.</h2>
         <p className="mt-2 text-sm leading-relaxed text-forest-700/80">
           It will appear on the public wall after a short review.
           <br />
-          Thank you for speaking for your community.
+          Thank you for demanding delivery — not just elections.
         </p>
 
         <blockquote className="mt-4 rounded-xl border border-forest-500/10 bg-forest-50 px-4 py-3 text-left text-sm italic text-forest-900">
@@ -76,32 +74,25 @@ export default function SuccessPanel({
           </footer>
         </blockquote>
 
-        <p className="mt-5 text-[11px] font-medium uppercase tracking-wider text-gold-600">
-          Multiply your impact
-        </p>
-        <p className="mt-1 text-xs text-forest-600/80">
-          One share can bring ten more voices from your state.
-        </p>
-
         <div className="mt-4 grid gap-2">
           <button
             type="button"
             onClick={shareWhatsApp}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3 text-sm font-bold text-white shadow-sm active:scale-[0.99]"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3 text-sm font-bold text-white"
           >
-            <span aria-hidden>💬</span> Share on WhatsApp
+            Share on WhatsApp
           </button>
           <button
             type="button"
             onClick={shareX}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-forest-900 py-3 text-sm font-bold text-cream active:scale-[0.99]"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-forest-900 py-3 text-sm font-bold text-cream"
           >
-            <span aria-hidden>𝕏</span> Post on X
+            Post on X
           </button>
           <button
             type="button"
             onClick={shareNative}
-            className="w-full rounded-xl border border-forest-500/25 bg-cream py-2.5 text-sm font-semibold text-forest-700 active:scale-[0.99]"
+            className="w-full rounded-xl border border-forest-500/25 bg-cream py-2.5 text-sm font-semibold text-forest-700"
           >
             Share / Copy link
           </button>
@@ -112,7 +103,7 @@ export default function SuccessPanel({
           onClick={onReset}
           className="mt-4 w-full py-2 text-xs text-forest-500 underline underline-offset-2"
         >
-          Submit another voice (different device)
+          Submit another mandate
         </button>
       </div>
     </section>

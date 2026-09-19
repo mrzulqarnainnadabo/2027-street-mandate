@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { ISEYC_SEAL_SRC, CIVIC_BRAIN_URL } from "@/lib/brand";
 
 export default function Hero({ total, states }: { total: number; states: number }) {
@@ -25,7 +26,7 @@ export default function Hero({ total, states }: { total: number; states: number 
         animate={{ opacity: 1, y: 0 }}
         className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-gold-600"
       >
-        A civic instrument by ISEYC
+        ISEYC 2027 Civic Mandate
       </motion.p>
       <motion.h1
         initial={{ opacity: 0, y: 12 }}
@@ -43,8 +44,8 @@ export default function Hero({ total, states }: { total: number; states: number 
         transition={{ delay: 0.15 }}
         className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-forest-700/80"
       >
-        One sentence. One issue. Your state.
-        The 2027 Street Mandate is the public voice wall for what Nigerians actually want fixed.
+        One concrete demand. The right office. Your state. A non-partisan public ledger of what
+        Nigerians require from public office — not a horse-race poll.
       </motion.p>
 
       <motion.div
@@ -55,15 +56,11 @@ export default function Hero({ total, states }: { total: number; states: number 
       >
         <div className="paper-card min-w-[110px] rounded-xl px-5 py-3">
           <div className="font-display text-2xl font-bold text-forest-500">{total}</div>
-          <div className="text-[10px] uppercase tracking-wider text-forest-700/60">
-            Voices so far
-          </div>
+          <div className="text-[10px] uppercase tracking-wider text-forest-700/60">Mandates so far</div>
         </div>
         <div className="paper-card min-w-[110px] rounded-xl px-5 py-3">
           <div className="font-display text-2xl font-bold text-forest-500">{states}</div>
-          <div className="text-[10px] uppercase tracking-wider text-forest-700/60">
-            States heard
-          </div>
+          <div className="text-[10px] uppercase tracking-wider text-forest-700/60">States heard</div>
         </div>
       </motion.div>
 
@@ -73,22 +70,31 @@ export default function Hero({ total, states }: { total: number; states: number 
         transition={{ delay: 0.3 }}
         className="mx-auto mt-4 max-w-sm text-[11px] text-forest-600/70"
       >
-        Goal: at least one clear demand from every state before 2027.
+        Goal: clear demands from every state before 2027.
         {states < 37 ? ` ${37 - states} states still silent.` : " All states heard."}
       </motion.p>
 
-      <motion.a
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.35 }}
-        href={CIVIC_BRAIN_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-forest-500/20 bg-white/80 px-3 py-1.5 text-[11px] font-medium text-forest-600 shadow-sm transition hover:border-forest-500/40"
+        className="mt-4 flex flex-wrap items-center justify-center gap-2"
       >
-        Explore insights on ISEYC Civic Brain
-        <span aria-hidden>↗</span>
-      </motion.a>
+        <Link
+          href="/about"
+          className="inline-flex items-center gap-1.5 rounded-full border border-forest-500/20 bg-white/80 px-3 py-1.5 text-[11px] font-medium text-forest-600 shadow-sm transition hover:border-forest-500/40"
+        >
+          Non-partisan charter
+        </Link>
+        <a
+          href={CIVIC_BRAIN_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 rounded-full border border-forest-500/20 bg-white/80 px-3 py-1.5 text-[11px] font-medium text-forest-600 shadow-sm transition hover:border-forest-500/40"
+        >
+          Civic Brain ↗
+        </a>
+      </motion.div>
     </section>
   );
 }
