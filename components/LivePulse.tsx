@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { DUTIES } from "@/lib/constants";
+import { DUTIES, OFFICES, STATES } from "@/lib/constants";
 
 type Voice = {
   id: string;
@@ -18,6 +18,9 @@ export default function LivePulse() {
   const [voices, setVoices] = useState<Voice[]>([]);
   const [tally, setTally] = useState<Record<string, number>>({});
   const [total, setTotal] = useState(0);
+  const [stateFilter, setStateFilter] = useState("");
+  const [officeFilter, setOfficeFilter] = useState("");
+  const [dutyFilter, setDutyFilter] = useState("");
 
   useEffect(() => {
     let alive = true;
@@ -42,8 +45,31 @@ export default function LivePulse() {
     };
   }, []);
 
-  const max = Math.max(...Object.values(tally), 1);
-  const topDuties = DUTIES.map((d) => ({ ...d, count: tally[d.id] || 0 }))
+  const filteredVoices = useMemo(
+    () =>
+      voices.filter(
+        (v) =>
+          (!stateFilter || v.state === stateFilter) &&
+          (!officeFilter || v.office === officeFilter) &&
+          (!dutyFilter || (v.duty || v.mandate) === dutyFilter)
+      ),
+    [voices, stateFilter, officeFilter, dutyFilter]
+  );
+
+  const filteredTally = useMemo(() => {
+    const next: Record<string, number> = {};
+    for (const v of filteredVoices) {
+      const duty = v.duty || v.mandate;
+      next[duty] = (next[duty] || 0) + 1;
+    }
+    return next;
+  }, [filteredVoices]);
+
+  const max = Math.max(...Object.values(filteredTally), 1);
+  const topDuties = DUTIES.map((d) => ({
+    ...d,
+    count: filteredTally[d.id] || 0,
+  }))
     .filter((d) => d.count > 0)
     .sort((a, b) => b.count - a.count)
     .slice(0, 8);
@@ -51,6 +77,8 @@ export default function LivePulse() {
     topDuties.length > 0
       ? topDuties
       : DUTIES.slice(0, 6).map((d) => ({ ...d, count: 0 }));
+
+  const hasFilters = Boolean(stateFilter || officeFilter || dutyFilter);
 
   return (
     <section className="mt-10 border-t border-forest-500/10 px-4 pb-16 pt-8">
@@ -61,44 +89,120 @@ export default function LivePulse() {
         Published mandates by duty · never candidate rankings
       </p>
 
+      <div className="mb-5 grid gap-2 sm:grid-cols-3">
+        <select
+          value={stateFilter}
+          onChange={(e) => setStateFilter(e.target.value)}
+          aria-label="Filter by state"
+          className="w-full rounded-lg border border-forest-500/15 bg-white px-3 py-2 text-xs text-forest-700 outline-none focus:border-forest-500"
+        >
+          <option value="">All states</option>
+          {STATES.map((state) => (
+            <option key={state} value={state}>
+              {state}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={officeFilter}
+          onChange={(e) => setOfficeFilter(e.target.value)}
+          aria-label="Filter by office"
+          className="w-full rounded-lg border border-forest-500/15 bg-white px-3 py-2 text-xs text-forest-700 outline-none focus:border-forest-500"
+        >
+          <option value="">All offices</option>
+          {OFFICES.filter((office) => office.id !== "Unsure").map((office) => (
+            <option key={office.id} value={office.id}>
+              {office.label}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={dutyFilter}
+          onChange={(e) => setDutyFilter(e.target.value)}
+          aria-label="Filter by duty"
+          className="w-full rounded-lg border border-forest-500/15 bg-white px-3 py-2 text-xs text-forest-700 outline-none focus:border-forest-500"
+        >
+          <option value="">All duties</option>
+          {DUTIES.map((duty) => (
+            <option key={duty.id} value={duty.id}>
+              {duty.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {hasFilters ? (
+        <div className="mb-5 flex items-center justify-between rounded-lg bg-forest-50 px-3 py-2 text-[11px] text-forest-600">
+          <span>
+            Showing {filteredVoices.length} of {total} published mandates
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              setStateFilter("");
+              setOfficeFilter("");
+              setDutyFilter("");
+            }}
+            className="font-semibold underline underline-offset-2"
+          >
+            Clear filters
+          </button>
+        </div>
+      ) : null}
+
       <div className="mb-8 space-y-2">
         {displayDuties.map((m) => {
-          const pct = total > 0 ? Math.round((m.count / max) * 100) : 0;
+          const pct =
+            filteredVoices.length > 0
+              ? Math.round((m.count / max) * 100)
+              : 0;
           return (
             <div key={m.id} className="flex items-center gap-2 text-xs">
-              <span className="w-28 shrink-0 truncate text-forest-700">{m.label}</span>
+              <span className="w-28 shrink-0 truncate text-forest-700">
+                {m.label}
+              </span>
               <div className="tally-track h-3 flex-1 overflow-hidden rounded-full bg-forest-100">
                 <div
                   className="h-full rounded-full bg-forest-500 transition-all duration-700"
                   style={{ width: `${pct}%` }}
                 />
               </div>
-              <span className="w-6 text-right font-medium text-forest-500">{m.count}</span>
+              <span className="w-6 text-right font-medium text-forest-500">
+                {m.count}
+              </span>
             </div>
           );
         })}
       </div>
 
-      {voices.length === 0 ? (
+      {filteredVoices.length === 0 ? (
         <p className="rounded-xl border border-dashed border-forest-500/20 py-8 text-center text-sm text-forest-500">
-          No published mandates yet. Submit one — it appears after moderation.
+          {hasFilters
+            ? "No published mandates match these filters."
+            : "No published mandates yet. Submit one — it appears after moderation."}
         </p>
       ) : (
         <div className="space-y-3">
-          {voices.map((v) => (
+          {filteredVoices.map((v) => (
             <Link
               key={v.id}
               href={`/mandate/${v.id}`}
               className="paper-card block rounded-xl px-4 py-3 transition hover:ring-1 hover:ring-forest-500/30"
             >
-              <p className="text-sm leading-snug text-forest-900">“{v.sentence}”</p>
+              <p className="text-sm leading-snug text-forest-900">
+                “{v.sentence}”
+              </p>
               <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] text-forest-500">
                 <span>
                   {v.state}
                   {v.lga ? ` · ${v.lga}` : ""}
                 </span>
                 {v.office ? (
-                  <span className="rounded bg-forest-50 px-1.5 py-0.5">{v.office}</span>
+                  <span className="rounded bg-forest-50 px-1.5 py-0.5">
+                    {v.office}
+                  </span>
                 ) : null}
                 <span className="rounded bg-forest-50 px-1.5 py-0.5">
                   {v.duty || v.mandate}
