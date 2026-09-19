@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MANDATES } from "@/lib/constants";
+import { DUTIES } from "@/lib/constants";
 
 type Voice = {
   id: string;
   sentence: string;
   mandate: string;
+  duty?: string;
+  office?: string;
   state: string;
+  lga?: string;
 };
 
 export default function LivePulse() {
@@ -26,7 +29,9 @@ export default function LivePulse() {
           setTally(data.tally || {});
           setTotal(data.total || 0);
         }
-      } catch {}
+      } catch {
+        /* ignore */
+      }
     }
     load();
     const t = setInterval(load, 30000);
@@ -37,20 +42,27 @@ export default function LivePulse() {
   }, []);
 
   const max = Math.max(...Object.values(tally), 1);
+  const topDuties = DUTIES.map((d) => ({ ...d, count: tally[d.id] || 0 }))
+    .filter((d) => d.count > 0)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 8);
+  const displayDuties =
+    topDuties.length > 0
+      ? topDuties
+      : DUTIES.slice(0, 6).map((d) => ({ ...d, count: 0 }));
 
   return (
     <section className="mt-10 border-t border-forest-500/10 px-4 pb-16 pt-8">
       <h2 className="mb-1 text-center font-display text-lg font-bold text-forest-700">
-        Street Ledger
+        Civic Pulse
       </h2>
       <p className="mb-6 text-center text-xs text-forest-500">
-        Live published voices · updates every 30s
+        Published mandates by duty · never candidate rankings
       </p>
 
       <div className="mb-8 space-y-2">
-        {MANDATES.map((m) => {
-          const count = tally[m.id] || 0;
-          const pct = total > 0 ? Math.round((count / max) * 100) : 0;
+        {displayDuties.map((m) => {
+          const pct = total > 0 ? Math.round((m.count / max) * 100) : 0;
           return (
             <div key={m.id} className="flex items-center gap-2 text-xs">
               <span className="w-28 shrink-0 truncate text-forest-700">{m.label}</span>
@@ -60,7 +72,7 @@ export default function LivePulse() {
                   style={{ width: `${pct}%` }}
                 />
               </div>
-              <span className="w-6 text-right font-medium text-forest-500">{count}</span>
+              <span className="w-6 text-right font-medium text-forest-500">{m.count}</span>
             </div>
           );
         })}
@@ -68,16 +80,24 @@ export default function LivePulse() {
 
       {voices.length === 0 ? (
         <p className="rounded-xl border border-dashed border-forest-500/20 py-8 text-center text-sm text-forest-500">
-          No published voices yet. Be the first — then come back after moderation.
+          No published mandates yet. Submit one — it appears after moderation.
         </p>
       ) : (
         <div className="space-y-3">
           {voices.map((v) => (
             <div key={v.id} className="paper-card rounded-xl px-4 py-3">
               <p className="text-sm leading-snug text-forest-900">“{v.sentence}”</p>
-              <div className="mt-1.5 flex items-center justify-between text-[10px] text-forest-500">
-                <span>{v.state}</span>
-                <span className="rounded bg-forest-50 px-1.5 py-0.5">{v.mandate}</span>
+              <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] text-forest-500">
+                <span>
+                  {v.state}
+                  {v.lga ? ` · ${v.lga}` : ""}
+                </span>
+                {v.office ? (
+                  <span className="rounded bg-forest-50 px-1.5 py-0.5">{v.office}</span>
+                ) : null}
+                <span className="rounded bg-forest-50 px-1.5 py-0.5">
+                  {v.duty || v.mandate}
+                </span>
               </div>
             </div>
           ))}

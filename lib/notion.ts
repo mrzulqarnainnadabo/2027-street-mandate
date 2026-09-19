@@ -1,4 +1,5 @@
 import { Client } from "@notionhq/client";
+import { normalizeDuty } from "@/lib/constants";
 
 const notion = new Client({
   auth: process.env.NOTION_TOKEN,
@@ -10,15 +11,19 @@ export type PulseVoice = {
   id: string;
   sentence: string;
   mandate: string;
+  duty: string;
+  office: string;
   state: string;
+  lga: string;
   created: string;
 };
 
 export async function submitVoice(data: {
   sentence: string;
-  mandate: string;
-  willVote: string;
+  duty: string;
+  office: string;
   state: string;
+  lga?: string;
   ageBand?: string;
   gender?: string;
   deviceId: string;
@@ -27,33 +32,54 @@ export async function submitVoice(data: {
     throw new Error("Notion not configured yet. Share the database with the integration.");
   }
 
-  const properties: any = {
-    Name: { title: [{ text: { content: data.sentence.slice(0, 140) } }] },
-    "Top Mandate": { select: { name: data.mandate } },
-    "Will You Vote": { select: { name: data.willVote } },
+  const meta = `${data.deviceId} | office:${data.office} | lga:${data.lga || ""}`;
+
+  const core: Record<string, unknown> = {
+    Name: { title: [{ text: { content: data.sentence.slice(0, 200) } }] },
+    "Top Mandate": { select: { name: data.duty } },
     State: { select: { name: data.state } },
     Status: { select: { name: "New" } },
-    "Device Fingerprint": { rich_text: [{ text: { content: data.deviceId } }] },
+    "Device Fingerprint": { rich_text: [{ text: { content: meta.slice(0, 2000) } }] },
   };
 
   if (data.ageBand) {
-    properties["Age Band"] = { select: { name: data.ageBand } };
+    core["Age Band"] = { select: { name: data.ageBand } };
   }
   if (data.gender) {
-    properties["Gender"] = { select: { name: data.gender } };
+    core["Gender"] = { select: { name: data.gender } };
   }
+
+  // Try full Phase 0 properties first
+  const full = {
+    ...core,
+    Duty: { select: { name: data.duty } },
+    Office: { select: { name: data.office } },
+    ...(data.lga?.trim()
+      ? { LGA: { rich_text: [{ text: { content: data.lga.trim().slice(0, 120) } }] } }
+      : {}),
+  };
 
   try {
     const page = await notion.pages.create({
       parent: { database_id: DATABASE_ID },
-      properties,
+      properties: full as any,
     });
     return page.id;
   } catch (err: any) {
-    console.error("Notion submit error:", err?.message || err);
-    throw new Error(
-      "Could not save to Notion. Make sure the database is shared with the Street Mandate integration."
-    );
+    const msg = String(err?.body || err?.message || err);
+    console.error("Notion full submit failed, trying core:", msg);
+    try {
+      const page = await notion.pages.create({
+        parent: { database_id: DATABASE_ID },
+        properties: core as any,
+      });
+      return page.id;
+    } catch (err2: any) {
+      console.error("Notion submit error:", err2?.message || err2);
+      throw new Error(
+        "Could not save to Notion. Make sure the database is shared with the Street Mandate integration."
+      );
+    }
   }
 }
 
@@ -63,7 +89,6 @@ export async function getPublishedPulse(): Promise<{
   total: number;
   states: number;
 }> {
-  // Never throw — return empty data so the site still builds and loads
   if (!process.env.NOTION_TOKEN || !DATABASE_ID) {
     return { voices: [], tally: {}, total: 0, states: 0 };
   }
@@ -76,7 +101,7 @@ export async function getPublishedPulse(): Promise<{
         select: { equals: "Published" },
       },
       sorts: [{ timestamp: "created_time", direction: "descending" }],
-      page_size: 40,
+      page_size: 50,
     });
 
     const voices: PulseVoice[] = [];
@@ -89,22 +114,35 @@ export async function getPublishedPulse(): Promise<{
         props.Name?.title?.[0]?.plain_text ||
         props.Sentence?.title?.[0]?.plain_text ||
         "";
-      const mandate =
+      const rawMandate =
         props["Top Mandate"]?.select?.name ||
+        props.Duty?.select?.name ||
         props.Mandate?.select?.name ||
         "Other";
+      const duty = normalizeDuty(rawMandate);
+      const office =
+        props.Office?.select?.name ||
+        extractFromFingerprint(props["Device Fingerprint"]?.rich_text, "office") ||
+        "";
+      const lga =
+        props.LGA?.rich_text?.[0]?.plain_text ||
+        extractFromFingerprint(props["Device Fingerprint"]?.rich_text, "lga") ||
+        "";
       const state = props.State?.select?.name || "";
 
       if (sentence) {
         voices.push({
           id: page.id,
           sentence,
-          mandate,
+          mandate: duty,
+          duty,
+          office,
           state,
+          lga,
           created: page.created_time,
         });
       }
-      tally[mandate] = (tally[mandate] || 0) + 1;
+      tally[duty] = (tally[duty] || 0) + 1;
       if (state) stateSet.add(state);
     }
 
@@ -116,17 +154,22 @@ export async function getPublishedPulse(): Promise<{
       });
       total = (all as any).has_more ? Math.max(voices.length, 1) : all.results.length;
     } catch {
-      // ignore count failure
+      /* ignore */
     }
 
-    return {
-      voices,
-      tally,
-      total,
-      states: stateSet.size,
-    };
+    return { voices, tally, total, states: stateSet.size };
   } catch (err: any) {
     console.error("Pulse error (non-fatal):", err?.message || err);
     return { voices: [], tally: {}, total: 0, states: 0 };
   }
+}
+
+function extractFromFingerprint(
+  rich: any[] | undefined,
+  key: "office" | "lga"
+): string {
+  const text = rich?.[0]?.plain_text || "";
+  const re = key === "office" ? /office:([^|]+)/ : /lga:([^|]+)/;
+  const m = text.match(re);
+  return (m?.[1] || "").trim();
 }

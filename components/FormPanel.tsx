@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  WILL_VOTE,
+  OFFICES,
   STATES,
   AGE_BANDS,
   GENDERS,
@@ -12,27 +12,29 @@ import {
 import { getDeviceId } from "@/lib/fingerprint";
 
 export default function FormPanel({
-  mandate,
+  duty,
   onSuccess,
 }: {
-  mandate: string;
+  duty: string;
   onSuccess: (sentence: string, state: string) => void;
 }) {
-  const [willVote, setWillVote] = useState("");
+  const [office, setOffice] = useState("");
   const [state, setState] = useState("");
+  const [lga, setLga] = useState("");
   const [sentence, setSentence] = useState("");
   const [ageBand, setAgeBand] = useState("");
   const [gender, setGender] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const examples = PROMPT_EXAMPLES[mandate] || PROMPT_EXAMPLES["Other"];
+  const examples = PROMPT_EXAMPLES[duty] || PROMPT_EXAMPLES["Other"];
+  const officeMeta = OFFICES.find((o) => o.id === office);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    if (!willVote || !state || sentence.trim().length < 5) {
-      setError("Please complete the required fields.");
+    if (!office || !state || sentence.trim().length < 5) {
+      setError("Please choose an office, your state, and write a clear demand.");
       return;
     }
     setLoading(true);
@@ -42,9 +44,10 @@ export default function FormPanel({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sentence: sentence.trim(),
-          mandate,
-          willVote,
+          duty,
+          office,
           state,
+          lga: lga.trim() || undefined,
           ageBand: ageBand || undefined,
           gender: gender || undefined,
           deviceId: getDeviceId(),
@@ -63,41 +66,33 @@ export default function FormPanel({
   return (
     <section className="px-4 pt-6">
       <h2 className="mb-3 text-center text-xs font-semibold uppercase tracking-widest text-forest-500">
-        2 · Your voice
+        2 · Your civic mandate
       </h2>
       <form onSubmit={handleSubmit} className="paper-card space-y-4 rounded-2xl p-4">
         <div>
           <label className="mb-1.5 block text-xs font-medium text-forest-700">
-            Will you vote in 2027?
+            Which office must deliver this?
           </label>
-          <div className="space-y-1.5">
-            {WILL_VOTE.map((w) => (
-              <label
-                key={w.id}
-                className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm ${
-                  willVote === w.id
-                    ? "border-forest-500 bg-forest-50"
-                    : "border-forest-500/15"
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="willVote"
-                  value={w.id}
-                  checked={willVote === w.id}
-                  onChange={() => setWillVote(w.id)}
-                  className="accent-forest-500"
-                />
-                {w.label}
-              </label>
+          <select
+            value={office}
+            onChange={(e) => setOffice(e.target.value)}
+            required
+            className="w-full rounded-lg border border-forest-500/20 bg-white px-3 py-2.5 text-sm outline-none focus:border-forest-500"
+          >
+            <option value="">Select office…</option>
+            {OFFICES.map((o) => (
+              <option key={o.id} value={o.id}>
+                {o.label}
+              </option>
             ))}
-          </div>
+          </select>
+          {officeMeta && (
+            <p className="mt-1.5 text-[11px] leading-snug text-forest-600/80">{officeMeta.hint}</p>
+          )}
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-forest-700">
-            Your state
-          </label>
+          <label className="mb-1.5 block text-xs font-medium text-forest-700">Your state</label>
           <select
             value={state}
             onChange={(e) => setState(e.target.value)}
@@ -115,21 +110,33 @@ export default function FormPanel({
 
         <div>
           <label className="mb-1.5 block text-xs font-medium text-forest-700">
-            What must leaders deliver?{" "}
+            LGA <span className="font-normal text-forest-500">(optional)</span>
+          </label>
+          <input
+            type="text"
+            value={lga}
+            onChange={(e) => setLga(e.target.value.slice(0, 120))}
+            placeholder="e.g. Kaduna South"
+            className="w-full rounded-lg border border-forest-500/20 bg-white px-3 py-2.5 text-sm outline-none focus:border-forest-500"
+          />
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-xs font-medium text-forest-700">
+            What must they deliver?{" "}
             <span className="font-normal text-forest-500">
               ({sentence.length}/{MAX_SENTENCE})
             </span>
           </label>
           <p className="mb-2 text-[11px] leading-snug text-forest-600/75">
-            One clear demand in plain English — not a party slogan. Speak as if
-            they are listening.
+            One concrete demand — measurable if possible. Not a party slogan.
           </p>
           <textarea
             value={sentence}
             onChange={(e) => setSentence(e.target.value.slice(0, MAX_SENTENCE))}
             required
             rows={3}
-            placeholder="e.g. Power that stays on so small shops can open every day…"
+            placeholder="e.g. Primary health centres stocked with essential medicines…"
             className="w-full resize-none rounded-lg border border-forest-500/20 bg-white px-3 py-2.5 text-sm outline-none focus:border-forest-500"
           />
           <div className="mt-2 flex flex-wrap gap-1.5">
@@ -148,9 +155,7 @@ export default function FormPanel({
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="mb-1 block text-[10px] font-medium text-forest-700/70">
-              Age (optional)
-            </label>
+            <label className="mb-1 block text-[10px] font-medium text-forest-700/70">Age (optional)</label>
             <select
               value={ageBand}
               onChange={(e) => setAgeBand(e.target.value)}
@@ -165,9 +170,7 @@ export default function FormPanel({
             </select>
           </div>
           <div>
-            <label className="mb-1 block text-[10px] font-medium text-forest-700/70">
-              Gender (optional)
-            </label>
+            <label className="mb-1 block text-[10px] font-medium text-forest-700/70">Gender (optional)</label>
             <select
               value={gender}
               onChange={(e) => setGender(e.target.value)}
@@ -184,9 +187,7 @@ export default function FormPanel({
         </div>
 
         {error && (
-          <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">
-            {error}
-          </p>
+          <p className="rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">{error}</p>
         )}
 
         <button
@@ -194,8 +195,12 @@ export default function FormPanel({
           disabled={loading}
           className="w-full rounded-xl bg-forest-500 py-3.5 text-sm font-bold text-white transition active:scale-[0.98] disabled:opacity-60"
         >
-          {loading ? "Adding your voice…" : "Add my voice"}
+          {loading ? "Submitting mandate…" : "Submit my mandate"}
         </button>
+
+        <p className="text-center text-[10px] leading-snug text-forest-500">
+          Non-partisan. No candidate rankings. Your text appears only after moderation.
+        </p>
       </form>
     </section>
   );

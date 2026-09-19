@@ -1,27 +1,26 @@
-# The 2027 Street Mandate — by ISEYC
-
-Single-page non-partisan civic survey + live voice wall.
+# ISEYC 2027 Civic Mandate
 
 > Don't tell us who you'll vote for. Tell them what they must deliver.
 
-## Environment
+Non-partisan civic mandate platform by **ISEYC**.
+
+## Phase 0
+
+- Duty + office + state + optional LGA + demand
+- Notion moderation (`New` → `Published`)
+- Civic Pulse by duty (never candidate rankings)
+- `/about` non-partisan charter
+- Vote-intent removed from product path
+
+## Env
 
 ```
-NOTION_TOKEN=secret_...
-NOTION_DATABASE_ID=d46f6a3d47294c718519952b8497b911
+NOTION_TOKEN=
+NOTION_DATABASE_ID=
 ```
 
-Share the Notion database with your integration.
-
-## Deploy
+Optional Notion columns: `Office` (select), `LGA` (rich text), `Duty` (select). Fallback embeds office/LGA in Device Fingerprint.
 
 ```bash
-npx vercel
+npm install && npm run build
 ```
-
-Add the two env vars, then `npx vercel --prod`.
-
-## Moderation
-
-All new voices land as Status = "New".  
-Only change Status to "Published" in Notion for them to appear on the public wall.
