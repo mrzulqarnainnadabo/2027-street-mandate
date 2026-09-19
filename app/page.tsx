@@ -3,14 +3,14 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import VoteCards from "@/components/VoteCards";
+import DutyCards from "@/components/DutyCards";
 import FormPanel from "@/components/FormPanel";
 import SuccessPanel from "@/components/SuccessPanel";
 import LivePulse from "@/components/LivePulse";
 import Footer from "@/components/Footer";
 
 export default function Home() {
-  const [mandate, setMandate] = useState<string | null>(null);
+  const [duty, setDuty] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const [lastSentence, setLastSentence] = useState("");
   const [lastState, setLastState] = useState("");
@@ -31,7 +31,7 @@ export default function Home() {
   }
 
   function reset() {
-    setMandate(null);
+    setDuty(null);
     setDone(false);
     setLastSentence("");
     setLastState("");
@@ -45,17 +45,11 @@ export default function Home() {
 
         {!done ? (
           <>
-            <VoteCards selected={mandate} onSelect={setMandate} />
-            {mandate && (
-              <FormPanel mandate={mandate} onSuccess={handleSuccess} />
-            )}
+            <DutyCards selected={duty} onSelect={setDuty} />
+            {duty && <FormPanel duty={duty} onSuccess={handleSuccess} />}
           </>
         ) : (
-          <SuccessPanel
-            sentence={lastSentence}
-            state={lastState}
-            onReset={reset}
-          />
+          <SuccessPanel sentence={lastSentence} state={lastState} onReset={reset} />
         )}
 
         <LivePulse />
