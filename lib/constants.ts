@@ -1,65 +1,100 @@
-export const MANDATES = [
-  { id: "Security & Safety", label: "Security & Safety", icon: "🛡️" },
-  { id: "Jobs & Economy", label: "Jobs & Economy", icon: "💼" },
-  { id: "Credible Candidates", label: "Credible Candidates", icon: "🗳️" },
-  { id: "Honest Elections", label: "Honest Elections", icon: "⚖️" },
-  { id: "Education & Youth", label: "Education & Youth", icon: "📚" },
-  { id: "Health & Basic Services", label: "Health & Basic Services", icon: "🏥" },
-  { id: "Electricity & Infrastructure", label: "Electricity & Infrastructure", icon: "⚡" },
-  { id: "Other", label: "Other", icon: "✨" },
+export const OFFICE_OPTIONS = [
+  {
+    id: "President",
+    label: "President",
+    helper: "Federal / national delivery",
+  },
+  {
+    id: "Governor",
+    label: "Governor",
+    helper: "Kaduna State delivery",
+  },
+  {
+    id: "Senator",
+    label: "Senator",
+    helper: "Senate representation",
+  },
+  {
+    id: "Representative",
+    label: "House of Representatives",
+    helper: "Federal constituency",
+  },
 ] as const;
 
-export const WILL_VOTE = [
-  { id: "Yes definitely", label: "Yes, definitely" },
-  { id: "Yes if safe", label: "Yes, if it is safe" },
-  { id: "Not sure", label: "Not sure" },
-  { id: "No vote will not count", label: "No — my vote will not count" },
+export const DUTIES = [
+  { id: "Health", label: "Health", icon: "🏥" },
+  { id: "Security", label: "Security", icon: "🛡️" },
+  { id: "Education", label: "Education", icon: "📚" },
+  { id: "Jobs", label: "Jobs", icon: "💼" },
+  { id: "Power", label: "Power", icon: "⚡" },
+  { id: "Water", label: "Water", icon: "💧" },
+  { id: "Roads", label: "Roads", icon: "🛣️" },
+  { id: "Corruption control", label: "Corruption control", icon: "⚖️" },
+] as const;
+
+export const KADUNA_LGAS = [
+  "Birnin Gwari",
+  "Chikun",
+  "Giwa",
+  "Igabi",
+  "Ikara",
+  "Jaba",
+  "Jema'a",
+  "Kachia",
+  "Kaduna North",
+  "Kaduna South",
+  "Kagarko",
+  "Kajuru",
+  "Kaura",
+  "Kauru",
+  "Kubau",
+  "Kudan",
+  "Lere",
+  "Makarfi",
+  "Sabon Gari",
+  "Sanga",
+  "Soba",
+  "Zangon Kataf",
+  "Zaria",
 ] as const;
 
 export const STATES = [
-  "Abia","Adamawa","Akwa Ibom","Anambra","Bauchi","Bayelsa","Benue","Borno",
-  "Cross River","Delta","Ebonyi","Edo","Ekiti","Enugu","Gombe","Imo","Jigawa",
-  "Kaduna","Kano","Katsina","Kebbi","Kogi","Kwara","Lagos","Nasarawa","Niger",
-  "Ogun","Ondo","Osun","Oyo","Plateau","Rivers","Sokoto","Taraba","Yobe",
-  "Zamfara","FCT"
+  "Kaduna",
 ] as const;
 
-export const AGE_BANDS = ["18-24","25-34","35-44","45+","Prefer not"] as const;
-export const GENDERS = ["Male","Female","Prefer not"] as const;
-
-export const MAX_SENTENCE = 140;
+export const MAX_SENTENCE = 180;
 
 export const PROMPT_EXAMPLES: Record<string, string[]> = {
-  "Security & Safety": [
-    "Neighbourhood patrols that actually respond before midnight.",
-    "Safe roads so girls can return from school without fear.",
+  Health: [
+    "Primary health centres should have essential medicines and staff.",
+    "Basic maternal and emergency care should be available in my LGA.",
   ],
-  "Jobs & Economy": [
-    "Skills centres that lead to real paid work for young people.",
-    "Local factories open so our graduates stop leaving the state.",
+  Security: [
+    "Security response should reach vulnerable communities quickly.",
+    "Safe roads and neighbourhoods should be a measurable priority.",
   ],
-  "Credible Candidates": [
-    "Leaders with public asset declarations and clean records.",
-    "Candidates who debate policy, not just party slogans.",
+  Education: [
+    "Public schools should have teachers present and learning materials.",
+    "Young people should have practical skills linked to real opportunities.",
   ],
-  "Honest Elections": [
-    "Results announced at the polling unit before they leave.",
-    "BVAS that works and paper trails anyone can check.",
+  Jobs: [
+    "Local job and skills programmes should lead to measurable placements.",
+    "Small businesses should have reliable conditions to grow and hire.",
   ],
-  "Education & Youth": [
-    "Public schools with teachers present every school day.",
-    "Scholarships tied to skills Nigeria actually needs.",
+  Power: [
+    "Electricity should be reliable enough for homes and small businesses.",
+    "Power projects should publish locations, budgets and delivery status.",
   ],
-  "Health & Basic Services": [
-    "Primary health centres stocked with basic medicines.",
-    "Clean water that reaches every ward, not only the LGA HQ.",
+  Water: [
+    "Every ward should have dependable access to clean water.",
+    "Broken public water points should be repaired and tracked.",
   ],
-  "Electricity & Infrastructure": [
-    "Power that stays on long enough for small shops to work.",
-    "Roads that do not wash away every rainy season.",
+  Roads: [
+    "Road projects should publish budgets, locations and completion dates.",
+    "Flood-prone roads should be repaired before the next rainy season.",
   ],
-  "Other": [
-    "One clear promise kept within the first 100 days.",
-    "Public dashboards that show where our money went.",
+  "Corruption control": [
+    "Public projects should publish budgets, contractors and delivery status.",
+    "Public spending should be easier for citizens to track.",
   ],
 };
