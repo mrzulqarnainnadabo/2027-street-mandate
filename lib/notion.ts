@@ -65,6 +65,7 @@ export async function getPublishedPulse(): Promise<{
   dutyTally: Record<string, number>;
   total: number;
   states: number;
+  lgas: number;
 }> {
   if (!process.env.NOTION_TOKEN || !DATABASE_ID) {
     return {
@@ -75,6 +76,7 @@ export async function getPublishedPulse(): Promise<{
       dutyTally: {},
       total: 0,
       states: 0,
+      lgas: 0,
     };
   }
 
@@ -150,6 +152,7 @@ export async function getPublishedPulse(): Promise<{
       dutyTally,
       total: voices.length,
       states: stateSet.size,
+      lgas: Object.keys(lgaTally).length,
     };
   } catch (err: any) {
     console.error("Pulse error (non-fatal):", err?.message || err);
@@ -161,6 +164,7 @@ export async function getPublishedPulse(): Promise<{
       dutyTally: {},
       total: 0,
       states: 0,
+      lgas: 0,
     };
   }
 }
