@@ -6,17 +6,16 @@ export default function Footer() {
     <footer className="border-t border-forest-500/10 bg-forest-900 px-4 py-10 text-center text-cream">
       <img
         src={ISEYC_LOGO_SRC}
-        alt="ISEYC"
-        width={200}
-        height={150}
-        className="mx-auto mb-4 h-auto w-44 object-contain"
+        alt="ISEYC official logo"
+        width={900}
+        height={605}
+        className="mx-auto mb-5 h-auto w-56 object-contain sm:w-64"
       />
-      <p className="font-display text-base font-bold tracking-wide">ISEYC</p>
-      <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-gold-400">
-        Empowering Youth, Shaping Future
+      <p className="text-[10px] uppercase tracking-[0.18em] text-gold-400">
+        2027 Civic Mandate
       </p>
-      <p className="mx-auto mt-4 max-w-sm text-xs leading-relaxed text-cream/70">
-        2027 Civic Mandate — a public civic instrument.
+      <p className="mx-auto mt-3 max-w-sm text-xs leading-relaxed text-cream/70">
+        A public civic instrument by ISEYC.
         <br />
         Non-partisan. No candidate rankings. No party colours as scores.
       </p>

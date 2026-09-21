@@ -80,55 +80,56 @@ export default function SuccessPanel({
   }
 
   return (
-    <section className="px-4 pt-6">
-      <div className="paper-card rounded-2xl p-5 text-center">
-        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-forest-500 text-2xl text-cream">
+    <section className="px-4 pt-7">
+      <div className="mx-auto max-w-xl border-y border-forest-500/15 bg-white px-4 py-6 text-center sm:px-6">
+        <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center border-2 border-forest-500 text-xl font-bold text-forest-500">
           ✓
         </div>
-        <h2 className="font-display text-xl font-bold text-forest-700">Submitted for review</h2>
-        <p className="mt-2 text-sm leading-relaxed text-forest-700/85">
+        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">Receipt</p>
+        <h2 className="mt-1 font-display text-xl font-bold text-forest-900">Submitted for review</h2>
+        <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-forest-700/85">
           Your mandate is <strong className="font-semibold">not public yet</strong>. It appears on
           Civic Pulse only after ISEYC moderation marks it Published.
         </p>
 
-        <blockquote className="mt-4 rounded-xl border border-forest-500/10 bg-forest-50 px-4 py-3 text-left text-sm italic text-forest-900">
+        <blockquote className="mx-auto mt-5 max-w-md border-l-2 border-forest-500 bg-forest-50 px-4 py-3 text-left text-sm italic text-forest-900">
           “{sentence}”
           <footer className="mt-1.5 text-xs not-italic text-forest-500">
             — {state} · pending review
           </footer>
         </blockquote>
 
-        <p className="mt-3 text-[11px] leading-snug text-forest-500">
-          Invite others to the campaign. Share your personal receipt only after it is Published.
+        <p className="mx-auto mt-4 max-w-md text-[11px] leading-snug text-forest-500">
+          Share the civic mandate if you wish. Public publication still depends on ISEYC review.
         </p>
 
-        <div className="mt-4 grid gap-2">
+        <div className="mx-auto mt-4 grid max-w-md gap-2">
           <button
             type="button"
             onClick={shareWhatsApp}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3 text-sm font-bold text-white"
+            className="min-h-[48px] w-full rounded-md bg-forest-500 px-4 text-sm font-bold text-white"
           >
-            Share campaign on WhatsApp
+            Share on WhatsApp
           </button>
           <button
             type="button"
             onClick={shareX}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-forest-900 py-3 text-sm font-bold text-cream"
+            className="min-h-[48px] w-full rounded-md bg-forest-900 px-4 text-sm font-bold text-cream"
           >
-            Post campaign on X
+            Share on X
           </button>
           <button
             type="button"
             onClick={shareNative}
-            className="w-full rounded-xl border border-forest-500/25 bg-cream py-2.5 text-sm font-semibold text-forest-700"
+            className="min-h-[46px] w-full rounded-md border border-forest-500/25 bg-cream px-4 text-sm font-semibold text-forest-700"
           >
-            Copy campaign link
+            Copy civic mandate
           </button>
           {detailUrl ? (
             <button
               type="button"
               onClick={copyDetailHint}
-              className="w-full rounded-xl border border-dashed border-forest-500/20 py-2 text-xs font-medium text-forest-600"
+              className="min-h-[42px] w-full border border-dashed border-forest-500/20 px-4 text-xs font-medium text-forest-600"
             >
               Copy future public link (after publish)
             </button>
@@ -138,7 +139,7 @@ export default function SuccessPanel({
         <button
           type="button"
           onClick={onReset}
-          className="mt-4 w-full py-2 text-xs text-forest-500 underline underline-offset-2"
+          className="mt-5 py-2 text-xs text-forest-500 underline underline-offset-2"
         >
           Submit another mandate
         </button>
