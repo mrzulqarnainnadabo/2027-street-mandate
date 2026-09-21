@@ -37,17 +37,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function StatusPage({ params }: Props) {
   const { id } = await params;
-  const mandate = await getMandateStatus(id);
+  let mandate;
+  let unavailable = false;
+  try {
+    mandate = await getMandateStatus(id);
+  } catch {
+    unavailable = true;
+  }
 
   if (!mandate) {
     return (
       <div className="mx-auto min-h-screen max-w-2xl px-4 py-16 text-center">
         <img src={ISEYC_SEAL_SRC} alt="ISEYC" width={64} height={64} className="mx-auto mb-4" />
         <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">Submission status</p>
-        <h1 className="mt-1 font-display text-xl font-bold text-forest-900">Status not available</h1>
+        <h1 className="mt-1 font-display text-xl font-bold text-forest-900">
+          {unavailable ? "Status temporarily unavailable" : "Status not found"}
+        </h1>
         <p className="mt-2 text-sm leading-relaxed text-forest-600">
-          This reference may be invalid, or the civic data service may be temporarily unavailable.
-          Please try again later.
+          {unavailable
+            ? "The civic data service could not be reached. Your submission has not been marked as lost. Please try again later."
+            : "This reference may be invalid or the submission may no longer be available. Check the link and try again."}
         </p>
         <Link href="/" className="mt-6 inline-block text-sm font-semibold text-forest-600 underline">
           ← Back to Civic Mandate
