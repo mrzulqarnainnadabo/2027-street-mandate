@@ -7,6 +7,10 @@ const notion = new Client({
 
 const DATABASE_ID = (process.env.NOTION_DATABASE_ID || "").replace(/-/g, "");
 
+/** Soft cap so a runaway DB cannot blow the serverless timeout */
+const MAX_PUBLISHED_PAGES = 10;
+const PAGE_SIZE = 50;
+
 export type PulseVoice = {
   id: string;
   sentence: string;
@@ -134,54 +138,71 @@ export async function submitVoice(data: {
   }
 }
 
+/**
+ * Load Published mandates only.
+ * Paginate until exhausted or soft cap.
+ * `total` is always the number of Published pages successfully loaded (honest).
+ * `truncated` is true if Notion still has more Published rows beyond the soft cap.
+ */
 export async function getPublishedPulse(): Promise<{
   voices: PulseVoice[];
   tally: Record<string, number>;
   total: number;
   states: number;
+  truncated: boolean;
 }> {
   if (!process.env.NOTION_TOKEN || !DATABASE_ID) {
-    return { voices: [], tally: {}, total: 0, states: 0 };
+    return { voices: [], tally: {}, total: 0, states: 0, truncated: false };
   }
 
   try {
-    const response = await notion.databases.query({
-      database_id: DATABASE_ID,
-      filter: {
-        property: "Status",
-        select: { equals: "Published" },
-      },
-      sorts: [{ timestamp: "created_time", direction: "descending" }],
-      page_size: 50,
-    });
-
     const voices: PulseVoice[] = [];
     const tally: Record<string, number> = {};
     const stateSet = new Set<string>();
+    let cursor: string | undefined;
+    let truncated = false;
 
-    for (const page of response.results as any[]) {
-      const v = mapPageToVoice(page);
-      if (!v) continue;
-      voices.push(v);
-      tally[v.duty] = (tally[v.duty] || 0) + 1;
-      if (v.state) stateSet.add(v.state);
-    }
-
-    let total = voices.length;
-    try {
-      const all = await notion.databases.query({
+    for (let page = 0; page < MAX_PUBLISHED_PAGES; page++) {
+      const response: any = await notion.databases.query({
         database_id: DATABASE_ID,
-        page_size: 1,
+        filter: {
+          property: "Status",
+          select: { equals: "Published" },
+        },
+        sorts: [{ timestamp: "created_time", direction: "descending" }],
+        page_size: PAGE_SIZE,
+        ...(cursor ? { start_cursor: cursor } : {}),
       });
-      total = (all as any).has_more ? Math.max(voices.length, 1) : all.results.length;
-    } catch {
-      /* ignore */
+
+      for (const result of response.results as any[]) {
+        const v = mapPageToVoice(result);
+        if (!v) continue;
+        voices.push(v);
+        tally[v.duty] = (tally[v.duty] || 0) + 1;
+        if (v.state) stateSet.add(v.state);
+      }
+
+      if (!response.has_more) {
+        truncated = false;
+        break;
+      }
+      cursor = response.next_cursor || undefined;
+      if (!cursor) break;
+      if (page === MAX_PUBLISHED_PAGES - 1) {
+        truncated = true;
+      }
     }
 
-    return { voices, tally, total, states: stateSet.size };
+    return {
+      voices,
+      tally,
+      total: voices.length,
+      states: stateSet.size,
+      truncated,
+    };
   } catch (err: any) {
     console.error("Pulse error (non-fatal):", err?.message || err);
-    return { voices: [], tally: {}, total: 0, states: 0 };
+    return { voices: [], tally: {}, total: 0, states: 0, truncated: false };
   }
 }
 
