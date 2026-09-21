@@ -12,13 +12,14 @@ export default function SuccessPanel({
   onReset: () => void;
 }) {
   const origin =
-    typeof window !== "undefined" ? window.location.origin : "https://2027-street-mandate.vercel.app";
+    typeof window !== "undefined"
+      ? window.location.origin
+      : "https://2027-street-mandate.vercel.app";
   const homeUrl = origin + "/";
-  // Public detail URL only works after Notion Status = Published
   const detailUrl = mandateId ? `${origin}/mandate/${mandateId}` : null;
 
   const shareBody = [
-    "I just submitted a civic mandate on ISEYC’s 2027 Civic Mandate.",
+    "I submitted a civic mandate on ISEYC’s 2027 Civic Mandate (under review).",
     "",
     `"${sentence}"`,
     `— from ${state}`,
@@ -61,7 +62,7 @@ export default function SuccessPanel({
     window.open(
       "https://twitter.com/intent/tweet?text=" +
         encodeURIComponent(
-          `I submitted a civic mandate with ISEYC.\n\n"${sentence}" — ${state}\n\nTell them what they must deliver → ${homeUrl}`
+          `I submitted a civic mandate with ISEYC (under review).\n\n"${sentence}" — ${state}\n\nTell them what they must deliver → ${homeUrl}`
         ),
       "_blank",
       "noopener,noreferrer"
@@ -70,12 +71,11 @@ export default function SuccessPanel({
 
   async function copyDetailHint() {
     if (!detailUrl) return;
-    const msg = `After review, this mandate will be public at:\n${detailUrl}\n\n(Only works once Status is Published in moderation.)`;
     try {
       await navigator.clipboard.writeText(detailUrl);
-      alert("Detail link copied. It opens publicly only after the mandate is Published.");
+      alert("Link copied. It only opens publicly after ISEYC sets Status to Published.");
     } catch {
-      alert(msg);
+      alert(`After review, public link:\n${detailUrl}`);
     }
   }
 
@@ -85,11 +85,10 @@ export default function SuccessPanel({
         <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-forest-500 text-2xl text-cream">
           ✓
         </div>
-        <h2 className="font-display text-xl font-bold text-forest-700">Your mandate is in.</h2>
-        <p className="mt-2 text-sm leading-relaxed text-forest-700/80">
-          It will appear on the public wall after a short review.
-          <br />
-          Thank you for demanding delivery — not just elections.
+        <h2 className="font-display text-xl font-bold text-forest-700">Submitted for review</h2>
+        <p className="mt-2 text-sm leading-relaxed text-forest-700/85">
+          Your mandate is <strong className="font-semibold">not public yet</strong>. It appears on
+          Civic Pulse only after ISEYC moderation marks it Published.
         </p>
 
         <blockquote className="mt-4 rounded-xl border border-forest-500/10 bg-forest-50 px-4 py-3 text-left text-sm italic text-forest-900">
@@ -100,8 +99,7 @@ export default function SuccessPanel({
         </blockquote>
 
         <p className="mt-3 text-[11px] leading-snug text-forest-500">
-          Share the campaign now. Your personal mandate link becomes public only after moderation
-          marks it <strong className="font-semibold text-forest-700">Published</strong>.
+          Invite others to the campaign. Share your personal receipt only after it is Published.
         </p>
 
         <div className="mt-4 grid gap-2">
@@ -110,21 +108,21 @@ export default function SuccessPanel({
             onClick={shareWhatsApp}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3 text-sm font-bold text-white"
           >
-            Share on WhatsApp
+            Share campaign on WhatsApp
           </button>
           <button
             type="button"
             onClick={shareX}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-forest-900 py-3 text-sm font-bold text-cream"
           >
-            Post on X
+            Post campaign on X
           </button>
           <button
             type="button"
             onClick={shareNative}
             className="w-full rounded-xl border border-forest-500/25 bg-cream py-2.5 text-sm font-semibold text-forest-700"
           >
-            Share / Copy campaign link
+            Copy campaign link
           </button>
           {detailUrl ? (
             <button
@@ -132,7 +130,7 @@ export default function SuccessPanel({
               onClick={copyDetailHint}
               className="w-full rounded-xl border border-dashed border-forest-500/20 py-2 text-xs font-medium text-forest-600"
             >
-              Copy future mandate link (after publish)
+              Copy future public link (after publish)
             </button>
           ) : null}
         </div>
