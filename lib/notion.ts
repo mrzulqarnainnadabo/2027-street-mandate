@@ -260,6 +260,11 @@ export async function getMandateStatus(id: string): Promise<MandateStatus | null
     };
   } catch (err: any) {
     console.error("getMandateStatus:", err?.message || err);
-    return null;
+    const status = Number(err?.status || err?.body?.status || 0);
+    const code = err?.code || err?.body?.code;
+    if (status === 400 || status === 404 || code === "object_not_found") {
+      return null;
+    }
+    throw new Error("Civic status could not load right now.");
   }
 }
