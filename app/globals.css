@@ -8,11 +8,15 @@
   --deep: #16201b;
   --gold: #c99a2e;
   --cream: #fdfaf2;
-  --line: rgba(15, 77, 52, 0.12);
+  --line: rgba(15, 77, 52, 0.14);
 }
 
 * {
   -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -34,18 +38,17 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
   outline: 2px solid #0f4d34;
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
-/* Quiet institutional surface — less “startup card”, more ledger */
 .paper-card {
-  background-color: #ffffff;
+  background: #fff;
   border: 1px solid var(--line);
   box-shadow: none;
 }
 
 .paper-card-soft {
-  background-color: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.78);
   border: 1px solid var(--line);
 }
 
@@ -53,7 +56,28 @@ textarea:focus-visible {
   background: rgba(15, 77, 52, 0.08);
 }
 
+.field-control {
+  min-height: 52px;
+  border: 1px solid rgba(15, 77, 52, 0.22);
+  background: #fff;
+  border-radius: 0.5rem;
+  color: #16201b;
+}
+
+.field-control::placeholder {
+  color: rgba(22, 32, 27, 0.42);
+}
+
+.field-control:focus {
+  border-color: #0f4d34;
+  box-shadow: 0 0 0 1px #0f4d34;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
