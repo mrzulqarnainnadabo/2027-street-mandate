@@ -16,13 +16,33 @@ export default function Home() {
   const [lastSentence, setLastSentence] = useState("");
   const [lastState, setLastState] = useState("");
   const [lastMandateId, setLastMandateId] = useState<string | undefined>(undefined);
-  const [stats, setStats] = useState({ total: 0, states: 0 });
+  const [stats, setStats] = useState<{
+    total: number;
+    states: number;
+    status: "loading" | "ready" | "unavailable";
+  }>({ total: 0, states: 0, status: "loading" });
 
   useEffect(() => {
+    let alive = true;
     fetch("/api/pulse")
-      .then((r) => r.json())
-      .then((d) => setStats({ total: d.total || 0, states: d.states || 0 }))
-      .catch(() => {});
+      .then(async (r) => {
+        if (!r.ok) throw new Error("pulse unavailable");
+        return r.json();
+      })
+      .then((d) => {
+        if (!alive) return;
+        setStats({
+          total: typeof d.total === "number" ? d.total : 0,
+          states: typeof d.states === "number" ? d.states : 0,
+          status: "ready",
+        });
+      })
+      .catch(() => {
+        if (alive) setStats((s) => ({ ...s, status: "unavailable" }));
+      });
+    return () => {
+      alive = false;
+    };
   }, [done]);
 
   function handleSuccess(sentence: string, state: string, mandateId?: string) {
@@ -45,7 +65,11 @@ export default function Home() {
     <div className="mx-auto min-h-screen max-w-2xl">
       <Header />
       <main>
-        <Hero total={stats.total} states={stats.states} />
+        <Hero
+          total={stats.total}
+          states={stats.states}
+          pulseStatus={stats.status}
+        />
 
         {!done ? (
           <>
