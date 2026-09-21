@@ -85,3 +85,37 @@ textarea:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Field / offline print: institutional brief, no chrome */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11pt;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  a {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+
+  header,
+  footer {
+    display: none !important;
+  }
+
+  .print-block {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-title::after {
+    content: " — ISEYC 2027 Civic Mandate (non-partisan public record)";
+    font-size: 9pt;
+    font-weight: normal;
+  }
+}
