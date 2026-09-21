@@ -33,6 +33,16 @@ export type MandateStatus = {
   created: string;
 };
 
+export class CivicStatusError extends Error {
+  constructor(
+    public readonly code: "NOT_FOUND" | "UNAVAILABLE",
+    message: string
+  ) {
+    super(message);
+    this.name = "CivicStatusError";
+  }
+}
+
 function extractFromFingerprint(
   rich: any[] | undefined,
   key: "office" | "lga"
@@ -260,6 +270,16 @@ export async function getMandateStatus(id: string): Promise<MandateStatus | null
     };
   } catch (err: any) {
     console.error("getMandateStatus:", err?.message || err);
-    return null;
+    const status = err?.status || err?.code;
+    if (status === 404 || status === "object_not_found") {
+      throw new CivicStatusError(
+        "NOT_FOUND",
+        "This submission reference could not be found."
+      );
+    }
+    throw new CivicStatusError(
+      "UNAVAILABLE",
+      "Civic status is temporarily unavailable. Please try again later."
+    );
   }
 }
