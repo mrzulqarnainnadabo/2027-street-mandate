@@ -58,7 +58,9 @@ function buildPlainBrief(
     lines.push("");
   }
 
-  lines.push(`Brief: https://2027-street-mandate.vercel.app/brief?state=${encodeURIComponent(state)}`);
+  lines.push(
+    `Brief: https://2027-street-mandate.vercel.app/brief?state=${encodeURIComponent(state)}`
+  );
   lines.push(`Submit: https://2027-street-mandate.vercel.app/`);
   return lines.join("\n");
 }
@@ -145,10 +147,14 @@ function BriefInner() {
   if (error) {
     return (
       <main className="px-4 py-8">
-        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">Data for delivery</p>
+        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">
+          Data for delivery
+        </p>
         <h1 className="mt-1 font-display text-2xl font-bold text-forest-900">State Civic Brief</h1>
         <div className="mt-6 border-y border-forest-500/15 bg-forest-50 px-4 py-6 text-center">
-          <p className="text-sm font-semibold text-forest-800">State Civic Brief is temporarily unavailable.</p>
+          <p className="text-sm font-semibold text-forest-800">
+            State Civic Brief is temporarily unavailable.
+          </p>
           <p className="mt-1.5 text-xs leading-relaxed text-forest-600">
             Published civic records could not be loaded. No empty or zero count is shown as if no
             mandates exist.
@@ -160,16 +166,18 @@ function BriefInner() {
 
   return (
     <main className="px-4 py-8">
-      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">
+      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600 no-print">
         Data for delivery
       </p>
-      <h1 className="mt-1 font-display text-2xl font-bold text-forest-900">State Civic Brief</h1>
+      <h1 className="print-title mt-1 font-display text-2xl font-bold text-forest-900">
+        State Civic Brief — {state}
+      </h1>
       <p className="mt-2 text-sm leading-relaxed text-forest-700/90">
         Published citizen demands for one state, grouped by duty, then by office. Public memory —
         not a poll, ranking, or endorsement.
       </p>
 
-      <label className="mt-6 block text-xs font-semibold text-forest-700">
+      <label className="mt-6 block text-xs font-semibold text-forest-700 no-print">
         State
         <select
           value={state}
@@ -196,15 +204,26 @@ function BriefInner() {
             ) : null}
           </span>
         )}
-        {!loading && forState.length > 0 ? (
-          <button
-            type="button"
-            onClick={copyBrief}
-            className="min-h-[40px] rounded-md border border-forest-500/25 bg-white px-3 py-1.5 text-[11px] font-semibold text-forest-800"
-          >
-            {copied ? "Copied" : "Copy brief text"}
-          </button>
-        ) : null}
+        <div className="flex flex-wrap gap-2 no-print">
+          {!loading && forState.length > 0 ? (
+            <>
+              <button
+                type="button"
+                onClick={copyBrief}
+                className="min-h-[40px] rounded-md border border-forest-500/25 bg-white px-3 py-1.5 text-[11px] font-semibold text-forest-800"
+              >
+                {copied ? "Copied" : "Copy brief text"}
+              </button>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="min-h-[40px] rounded-md border border-forest-500/25 bg-white px-3 py-1.5 text-[11px] font-semibold text-forest-800"
+              >
+                Print / PDF
+              </button>
+            </>
+          ) : null}
+        </div>
       </div>
 
       {!loading && forState.length === 0 ? (
@@ -215,7 +234,7 @@ function BriefInner() {
           </p>
           <Link
             href="/"
-            className="mt-4 inline-block text-sm font-semibold text-forest-700 underline underline-offset-2"
+            className="mt-4 inline-block text-sm font-semibold text-forest-700 underline underline-offset-2 no-print"
           >
             Submit a mandate →
           </Link>
@@ -226,7 +245,7 @@ function BriefInner() {
             const items = byDuty[d.id] || [];
             const officeGroups = groupByOffice(items);
             return (
-              <section key={d.id}>
+              <section key={d.id} className="print-block">
                 <div className="mb-3 flex items-baseline justify-between border-b border-forest-500/15 pb-2">
                   <h2 className="font-display text-base font-bold text-forest-800">{d.label}</h2>
                   <span className="text-[11px] tabular-nums text-forest-500">
@@ -235,24 +254,27 @@ function BriefInner() {
                 </div>
                 <div className="space-y-4">
                   {officeGroups.map(({ office, items: officeItems }) => (
-                    <div key={office}>
+                    <div key={office} className="print-block">
                       <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-forest-500">
                         {office}
                       </p>
                       <ul className="space-y-2.5">
                         {officeItems.map((v) => (
                           <li key={v.id}>
-                            <Link
-                              href={`/mandate/${v.id}`}
-                              className="block border border-forest-500/12 bg-white px-3 py-3 transition hover:border-forest-500/30"
-                            >
+                            <div className="block border border-forest-500/12 bg-white px-3 py-3">
                               <p className="text-sm leading-snug text-forest-900">
                                 “{v.sentence}”
                               </p>
                               {v.lga ? (
                                 <p className="mt-1.5 text-[10px] text-forest-500">{v.lga}</p>
                               ) : null}
-                            </Link>
+                              <Link
+                                href={`/mandate/${v.id}`}
+                                className="mt-1 inline-block text-[10px] text-forest-500 underline no-print"
+                              >
+                                Open record →
+                              </Link>
+                            </div>
                           </li>
                         ))}
                       </ul>
@@ -265,16 +287,21 @@ function BriefInner() {
         </div>
       )}
 
-      <div className="mt-10 border-t border-forest-500/10 pt-6 text-xs leading-relaxed text-forest-500">
+      <div className="mt-10 border-t border-forest-500/10 pt-6 text-xs leading-relaxed text-forest-500 no-print">
         <p className="font-semibold text-forest-700">How this helps</p>
         <ul className="mt-2 list-disc space-y-1 pl-4">
           <li>Shareable link: /brief?state={state}</li>
           <li>Copy brief text for WhatsApp or X without ranking language.</li>
+          <li>Print / PDF for meetings and ward briefings.</li>
           <li>Counts are published demands only — not votes or popularity.</li>
         </ul>
       </div>
 
-      <p className="mt-8 text-center">
+      <p className="mt-6 text-[10px] text-forest-500">
+        Non-partisan public record · ISEYC · Not an election poll or endorsement
+      </p>
+
+      <p className="mt-8 text-center no-print">
         <Link href="/" className="text-sm font-semibold text-forest-600 underline underline-offset-2">
           ← Back to Civic Mandate
         </Link>
@@ -286,7 +313,9 @@ function BriefInner() {
 export default function BriefPage() {
   return (
     <div className="mx-auto min-h-screen max-w-2xl">
-      <Header />
+      <div className="no-print">
+        <Header />
+      </div>
       <Suspense
         fallback={
           <main className="px-4 py-8 text-sm text-forest-600">Loading brief…</main>
@@ -294,7 +323,9 @@ export default function BriefPage() {
       >
         <BriefInner />
       </Suspense>
-      <Footer />
+      <div className="no-print">
+        <Footer />
+      </div>
     </div>
   );
 }
