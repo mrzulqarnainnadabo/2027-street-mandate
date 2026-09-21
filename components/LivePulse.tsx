@@ -30,10 +30,20 @@ export default function LivePulse() {
         const res = await fetch("/api/pulse");
         if (!res.ok) throw new Error("Pulse unavailable");
         const data = await res.json();
+        if (
+          !Array.isArray(data.voices) ||
+          !data.tally ||
+          typeof data.total !== "number" ||
+          typeof data.states !== "number" ||
+          data.total < 0 ||
+          data.states < 0
+        ) {
+          throw new Error("Pulse response invalid");
+        }
         if (alive) {
           setError(false);
-          setVoices(data.voices || []);
-          setTotal(typeof data.total === "number" ? data.total : (data.voices || []).length);
+          setVoices(data.voices);
+          setTotal(data.total);
           setTruncated(Boolean(data.truncated));
         }
       } catch {

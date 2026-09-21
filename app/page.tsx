@@ -27,7 +27,18 @@ export default function Home() {
     fetch("/api/pulse")
       .then(async (r) => {
         if (!r.ok) throw new Error("pulse unavailable");
-        return r.json();
+        const data = await r.json();
+        if (
+          !Array.isArray(data.voices) ||
+          !data.tally ||
+          typeof data.total !== "number" ||
+          typeof data.states !== "number" ||
+          data.total < 0 ||
+          data.states < 0
+        ) {
+          throw new Error("pulse response invalid");
+        }
+        return data;
       })
       .then((d) => {
         if (!alive) return;

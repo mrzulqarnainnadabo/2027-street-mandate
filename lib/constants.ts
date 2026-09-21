@@ -42,8 +42,8 @@ export const STATES = [
   "Zamfara","FCT"
 ] as const;
 
-export const AGE_BANDS = ["18-24","25-34","35-44","45+","Prefer not"] as const;
-export const GENDERS = ["Male","Female","Prefer not"] as const;
+export const AGE_BANDS = ["18-24", "25-34", "35-44", "45-54", "55+"] as const;
+export const GENDERS = ["Female", "Male", "Prefer not to say"] as const;
 
 /** Quality floor for a publishable civic demand (form + API must match) */
 export const MIN_SENTENCE = 20;

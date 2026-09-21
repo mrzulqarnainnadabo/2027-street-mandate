@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { submitVoice } from "@/lib/notion";
-import { DUTIES, OFFICES, STATES, MIN_SENTENCE, MAX_SENTENCE } from "@/lib/constants";
+import {
+  DUTIES,
+  OFFICES,
+  STATES,
+  AGE_BANDS,
+  GENDERS,
+  MIN_SENTENCE,
+  MAX_SENTENCE,
+} from "@/lib/constants";
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,6 +35,18 @@ export async function POST(req: NextRequest) {
     }
     if (!STATES.includes(state)) {
       return NextResponse.json({ error: "Invalid state." }, { status: 400 });
+    }
+    if (ageBand !== undefined && !AGE_BANDS.includes(ageBand)) {
+      return NextResponse.json({ error: "Invalid age band." }, { status: 400 });
+    }
+    if (gender !== undefined && !GENDERS.includes(gender)) {
+      return NextResponse.json({ error: "Invalid gender." }, { status: 400 });
+    }
+    if (lga !== undefined && (typeof lga !== "string" || lga.trim().length > 120)) {
+      return NextResponse.json({ error: "LGA must be 120 characters or fewer." }, { status: 400 });
+    }
+    if (deviceId !== undefined && (typeof deviceId !== "string" || deviceId.length > 200)) {
+      return NextResponse.json({ error: "Invalid device reference." }, { status: 400 });
     }
 
     const id = await submitVoice({
