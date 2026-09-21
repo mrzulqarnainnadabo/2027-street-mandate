@@ -1,7 +1,20 @@
 import Link from "next/link";
 import { ISEYC_SEAL_SRC } from "@/lib/brand";
 
-export default function Hero({ total, states }: { total: number; states: number }) {
+type PulseStatus = "loading" | "ready" | "unavailable";
+
+export default function Hero({
+  total,
+  states,
+  pulseStatus = "ready",
+}: {
+  total: number;
+  states: number;
+  pulseStatus?: PulseStatus;
+}) {
+  const showCounts = pulseStatus === "ready";
+  const unavailable = pulseStatus === "unavailable";
+
   return (
     <section className="border-b border-forest-500/10 px-4 pb-6 pt-7 text-center">
       <div className="mb-3 flex justify-center">
@@ -29,29 +42,52 @@ export default function Hero({ total, states }: { total: number; states: number 
         public record — never a candidate ranking or popularity poll.
       </p>
 
-      <div className="mx-auto mt-5 flex max-w-xs justify-center divide-x divide-forest-500/15 border-y border-forest-500/10 py-3 text-left">
-        <div className="w-1/2 pr-6">
-          <div className="font-display text-xl font-bold tabular-nums text-forest-700">{total}</div>
-          <div className="text-[10px] uppercase tracking-wide text-forest-500">Published mandates</div>
+      {unavailable ? (
+        <div className="mx-auto mt-5 max-w-sm border-y border-forest-500/10 bg-forest-50 px-3 py-3 text-center">
+          <p className="text-xs font-semibold text-forest-800">
+            Published counts temporarily unavailable
+          </p>
+          <p className="mt-1 text-[10px] leading-snug text-forest-600">
+            The public record could not be loaded. No zero count is shown in place of real data.
+          </p>
         </div>
-        <div className="w-1/2 pl-6">
-          <div className="font-display text-xl font-bold tabular-nums text-forest-700">{states}</div>
-          <div className="text-[10px] uppercase tracking-wide text-forest-500">States represented</div>
+      ) : (
+        <div className="mx-auto mt-5 flex max-w-xs justify-center divide-x divide-forest-500/15 border-y border-forest-500/10 py-3 text-left">
+          <div className="w-1/2 pr-6">
+            <div className="font-display text-xl font-bold tabular-nums text-forest-700">
+              {showCounts ? total : "—"}
+            </div>
+            <div className="text-[10px] uppercase tracking-wide text-forest-500">
+              Published mandates
+            </div>
+          </div>
+          <div className="w-1/2 pl-6">
+            <div className="font-display text-xl font-bold tabular-nums text-forest-700">
+              {showCounts ? states : "—"}
+            </div>
+            <div className="text-[10px] uppercase tracking-wide text-forest-500">
+              States represented
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
-      <p className="mt-1.5 text-[10px] text-forest-500/75">Published records only · not a poll</p>
+      <p className="mt-1.5 text-[10px] text-forest-500/75">
+        {showCounts ? "Published records only · not a poll" : "Loading public record…"}
+      </p>
 
       <p className="mt-4 text-[11px] font-semibold text-forest-600">
         Scroll to begin · choose a duty of government
       </p>
 
-      <Link
-        href="/about"
-        className="mt-2 inline-block text-[11px] text-forest-500 underline underline-offset-2"
-      >
-        Read the non-partisan charter
-      </Link>
+      <div className="mt-2 flex flex-wrap items-center justify-center gap-3 text-[11px]">
+        <Link href="/brief" className="text-forest-600 underline underline-offset-2">
+          State Civic Brief
+        </Link>
+        <Link href="/about" className="text-forest-500 underline underline-offset-2">
+          Non-partisan charter
+        </Link>
+      </div>
     </section>
   );
 }
