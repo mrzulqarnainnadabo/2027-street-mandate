@@ -21,20 +21,23 @@ export default function LivePulse() {
   const [stateFilter, setStateFilter] = useState("");
   const [officeFilter, setOfficeFilter] = useState("");
   const [dutyFilter, setDutyFilter] = useState("");
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     let alive = true;
     async function load() {
       try {
         const res = await fetch("/api/pulse");
+        if (!res.ok) throw new Error("Pulse unavailable");
         const data = await res.json();
         if (alive) {
+          setError(false);
           setVoices(data.voices || []);
           setTotal(typeof data.total === "number" ? data.total : (data.voices || []).length);
           setTruncated(Boolean(data.truncated));
         }
       } catch {
-        /* ignore */
+        if (alive) setError(true);
       }
     }
     load();
@@ -72,6 +75,20 @@ export default function LivePulse() {
   }));
 
   const hasFilters = Boolean(stateFilter || officeFilter || dutyFilter);
+
+  if (error) {
+    return (
+      <section className="mt-10 border-t border-forest-500/10 px-4 pb-16 pt-8">
+        <div className="mx-auto max-w-xl border-y border-forest-500/15 bg-forest-50 px-4 py-6 text-center">
+          <p className="text-sm font-semibold text-forest-800">Civic Pulse is temporarily unavailable.</p>
+          <p className="mt-1.5 text-xs leading-relaxed text-forest-600">
+            Published civic records could not be loaded. This wall will try again automatically.
+            No zero or empty count is being shown as a substitute.
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="mt-10 border-t border-forest-500/10 px-4 pb-16 pt-8">

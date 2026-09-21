@@ -26,17 +26,24 @@ export default function BriefPage() {
   const [total, setTotal] = useState(0);
   const [state, setState] = useState("Kaduna");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     let alive = true;
     fetch("/api/pulse")
-      .then((r) => r.json())
+      .then(async (r) => {
+        if (!r.ok) throw new Error("Brief unavailable");
+        return r.json();
+      })
       .then((d) => {
         if (!alive) return;
+        setError(false);
         setVoices(d.voices || []);
         setTotal(typeof d.total === "number" ? d.total : (d.voices || []).length);
       })
-      .catch(() => {})
+      .catch(() => {
+        if (alive) setError(true);
+      })
       .finally(() => {
         if (alive) setLoading(false);
       });
@@ -62,6 +69,26 @@ export default function BriefPage() {
   }, [forState]);
 
   const dutiesWithData = DUTIES.filter((d) => (byDuty[d.id] || []).length > 0);
+
+  if (error) {
+    return (
+      <div className="mx-auto min-h-screen max-w-2xl">
+        <Header />
+        <main className="px-4 py-8">
+          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">Data for delivery</p>
+          <h1 className="mt-1 font-display text-2xl font-bold text-forest-900">State Civic Brief</h1>
+          <div className="mt-6 border-y border-forest-500/15 bg-forest-50 px-4 py-6 text-center">
+            <p className="text-sm font-semibold text-forest-800">State Civic Brief is temporarily unavailable.</p>
+            <p className="mt-1.5 text-xs leading-relaxed text-forest-600">
+              Published civic records could not be loaded, so this brief is not displaying an empty or zero count as if no mandates exist.
+              Please try again later.
+            </p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto min-h-screen max-w-2xl">
