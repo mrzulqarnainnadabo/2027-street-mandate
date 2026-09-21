@@ -16,17 +16,54 @@ type Voice = {
   lga?: string;
 };
 
-/**
- * State Civic Brief — data for action, not rankings.
- * Groups published mandates so communities and offices can see
- * concrete demands by duty. Never candidate scores.
- */
+function groupByOffice(items: Voice[]): { office: string; items: Voice[] }[] {
+  const map = new Map<string, Voice[]>();
+  for (const v of items) {
+    const key = (v.office || "").trim() || "Office not specified";
+    if (!map.has(key)) map.set(key, []);
+    map.get(key)!.push(v);
+  }
+  return Array.from(map.entries())
+    .map(([office, list]) => ({ office, items: list }))
+    .sort((a, b) => a.office.localeCompare(b.office));
+}
+
+function buildPlainBrief(state: string, forState: Voice[], dutiesWithData: typeof DUTIES, byDuty: Record<string, Voice[]>): string {
+  const lines: string[] = [
+    `ISEYC 2027 Civic Mandate — State Civic Brief`,
+    `State: ${state}`,
+    `Published demands: ${forState.length}`,
+    ``,
+    `Not a poll. Not a ranking. Not an endorsement.`,
+    `Public memory of what citizens asked public office to deliver.`,
+    ``,
+  ];
+
+  for (const d of dutiesWithData) {
+    const items = byDuty[d.id] || [];
+    lines.push(`${d.label} (${items.length})`);
+    for (const { office, items: officeItems } of groupByOffice(items)) {
+      lines.push(`  [${office}]`);
+      for (const v of officeItems) {
+        const place = v.lga ? ` (${v.lga})` : "";
+        lines.push(`  - "${v.sentence}"${place}`);
+      }
+    }
+    lines.push("");
+  }
+
+  lines.push(`Source: https://2027-street-mandate.vercel.app/brief`);
+  lines.push(`Submit: https://2027-street-mandate.vercel.app/`);
+  return lines.join("\n");
+}
+
 export default function BriefPage() {
   const [voices, setVoices] = useState<Voice[]>([]);
   const [total, setTotal] = useState(0);
   const [state, setState] = useState("Kaduna");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -70,6 +107,17 @@ export default function BriefPage() {
 
   const dutiesWithData = DUTIES.filter((d) => (byDuty[d.id] || []).length > 0);
 
+  async function copyBrief() {
+    const text = buildPlainBrief(state, forState, dutiesWithData, byDuty);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      alert(text);
+    }
+  }
+
   if (error) {
     return (
       <div className="mx-auto min-h-screen max-w-2xl">
@@ -80,8 +128,8 @@ export default function BriefPage() {
           <div className="mt-6 border-y border-forest-500/15 bg-forest-50 px-4 py-6 text-center">
             <p className="text-sm font-semibold text-forest-800">State Civic Brief is temporarily unavailable.</p>
             <p className="mt-1.5 text-xs leading-relaxed text-forest-600">
-              Published civic records could not be loaded, so this brief is not displaying an empty or zero count as if no mandates exist.
-              Please try again later.
+              Published civic records could not be loaded, so this brief is not displaying an empty or
+              zero count as if no mandates exist. Please try again later.
             </p>
           </div>
         </main>
@@ -101,9 +149,8 @@ export default function BriefPage() {
           State Civic Brief
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-forest-700/90">
-          Published citizen demands for one state, grouped by duty of government.
-          This is a public memory of what people asked for — not a poll, not a ranking,
-          not an endorsement.
+          Published citizen demands for one state, grouped by duty, then by office.
+          Public memory of what people asked for — not a poll, ranking, or endorsement.
         </p>
 
         <label className="mt-6 block text-xs font-semibold text-forest-700">
@@ -121,11 +168,11 @@ export default function BriefPage() {
           </select>
         </label>
 
-        <div className="mt-4 border-y border-forest-500/10 py-3 text-xs text-forest-600">
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-y border-forest-500/10 py-3 text-xs text-forest-600">
           {loading ? (
             <span>Loading published records…</span>
           ) : (
-            <>
+            <span>
               <strong className="tabular-nums text-forest-800">{forState.length}</strong>{" "}
               published from {state}
               {total > 0 ? (
@@ -133,8 +180,17 @@ export default function BriefPage() {
                   {" "}· {total} published nationally on this wall
                 </span>
               ) : null}
-            </>
+            </span>
           )}
+          {!loading && forState.length > 0 ? (
+            <button
+              type="button"
+              onClick={copyBrief}
+              className="min-h-[40px] rounded-md border border-forest-500/25 bg-white px-3 py-1.5 text-[11px] font-semibold text-forest-800"
+            >
+              {copied ? "Copied" : "Copy brief text"}
+            </button>
+          ) : null}
         </div>
 
         {!loading && forState.length === 0 ? (
@@ -143,8 +199,8 @@ export default function BriefPage() {
               No published mandates from {state} yet.
             </p>
             <p className="mt-2 text-xs text-forest-500">
-              When citizens submit and ISEYC publishes, demands will group here by duty — so
-              communities can see patterns, not personalities.
+              When citizens submit and ISEYC sets Status to Published, demands group here by duty
+              and office — patterns, not personalities.
             </p>
             <Link
               href="/"
@@ -157,6 +213,7 @@ export default function BriefPage() {
           <div className="mt-6 space-y-8">
             {dutiesWithData.map((d) => {
               const items = byDuty[d.id] || [];
+              const officeGroups = groupByOffice(items);
               return (
                 <section key={d.id}>
                   <div className="mb-3 flex items-baseline justify-between border-b border-forest-500/15 pb-2">
@@ -167,23 +224,32 @@ export default function BriefPage() {
                       {items.length} demand{items.length === 1 ? "" : "s"}
                     </span>
                   </div>
-                  <ul className="space-y-3">
-                    {items.map((v) => (
-                      <li key={v.id}>
-                        <Link
-                          href={`/mandate/${v.id}`}
-                          className="block border border-forest-500/12 bg-white px-3 py-3 transition hover:border-forest-500/30"
-                        >
-                          <p className="text-sm leading-snug text-forest-900">
-                            “{v.sentence}”
-                          </p>
-                          <p className="mt-1.5 text-[10px] text-forest-500">
-                            {[v.lga, v.office].filter(Boolean).join(" · ") || "Office not specified"}
-                          </p>
-                        </Link>
-                      </li>
+                  <div className="space-y-4">
+                    {officeGroups.map(({ office, items: officeItems }) => (
+                      <div key={office}>
+                        <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-forest-500">
+                          {office}
+                        </p>
+                        <ul className="space-y-2.5">
+                          {officeItems.map((v) => (
+                            <li key={v.id}>
+                              <Link
+                                href={`/mandate/${v.id}`}
+                                className="block border border-forest-500/12 bg-white px-3 py-3 transition hover:border-forest-500/30"
+                              >
+                                <p className="text-sm leading-snug text-forest-900">
+                                  “{v.sentence}”
+                                </p>
+                                {v.lga ? (
+                                  <p className="mt-1.5 text-[10px] text-forest-500">{v.lga}</p>
+                                ) : null}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </section>
               );
             })}
@@ -194,8 +260,8 @@ export default function BriefPage() {
           <p className="font-semibold text-forest-700">How this helps</p>
           <ul className="mt-2 list-disc space-y-1 pl-4">
             <li>Communities see what others in their state already demanded.</li>
-            <li>ISEYC can turn weekly published rows into field briefs without ranking people.</li>
-            <li>Offices and aspirants can read public expectations — response is optional and separate.</li>
+            <li>Copy brief text for WhatsApp or X without ranking language.</li>
+            <li>Offices can read public expectations — response is separate and optional.</li>
           </ul>
           <p className="mt-3">
             Counts describe published demands only. They are not votes, polls, or popularity scores.
