@@ -11,10 +11,13 @@ export default function DutyCards({
 }) {
   return (
     <section className="px-4">
-      <h2 className="mb-3 text-center text-xs font-semibold uppercase tracking-widest text-forest-500">
-        1 · What must be delivered?
+      <h2 className="mb-1 text-center font-display text-base font-bold text-forest-800">
+        What must public office deliver?
       </h2>
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+      <p className="mb-4 text-center text-[11px] text-forest-500">
+        Step 1 · Pick one duty of government
+      </p>
+      <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
         {DUTIES.map((m) => {
           const active = selected === m.id;
           return (
@@ -22,14 +25,23 @@ export default function DutyCards({
               key={m.id}
               type="button"
               onClick={() => onSelect(m.id)}
-              className={`paper-card flex flex-col items-center gap-1.5 rounded-xl px-2.5 py-3.5 text-center transition active:scale-[0.98] ${
-                active ? "ring-2 ring-forest-500 bg-forest-50" : "hover:bg-white"
+              className={`flex min-h-[48px] items-center gap-3 rounded-lg border px-3 py-3 text-left transition active:scale-[0.99] ${
+                active
+                  ? "border-forest-500 bg-forest-50 ring-1 ring-forest-500"
+                  : "border-forest-500/12 bg-white hover:border-forest-500/30"
               }`}
             >
-              <span className="text-lg">{m.icon}</span>
               <span
-                className={`text-[11px] font-semibold leading-tight ${
-                  active ? "text-forest-700" : "text-forest-900"
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-sm ${
+                  active ? "bg-forest-500 text-cream" : "bg-forest-50 text-forest-700"
+                }`}
+                aria-hidden
+              >
+                {m.icon}
+              </span>
+              <span
+                className={`text-sm font-medium leading-snug ${
+                  active ? "text-forest-800" : "text-forest-900"
                 }`}
               >
                 {m.label}
