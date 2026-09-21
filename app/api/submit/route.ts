@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { submitVoice } from "@/lib/notion";
-import { DUTIES, OFFICES, STATES, MAX_SENTENCE } from "@/lib/constants";
-
-/** Keep in sync with FormPanel MIN_SENTENCE — quality floor for civic data */
-const MIN_SENTENCE = 20;
+import { DUTIES, OFFICES, STATES, MIN_SENTENCE, MAX_SENTENCE } from "@/lib/constants";
 
 export async function POST(req: NextRequest) {
   try {

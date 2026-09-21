@@ -6,12 +6,11 @@ import {
   STATES,
   AGE_BANDS,
   GENDERS,
+  MIN_SENTENCE,
   MAX_SENTENCE,
   PROMPT_EXAMPLES,
 } from "@/lib/constants";
 import { getDeviceId } from "@/lib/fingerprint";
-
-const MIN_SENTENCE = 20;
 
 export default function FormPanel({
   duty,
