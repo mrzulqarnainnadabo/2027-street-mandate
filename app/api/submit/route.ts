@@ -1,14 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { submitVoice } from "@/lib/notion";
-import { DUTIES, OFFICES, STATES, MIN_SENTENCE, MAX_SENTENCE } from "@/lib/constants";
+import {
+  DUTIES,
+  OFFICES,
+  STATES,
+  AGE_BANDS,
+  GENDERS,
+  MIN_SENTENCE,
+  MAX_SENTENCE,
+} from "@/lib/constants";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { sentence, duty, mandate, office, state, lga, ageBand, gender, deviceId } = body;
-    const dutyId = duty || mandate;
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return NextResponse.json({ error: "Invalid submission." }, { status: 400 });
+    }
 
-    if (!sentence || typeof sentence !== "string" || sentence.trim().length < MIN_SENTENCE) {
+    const { sentence, duty, mandate, office, state, lga, ageBand, gender, deviceId } = body as Record<string, unknown>;
+    const dutyId = typeof duty === "string" && duty ? duty : mandate;
+
+    if (typeof sentence !== "string" || sentence.trim().length < MIN_SENTENCE) {
       return NextResponse.json(
         {
           error: `Please write a clearer demand (at least ${MIN_SENTENCE} characters). Name a service or outcome — not a party slogan.`,
@@ -16,17 +28,29 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    if (sentence.length > MAX_SENTENCE) {
+    if (sentence.trim().length > MAX_SENTENCE) {
       return NextResponse.json({ error: `Max ${MAX_SENTENCE} characters.` }, { status: 400 });
     }
-    if (!DUTIES.find((d) => d.id === dutyId)) {
+    if (typeof dutyId !== "string" || !DUTIES.some((d) => d.id === dutyId)) {
       return NextResponse.json({ error: "Invalid duty category." }, { status: 400 });
     }
-    if (!OFFICES.find((o) => o.id === office)) {
+    if (typeof office !== "string" || !OFFICES.some((o) => o.id === office)) {
       return NextResponse.json({ error: "Invalid office." }, { status: 400 });
     }
-    if (!STATES.includes(state)) {
+    if (typeof state !== "string" || !STATES.includes(state as (typeof STATES)[number])) {
       return NextResponse.json({ error: "Invalid state." }, { status: 400 });
+    }
+    if (ageBand !== undefined && (typeof ageBand !== "string" || !AGE_BANDS.includes(ageBand as (typeof AGE_BANDS)[number]))) {
+      return NextResponse.json({ error: "Invalid age band." }, { status: 400 });
+    }
+    if (gender !== undefined && (typeof gender !== "string" || !GENDERS.includes(gender as (typeof GENDERS)[number]))) {
+      return NextResponse.json({ error: "Invalid gender." }, { status: 400 });
+    }
+    if (lga !== undefined && (typeof lga !== "string" || lga.trim().length > 120)) {
+      return NextResponse.json({ error: "LGA must be 120 characters or fewer." }, { status: 400 });
+    }
+    if (deviceId !== undefined && (typeof deviceId !== "string" || deviceId.length > 200)) {
+      return NextResponse.json({ error: "Invalid device reference." }, { status: 400 });
     }
 
     const id = await submitVoice({
@@ -35,9 +59,9 @@ export async function POST(req: NextRequest) {
       office,
       state,
       lga: typeof lga === "string" ? lga : undefined,
-      ageBand,
-      gender,
-      deviceId: deviceId || "unknown",
+      ageBand: typeof ageBand === "string" ? ageBand : undefined,
+      gender: typeof gender === "string" ? gender : undefined,
+      deviceId: typeof deviceId === "string" && deviceId ? deviceId : "unknown",
     });
 
     return NextResponse.json({ ok: true, id });
