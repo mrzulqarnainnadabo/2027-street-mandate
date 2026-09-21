@@ -40,6 +40,9 @@ export default async function MandateDetailPage({ params }: Props) {
   }
 
   const where = [m.state, m.lga].filter(Boolean).join(" · ");
+  const briefHref = m.state
+    ? `/brief?state=${encodeURIComponent(m.state)}`
+    : "/brief";
 
   return (
     <div className="mx-auto min-h-screen max-w-2xl px-4 py-10">
@@ -51,7 +54,7 @@ export default async function MandateDetailPage({ params }: Props) {
         </div>
       </div>
 
-      <article className="paper-card rounded-2xl p-5">
+      <article className="border border-forest-500/15 bg-white px-5 py-5">
         <p className="text-lg leading-relaxed text-forest-900">“{m.sentence}”</p>
 
         <dl className="mt-5 grid gap-2 text-xs text-forest-600">
@@ -86,9 +89,15 @@ export default async function MandateDetailPage({ params }: Props) {
       <div className="mt-8 flex flex-col items-center gap-3 text-sm">
         <Link
           href="/"
-          className="w-full max-w-xs rounded-xl bg-forest-500 py-3 text-center font-bold text-white"
+          className="w-full max-w-xs rounded-md bg-forest-500 py-3 text-center font-bold text-white"
         >
           Add your mandate
+        </Link>
+        <Link
+          href={briefHref}
+          className="text-xs font-semibold text-forest-700 underline underline-offset-2"
+        >
+          View State Civic Brief{m.state ? ` · ${m.state}` : ""}
         </Link>
         <Link href="/about" className="text-xs text-forest-600 underline underline-offset-2">
           Non-partisan charter
