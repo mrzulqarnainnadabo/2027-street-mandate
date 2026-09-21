@@ -270,8 +270,8 @@ export async function getMandateStatus(id: string): Promise<MandateStatus | null
     };
   } catch (err: any) {
     console.error("getMandateStatus:", err?.message || err);
-    const status = err?.status || err?.code;
-    if (status === 404 || status === "object_not_found") {
+    const code = err?.code || err?.body?.code;
+    if (code === "object_not_found") {
       throw new CivicStatusError(
         "NOT_FOUND",
         "This submission reference could not be found."
