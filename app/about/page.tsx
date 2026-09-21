@@ -59,6 +59,42 @@ export default function AboutPage() {
         </p>
 
         <h2 className="pt-1 font-display text-base font-bold text-forest-900">
+          How the public record is made
+        </h2>
+        <ol className="list-decimal space-y-1 pl-5">
+          <li>You submit one concrete service or outcome, with a state and responsible office.</li>
+          <li>ISEYC reviews the submission for clarity, public interest, safety, and non-partisanship.</li>
+          <li>A submission remains private to the moderation process while its status is New or under review.</li>
+          <li>Only submissions marked Published appear on Civic Pulse, State Civic Briefs, and public detail pages.</li>
+          <li>Similar demands may be grouped for clarity. Grouping does not mean the voices are votes or a popularity score.</li>
+        </ol>
+
+        <h2 className="pt-1 font-display text-base font-bold text-forest-900">What the numbers mean</h2>
+        <p>
+          A published count is the number of published records successfully loaded for the selected
+          scope and time of access. It is not a poll, vote total, ranking, endorsement, or claim to
+          represent every Nigerian. If the civic data service fails, the correct result is a temporary
+          unavailability message — never a made-up zero.
+        </p>
+
+        <h2 className="pt-1 font-display text-base font-bold text-forest-900">What happens after publication</h2>
+        <p>
+          Publication preserves a citizen demand as public civic data. ISEYC may use briefs to request
+          attention and document responses, but this platform does not provide emergency assistance,
+          government services, jobs, food, healthcare, or security. A published demand is not proof that
+          an office has accepted responsibility or delivered a result.
+        </p>
+
+        <h2 className="pt-1 font-display text-base font-bold text-forest-900">Safety and corrections</h2>
+        <p>
+          Do not submit passwords, bank details, phone numbers, exact home addresses, or information
+          that could put you or another person at risk. Evidence is optional. Contact ISEYC if a
+          published record contains a serious error, exposes personal information, or needs a safety
+          correction. We will assess correction and takedown requests rather than silently changing the
+          public record.
+        </p>
+
+        <h2 className="pt-1 font-display text-base font-bold text-forest-900">
           Why office and geography
         </h2>
         <p>
