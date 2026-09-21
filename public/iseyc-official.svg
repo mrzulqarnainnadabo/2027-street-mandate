@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 680" role="img" aria-labelledby="title desc">
+  <title id="title">ISEYC official logo</title>
+  <desc id="desc">Initiative for Sustainable Evolution for the Youth and Community — ISEYC.</desc>
+  <defs>
+    <path id="ring" d="M450 42a292 292 0 1 1 0 584a292 292 0 1 1 0-584"/>
+    <linearGradient id="forest" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d6847"/>
+      <stop offset="1" stop-color="#0f4d34"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-opacity=".16"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <circle cx="450" cy="334" r="294" fill="url(#forest)"/>
+    <circle cx="450" cy="334" r="274" fill="#fff"/>
+    <circle cx="450" cy="334" r="265" fill="none" stroke="#f2df32" stroke-width="4"/>
+    <text fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" letter-spacing="2.1">
+      <textPath href="#ring" startOffset="3%">INITIATIVE FOR SUSTAINABLE EVOLUTION FOR THE YOUTH AND COMMUNITY</textPath>
+    </text>
+
+    <!-- collaboration -->
+    <g transform="translate(332 174)" fill="none" stroke-linecap="round">
+      <path d="M-42 2l48 48M-25-8l48 48" stroke="#9b5d37" stroke-width="18"/>
+      <path d="M25-8L-23 40M42 2L-6 50" stroke="#d5b49c" stroke-width="18"/>
+      <path d="M-22 12l18 18M6 0l18 18M-6 30l18 18" stroke="#fff" stroke-width="3"/>
+    </g>
+
+    <!-- idea -->
+    <g transform="translate(570 180)" fill="none" stroke="#1a365d" stroke-linecap="round">
+      <path d="M-30 22c-24-54 11-86 30-86s54 32 30 86c-7 16-15 20-15 34H-15c0-14-8-18-15-34Z" stroke-width="7"/>
+      <path d="M-13 56h26M-10 66h20" stroke-width="6"/>
+      <path d="M0-30v45M-18-8l18 23 18-23" stroke="#e7aa3a" stroke-width="7"/>
+      <path d="M0-76v-14M-42-61l-10-10M42-61l10-10M-55-20h-15M55-20h15" stroke="#e7aa3a" stroke-width="6"/>
+    </g>
+
+    <!-- tree -->
+    <g transform="translate(450 365)">
+      <path d="M0 98V-20M0 38l-48-42M0 54l50-48M0 12l-6-62" fill="none" stroke="#8b5a2b" stroke-width="9" stroke-linecap="round"/>
+      <path d="M-8 88C-28 112-55 126-74 142M8 88c22 24 48 38 70 54" fill="none" stroke="#b39162" stroke-width="5" stroke-linecap="round"/>
+      <g fill="#1f6a47">
+        <ellipse cx="-58" cy="-15" rx="28" ry="17" transform="rotate(-25 -58 -15)"/>
+        <ellipse cx="-30" cy="-48" rx="29" ry="18" transform="rotate(18 -30 -48)"/>
+        <ellipse cx="5" cy="-63" rx="29" ry="18"/>
+        <ellipse cx="37" cy="-45" rx="29" ry="18" transform="rotate(-18 37 -45)"/>
+        <ellipse cx="63" cy="-10" rx="28" ry="17" transform="rotate(25 63 -10)"/>
+        <ellipse cx="-67" cy="18" rx="27" ry="17" transform="rotate(20 -67 18)"/>
+        <ellipse cx="68" cy="20" rx="27" ry="17" transform="rotate(-20 68 20)"/>
+        <ellipse cx="-20" cy="-8" rx="34" ry="20" transform="rotate(-12 -20 -8)"/>
+        <ellipse cx="27" cy="-5" rx="34" ry="20" transform="rotate(12 27 -5)"/>
+      </g>
+      <g fill="#2c845b" opacity=".95">
+        <circle cx="-75" cy="-35" r="10"/><circle cx="-48" cy="-70" r="10"/><circle cx="-5" cy="-82" r="10"/>
+        <circle cx="42" cy="-70" r="10"/><circle cx="76" cy="-35" r="10"/><circle cx="-85" cy="4" r="10"/>
+        <circle cx="85" cy="4" r="10"/><circle cx="-42" cy="-22" r="10"/><circle cx="43" cy="-22" r="10"/>
+      </g>
+    </g>
+
+    <!-- supporting hands -->
+    <path d="M338 488c36-23 72-25 112-6 40-19 76-17 112 6" fill="none" stroke="#3947a8" stroke-width="22" stroke-linecap="round"/>
+    <path d="M340 486c19 15 36 27 55 32M560 486c-19 15-36 27-55 32" fill="none" stroke="#3947a8" stroke-width="12" stroke-linecap="round"/>
+
+    <text x="450" y="548" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="48" font-weight="800" fill="#0f4d34" letter-spacing="1">ISEYC</text>
+  </g>
+
+  <!-- banner -->
+  <g transform="translate(50 565)">
+    <path d="M55 8C170 36 285 27 400 28s230 8 345-20l-18 76c-112-26-215-19-327-20s-215-6-327 20Z" fill="#0f4d34"/>
+    <path d="M55 8L12 32l43 16M745 8l43 24-43 16" fill="#1a365d"/>
+    <text x="400" y="58" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="700" fill="#fff" letter-spacing="1">EMPOWERMENT YOUTH, SHAPING FUTURE</text>
+  </g>
+</svg>
