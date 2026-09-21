@@ -152,16 +152,16 @@ export async function getPublishedPulse(): Promise<{
   truncated: boolean;
 }> {
   if (!process.env.NOTION_TOKEN || !DATABASE_ID) {
-    return { voices: [], tally: {}, total: 0, states: 0, truncated: false };
+    throw new Error("Civic Pulse is not configured: missing Notion environment variables.");
   }
 
-  try {
-    const voices: PulseVoice[] = [];
-    const tally: Record<string, number> = {};
-    const stateSet = new Set<string>();
-    let cursor: string | undefined;
-    let truncated = false;
+  const voices: PulseVoice[] = [];
+  const tally: Record<string, number> = {};
+  const stateSet = new Set<string>();
+  let cursor: string | undefined;
+  let truncated = false;
 
+  try {
     for (let page = 0; page < MAX_PUBLISHED_PAGES; page++) {
       const response: any = await notion.databases.query({
         database_id: DATABASE_ID,
@@ -201,8 +201,8 @@ export async function getPublishedPulse(): Promise<{
       truncated,
     };
   } catch (err: any) {
-    console.error("Pulse error (non-fatal):", err?.message || err);
-    return { voices: [], tally: {}, total: 0, states: 0, truncated: false };
+    console.error("Pulse error (fatal for public data):", err?.message || err);
+    throw new Error("Civic Pulse could not load published records.");
   }
 }
 
