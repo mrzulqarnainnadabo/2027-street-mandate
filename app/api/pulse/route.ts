@@ -10,8 +10,11 @@ export async function GET() {
   } catch (err: any) {
     console.error("Pulse error:", err);
     return NextResponse.json(
-      { voices: [], tally: {}, total: 0, states: 0 },
-      { status: 200 }
+      {
+        error: "CIVIC_PULSE_UNAVAILABLE",
+        message: "Published civic records are temporarily unavailable. Please try again later.",
+      },
+      { status: 503 }
     );
   }
 }
