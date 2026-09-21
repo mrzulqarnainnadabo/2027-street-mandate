@@ -2,38 +2,37 @@ import Link from "next/link";
 
 export default function HowItWorks() {
   return (
-    <section className="mx-4 mb-6 rounded-2xl border border-forest-500/15 bg-white/90 px-4 py-5 text-left shadow-sm">
-      <h2 className="text-center font-display text-sm font-bold text-forest-800">How it works</h2>
-      <ol className="mt-3 list-decimal space-y-2 pl-5 text-xs leading-relaxed text-forest-700">
-        <li>Choose a duty of government (health, security, power…).</li>
-        <li>Name the office that should deliver it — or say you are unsure.</li>
+    <section className="mx-4 mb-8 border-y border-forest-500/10 py-5">
+      <h2 className="text-center font-display text-sm font-bold tracking-wide text-forest-800">
+        How it works
+      </h2>
+      <ol className="mx-auto mt-3 max-w-md list-decimal space-y-2 pl-6 text-xs leading-relaxed text-forest-700">
+        <li>Choose a duty of government.</li>
+        <li>Name the office responsible — or say you are unsure.</li>
         <li>Add your state (and LGA if you know it).</li>
         <li>Write one concrete demand.</li>
-        <li>ISEYC reviews. Only accepted mandates appear on Civic Pulse.</li>
+        <li>ISEYC reviews. Only Published mandates appear on Civic Pulse.</li>
       </ol>
 
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-xl bg-forest-50 px-3 py-2.5">
-          <p className="text-[10px] font-bold uppercase tracking-wide text-forest-600">We publish</p>
-          <p className="mt-1 text-[11px] leading-snug text-forest-700">
-            Specific service demands, measurable expectations, public-interest concerns tied to an
-            office.
+      <div className="mx-auto mt-4 grid max-w-md gap-2 text-[11px] sm:grid-cols-2">
+        <div className="rounded-md border border-forest-500/10 bg-white px-3 py-2">
+          <p className="font-bold uppercase tracking-wide text-forest-600">We publish</p>
+          <p className="mt-1 leading-snug text-forest-700">
+            Specific service demands tied to public responsibility.
           </p>
         </div>
-        <div className="rounded-xl bg-forest-50 px-3 py-2.5">
-          <p className="text-[10px] font-bold uppercase tracking-wide text-forest-600">We reject</p>
-          <p className="mt-1 text-[11px] leading-snug text-forest-700">
-            Threats, hate, personal attacks, party slogans, candidate promotion, harassment,
-            empty noise.
+        <div className="rounded-md border border-forest-500/10 bg-white px-3 py-2">
+          <p className="font-bold uppercase tracking-wide text-forest-600">We reject</p>
+          <p className="mt-1 leading-snug text-forest-700">
+            Threats, hate, party slogans, candidate promotion, empty noise.
           </p>
         </div>
       </div>
 
-      <p className="mt-3 text-[10px] leading-snug text-forest-500">
-        Optional age/gender stay private. Device data is for spam control only. Mandate text becomes
-        public only after Status is set to Published.{" "}
+      <p className="mx-auto mt-3 max-w-md text-center text-[10px] leading-snug text-forest-500">
+        Optional demographics stay private. Mandate text is public only after publication.{" "}
         <Link href="/about" className="font-semibold underline underline-offset-2">
-          Full charter
+          Charter
         </Link>
       </p>
     </section>
