@@ -17,6 +17,8 @@ export default function SuccessPanel({
       : "https://2027-street-mandate.vercel.app";
   const homeUrl = origin + "/";
   const detailUrl = mandateId ? `${origin}/mandate/${mandateId}` : null;
+  const statusUrl = mandateId ? `${origin}/status/${mandateId}` : null;
+  const reference = mandateId ? `ISEYC-${mandateId.slice(0, 8).toUpperCase()}` : null;
 
   const shareBody = [
     "I submitted a civic mandate on ISEYC’s 2027 Civic Mandate (under review).",
@@ -91,6 +93,19 @@ export default function SuccessPanel({
           Your mandate is <strong className="font-semibold">not public yet</strong>. It appears on
           Civic Pulse only after ISEYC moderation marks it Published.
         </p>
+
+        {reference && statusUrl ? (
+          <div className="mx-auto mt-4 max-w-md border border-forest-500/15 bg-forest-50 px-4 py-3 text-left">
+            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">Keep your reference</p>
+            <p className="mt-1 font-display text-lg font-bold tracking-wide text-forest-900">{reference}</p>
+            <a
+              href={statusUrl}
+              className="mt-1 block text-xs font-semibold text-forest-700 underline underline-offset-2"
+            >
+              Check submission status
+            </a>
+          </div>
+        ) : null}
 
         <blockquote className="mx-auto mt-5 max-w-md border-l-2 border-forest-500 bg-forest-50 px-4 py-3 text-left text-sm italic text-forest-900">
           “{sentence}”

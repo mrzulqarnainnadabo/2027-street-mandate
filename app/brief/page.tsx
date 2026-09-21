@@ -17,6 +17,8 @@ type Voice = {
   lga?: string;
 };
 
+type Duty = (typeof DUTIES)[number];
+
 function groupByOffice(items: Voice[]): { office: string; items: Voice[] }[] {
   const map = new Map<string, Voice[]>();
   for (const v of items) {
@@ -32,7 +34,7 @@ function groupByOffice(items: Voice[]): { office: string; items: Voice[] }[] {
 function buildPlainBrief(
   state: string,
   forState: Voice[],
-  dutiesWithData: typeof DUTIES,
+  dutiesWithData: readonly Duty[],
   byDuty: Record<string, Voice[]>
 ): string {
   const lines: string[] = [

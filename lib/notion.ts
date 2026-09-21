@@ -22,6 +22,17 @@ export type PulseVoice = {
   created: string;
 };
 
+export type MandateStatus = {
+  id: string;
+  sentence: string;
+  duty: string;
+  office: string;
+  state: string;
+  lga: string;
+  status: string;
+  created: string;
+};
+
 function extractFromFingerprint(
   rich: any[] | undefined,
   key: "office" | "lga"
@@ -223,6 +234,32 @@ export async function getPublishedMandate(id: string): Promise<PulseVoice | null
     return mapPageToVoice(page);
   } catch (err: any) {
     console.error("getPublishedMandate:", err?.message || err);
+    return null;
+  }
+}
+
+/** Read a submission's moderation status without exposing demographic or fingerprint fields. */
+export async function getMandateStatus(id: string): Promise<MandateStatus | null> {
+  if (!process.env.NOTION_TOKEN || !DATABASE_ID) {
+    throw new Error("Civic status is not configured: missing Notion environment variables.");
+  }
+
+  try {
+    const page = (await notion.pages.retrieve({
+      page_id: notionPageId(id),
+    })) as any;
+
+    if (page.object !== "page" || page.archived) return null;
+
+    const mapped = mapPageToVoice(page);
+    if (!mapped) return null;
+
+    return {
+      ...mapped,
+      status: page.properties?.Status?.select?.name || "New",
+    };
+  } catch (err: any) {
+    console.error("getMandateStatus:", err?.message || err);
     return null;
   }
 }
