@@ -2,15 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { submitVoice } from "@/lib/notion";
 import { DUTIES, OFFICES, STATES, MAX_SENTENCE } from "@/lib/constants";
 
+/** Keep in sync with FormPanel MIN_SENTENCE — quality floor for civic data */
+const MIN_SENTENCE = 20;
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { sentence, duty, mandate, office, state, lga, ageBand, gender, deviceId } = body;
     const dutyId = duty || mandate;
 
-    if (!sentence || typeof sentence !== "string" || sentence.trim().length < 5) {
+    if (!sentence || typeof sentence !== "string" || sentence.trim().length < MIN_SENTENCE) {
       return NextResponse.json(
-        { error: "Please write a clear demand (at least 5 characters)." },
+        {
+          error: `Please write a clearer demand (at least ${MIN_SENTENCE} characters). Name a service or outcome — not a party slogan.`,
+        },
         { status: 400 }
       );
     }
@@ -41,9 +46,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, id });
   } catch (err: any) {
     console.error("Submit error:", err);
+    const message = String(err?.message || "");
+    const configFailure =
+      /not configured|Notion not configured|missing Notion|Share the database/i.test(message);
+
     return NextResponse.json(
-      { error: err.message || "Could not save your mandate. Please try again." },
-      { status: 500 }
+      {
+        error: configFailure
+          ? "Civic submission is temporarily unavailable. Please try again later."
+          : message || "Could not save your mandate. Please try again.",
+      },
+      { status: configFailure ? 503 : 500 }
     );
   }
 }

@@ -13,7 +13,7 @@ Citizens submit **one concrete demand** tied to a **duty** of government, an **o
 ISEYC moderates. Only **Published** rows appear on:
 
 - **Civic Pulse** (`/`) — public wall by duty
-- **State Civic Brief** (`/brief`) — State × Duty × Office
+- **State Civic Brief** (`/brief?state=Kaduna`) — State × Duty × Office (+ copy / print)
 - **Mandate page** (`/mandate/[id]`) — single published receipt
 
 This is **not** a poll, ranking, endorsement, or campaign tool.
@@ -30,7 +30,7 @@ Citizen submits
 
 Without **Publish**, the wall correctly shows zero. That is empty data, not a system failure.
 
-If Notion or env fails, `/api/pulse` should return **503** (not a fake zero) once the Track C deploy is live.
+If Notion or env fails, `/api/pulse` returns **503** (not a fake zero) when that code is deployed. Submit uses **503** for configuration failures.
 
 ## Env (Vercel)
 
@@ -40,6 +40,12 @@ NOTION_DATABASE_ID=
 ```
 
 Share the Notion database with the integration (Connections).
+
+### One Vercel project only
+
+Keep a **single** production project linked to this repo (recommended name: `2027-street-mandate`).
+
+Duplicate projects (`street-mandate-2027`, `iseyc-street-mandate`, `…-live`, etc.) each deploy on every push and will exhaust the free **100 deploys/day** limit. Disconnect extras under **Project → Settings → Git**.
 
 ### Notion fields (do not rename in code without migration)
 
