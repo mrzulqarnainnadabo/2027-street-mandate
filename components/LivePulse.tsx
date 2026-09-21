@@ -16,8 +16,8 @@ type Voice = {
 
 export default function LivePulse() {
   const [voices, setVoices] = useState<Voice[]>([]);
-  const [tally, setTally] = useState<Record<string, number>>({});
   const [total, setTotal] = useState(0);
+  const [truncated, setTruncated] = useState(false);
   const [stateFilter, setStateFilter] = useState("");
   const [officeFilter, setOfficeFilter] = useState("");
   const [dutyFilter, setDutyFilter] = useState("");
@@ -30,8 +30,8 @@ export default function LivePulse() {
         const data = await res.json();
         if (alive) {
           setVoices(data.voices || []);
-          setTally(data.tally || {});
-          setTotal(data.total || 0);
+          setTotal(typeof data.total === "number" ? data.total : (data.voices || []).length);
+          setTruncated(Boolean(data.truncated));
         }
       } catch {
         /* ignore */
@@ -84,6 +84,12 @@ export default function LivePulse() {
           <p className="mt-1 text-xs text-forest-500">
             Published mandates by duty · never candidate rankings
           </p>
+          {total > 0 ? (
+            <p className="mt-2 text-[11px] tabular-nums text-forest-600">
+              {total} published on this wall
+              {truncated ? " · more exist beyond this view" : ""}
+            </p>
+          ) : null}
         </div>
 
         <div className="mb-5 grid gap-2 sm:grid-cols-3">
@@ -133,8 +139,7 @@ export default function LivePulse() {
         {hasFilters ? (
           <div className="mb-5 flex items-start justify-between gap-3 border-y border-forest-500/10 bg-forest-50 px-3 py-2.5 text-[11px] text-forest-600">
             <span>
-              Showing {filteredVoices.length} of {voices.length} loaded published mandates
-              {total > voices.length ? ` (API shows ${total})` : ""}
+              Showing {filteredVoices.length} of {total} published mandates
             </span>
             <button
               type="button"
@@ -205,7 +210,9 @@ export default function LivePulse() {
                     {v.state}
                     {v.lga ? ` · ${v.lga}` : ""}
                   </span>
-                  {v.office ? <span className="border-l border-forest-500/15 pl-2">{v.office}</span> : null}
+                  {v.office ? (
+                    <span className="border-l border-forest-500/15 pl-2">{v.office}</span>
+                  ) : null}
                   <span className="border-l border-forest-500/15 pl-2">
                     {v.duty || v.mandate}
                   </span>
