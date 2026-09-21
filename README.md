@@ -26,7 +26,10 @@ Citizen submits
   → ISEYC reviews (reject hate / slogans / empty attacks)
   → Status = Published
   → appears on Civic Pulse + State Civic Brief
+  → operator may track response/follow-up internally
 ```
+
+The response-tracking layer is documented in [docs/mandate-to-response-protocol.md](docs/mandate-to-response-protocol.md).
 
 Without **Publish**, the wall correctly shows zero. That is empty data, not a system failure.
 
@@ -45,7 +48,7 @@ Share the Notion database with the integration (Connections).
 
 Keep a **single** production project linked to this repo (recommended name: `2027-street-mandate`).
 
-Duplicate projects (`street-mandate-2027`, `iseyc-street-mandate`, `…-live`, etc.) each deploy on every push and will exhaust the free **100 deploys/day** limit. Disconnect extras under **Project → Settings → Git**.
+Duplicate projects (`street-mandate-2027`, `iseyc-street-mandate`, `…-live`, etc.) each deploy on every push and can exhaust deployment capacity. Disconnect extras under **Project → Settings → Git**.
 
 ### Notion fields (do not rename in code without migration)
 
