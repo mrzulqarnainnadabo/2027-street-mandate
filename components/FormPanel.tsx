@@ -11,6 +11,8 @@ import {
 } from "@/lib/constants";
 import { getDeviceId } from "@/lib/fingerprint";
 
+const MIN_SENTENCE = 20;
+
 export default function FormPanel({
   duty,
   onSuccess,
@@ -33,8 +35,15 @@ export default function FormPanel({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    if (!office || !state || sentence.trim().length < 5) {
-      setError("Please choose an office, your state, and write a clear demand.");
+    const text = sentence.trim();
+    if (!office || !state) {
+      setError("Please choose the responsible office and your state.");
+      return;
+    }
+    if (text.length < MIN_SENTENCE) {
+      setError(
+        `Write a clearer demand (at least ${MIN_SENTENCE} characters). Name a service or outcome — not a party slogan.`
+      );
       return;
     }
     setLoading(true);
@@ -43,7 +52,7 @@ export default function FormPanel({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          sentence: sentence.trim(),
+          sentence: text,
           duty,
           office,
           state,
@@ -56,7 +65,7 @@ export default function FormPanel({
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
       const rawId = typeof data.id === "string" ? data.id.replace(/-/g, "") : undefined;
-      onSuccess(sentence.trim(), state, rawId);
+      onSuccess(text, state, rawId);
     } catch (err: any) {
       setError(err.message || "Something went wrong. Try again.");
     } finally {
@@ -69,10 +78,28 @@ export default function FormPanel({
       <div className="mx-auto max-w-xl border-y border-forest-500/15 bg-white px-4 py-5 sm:px-5">
         <div className="mb-5 border-b border-forest-500/10 pb-4">
           <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">Step 2</p>
-          <h2 className="mt-1 font-display text-lg font-bold text-forest-900">State your civic mandate</h2>
+          <h2 className="mt-1 font-display text-lg font-bold text-forest-900">
+            State your civic mandate
+          </h2>
           <p className="mt-1 text-xs leading-relaxed text-forest-600">
-            Give the demand a responsible office and a place.
+            Tie the demand to an office and a place so it can enter the public record as data — not
+            noise.
           </p>
+        </div>
+
+        <div className="mb-5 grid gap-2 text-[11px] leading-snug sm:grid-cols-2">
+          <div className="border border-forest-500/12 bg-forest-50/50 px-3 py-2.5">
+            <p className="font-bold uppercase tracking-wide text-forest-600">More likely published</p>
+            <p className="mt-1 text-forest-700">
+              Specific service or outcome (e.g. medicines at the PHC, teachers present, cleared drains).
+            </p>
+          </div>
+          <div className="border border-forest-500/12 bg-forest-50/50 px-3 py-2.5">
+            <p className="font-bold uppercase tracking-wide text-forest-600">Usually rejected</p>
+            <p className="mt-1 text-forest-700">
+              Party slogans, candidate promotion, threats, personal attacks, empty insults.
+            </p>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -117,7 +144,7 @@ export default function FormPanel({
 
           <div>
             <label className="mb-2 block text-[13px] font-bold text-forest-900">
-              LGA <span className="font-normal text-forest-500">(optional)</span>
+              LGA <span className="font-normal text-forest-500">(optional but useful)</span>
             </label>
             <input
               type="text"
@@ -126,6 +153,9 @@ export default function FormPanel({
               placeholder="e.g. Kaduna South"
               className="field-control w-full px-3 text-sm outline-none"
             />
+            <p className="mt-1 text-[10px] text-forest-500">
+              LGA helps the brief connect demands to the right local place.
+            </p>
           </div>
 
           <div>
@@ -138,19 +168,21 @@ export default function FormPanel({
               </span>
             </div>
             <p className="mb-2 text-[11px] leading-snug text-forest-600">
-              One concrete demand — measurable if possible. Not a party slogan.
+              One concrete demand. Prefer something you could check in 6–12 months. Not a campaign
+              slogan.
             </p>
             <textarea
               value={sentence}
               onChange={(e) => setSentence(e.target.value.slice(0, MAX_SENTENCE))}
               required
               rows={4}
+              minLength={MIN_SENTENCE}
               placeholder="e.g. Primary health centres stocked with essential medicines…"
               className="field-control min-h-[120px] w-full resize-none px-3 py-3 text-sm leading-relaxed outline-none"
             />
             <div className="mt-2 space-y-1.5">
               <p className="text-[10px] font-semibold uppercase tracking-wide text-forest-500">
-                Examples
+                Tap an example to start (edit before submit)
               </p>
               {examples.map((ex) => (
                 <button
@@ -167,7 +199,7 @@ export default function FormPanel({
 
           <div className="border-t border-forest-500/10 pt-4">
             <p className="mb-3 text-[11px] font-semibold text-forest-700">
-              Optional demographics · not shown publicly
+              Optional demographics · not shown on the public wall
             </p>
             <div className="grid grid-cols-2 gap-3">
               <div>
@@ -218,7 +250,8 @@ export default function FormPanel({
           </button>
 
           <p className="text-center text-[10px] leading-snug text-forest-500">
-            Non-partisan. No candidate rankings. Your text appears only after moderation.
+            Non-partisan. No candidate rankings. Text appears on Civic Pulse only after ISEYC
+            publishes it.
           </p>
         </form>
       </div>
