@@ -155,13 +155,13 @@ export async function getPublishedPulse(): Promise<{
     throw new Error("Civic Pulse is not configured: missing Notion environment variables.");
   }
 
-  const voices: PulseVoice[] = [];
-  const tally: Record<string, number> = {};
-  const stateSet = new Set<string>();
-  let cursor: string | undefined;
-  let truncated = false;
-
   try {
+    const voices: PulseVoice[] = [];
+    const tally: Record<string, number> = {};
+    const stateSet = new Set<string>();
+    let cursor: string | undefined;
+    let truncated = false;
+
     for (let page = 0; page < MAX_PUBLISHED_PAGES; page++) {
       const response: any = await notion.databases.query({
         database_id: DATABASE_ID,
