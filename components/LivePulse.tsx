@@ -136,7 +136,8 @@ export default function LivePulse() {
       {hasFilters ? (
         <div className="mb-5 flex items-center justify-between rounded-lg bg-forest-50 px-3 py-2 text-[11px] text-forest-600">
           <span>
-            Showing {filteredVoices.length} of {total} published mandates
+            Showing {filteredVoices.length} of {voices.length} loaded published mandates
+            {total > voices.length ? ` (API shows ${total})` : ""}
           </span>
           <button
             type="button"
@@ -155,23 +156,17 @@ export default function LivePulse() {
       <div className="mb-8 space-y-2">
         {displayDuties.map((m) => {
           const pct =
-            filteredVoices.length > 0
-              ? Math.round((m.count / max) * 100)
-              : 0;
+            filteredVoices.length > 0 ? Math.round((m.count / max) * 100) : 0;
           return (
             <div key={m.id} className="flex items-center gap-2 text-xs">
-              <span className="w-28 shrink-0 truncate text-forest-700">
-                {m.label}
-              </span>
+              <span className="w-28 shrink-0 truncate text-forest-700">{m.label}</span>
               <div className="tally-track h-3 flex-1 overflow-hidden rounded-full bg-forest-100">
                 <div
                   className="h-full rounded-full bg-forest-500 transition-all duration-700"
                   style={{ width: `${pct}%` }}
                 />
               </div>
-              <span className="w-6 text-right font-medium text-forest-500">
-                {m.count}
-              </span>
+              <span className="w-6 text-right font-medium text-forest-500">{m.count}</span>
             </div>
           );
         })}
@@ -179,9 +174,26 @@ export default function LivePulse() {
 
       {filteredVoices.length === 0 ? (
         <p className="rounded-xl border border-dashed border-forest-500/20 py-8 text-center text-sm text-forest-500">
-          {hasFilters
-            ? "No published mandates match these filters."
-            : "No published mandates yet. Submit one — it appears after moderation."}
+          {hasFilters ? (
+            <>
+              No published mandates match these filters.{" "}
+              <button
+                type="button"
+                className="font-semibold underline"
+                onClick={() => {
+                  setStateFilter("");
+                  setOfficeFilter("");
+                  setDutyFilter("");
+                }}
+              >
+                Clear filters
+              </button>
+            </>
+          ) : stateFilter ? (
+            `No published mandates from ${stateFilter} yet. Be the first to state what public office must deliver.`
+          ) : (
+            "No published mandates yet. Submit one — it appears after moderation."
+          )}
         </p>
       ) : (
         <div className="space-y-3">
@@ -191,18 +203,14 @@ export default function LivePulse() {
               href={`/mandate/${v.id}`}
               className="paper-card block rounded-xl px-4 py-3 transition hover:ring-1 hover:ring-forest-500/30"
             >
-              <p className="text-sm leading-snug text-forest-900">
-                “{v.sentence}”
-              </p>
+              <p className="text-sm leading-snug text-forest-900">“{v.sentence}”</p>
               <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[10px] text-forest-500">
                 <span>
                   {v.state}
                   {v.lga ? ` · ${v.lga}` : ""}
                 </span>
                 {v.office ? (
-                  <span className="rounded bg-forest-50 px-1.5 py-0.5">
-                    {v.office}
-                  </span>
+                  <span className="rounded bg-forest-50 px-1.5 py-0.5">{v.office}</span>
                 ) : null}
                 <span className="rounded bg-forest-50 px-1.5 py-0.5">
                   {v.duty || v.mandate}

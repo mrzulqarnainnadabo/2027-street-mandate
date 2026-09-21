@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ISEYC_LOGO_SRC, CIVIC_BRAIN_URL, ISEYC_EMAIL, ISEYC_WEB } from "@/lib/brand";
+import { ISEYC_LOGO_SRC, ISEYC_EMAIL, ISEYC_WEB } from "@/lib/brand";
 
 export default function Footer() {
   return (
@@ -9,20 +9,20 @@ export default function Footer() {
         alt="ISEYC"
         width={200}
         height={150}
-        className="mx-auto mb-4 h-auto w-48 object-contain"
+        className="mx-auto mb-4 h-auto w-44 object-contain"
       />
       <p className="font-display text-base font-bold tracking-wide">ISEYC</p>
       <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-gold-400">
         Empowering Youth, Shaping Future
       </p>
-      <p className="mx-auto mt-5 max-w-sm text-xs leading-relaxed text-cream/65">
-        Non-partisan. No party colours. No candidate rankings.
+      <p className="mx-auto mt-4 max-w-sm text-xs leading-relaxed text-cream/70">
+        2027 Civic Mandate — a public civic instrument.
         <br />
-        The 2027 Civic Mandate is a public civic instrument owned by ISEYC.
+        Non-partisan. No candidate rankings. No party colours as scores.
       </p>
-      <div className="mt-6 flex flex-col items-center gap-2.5 text-[11px]">
+      <div className="mt-6 flex flex-col items-center gap-2 text-[11px]">
         <Link href="/about" className="font-medium text-gold-400 underline-offset-2 hover:underline">
-          Non-partisan charter
+          Non-partisan charter &amp; rules
         </Link>
         <a
           href={ISEYC_WEB}
@@ -37,14 +37,6 @@ export default function Footer() {
           className="font-medium text-cream/80 underline-offset-2 hover:text-gold-400 hover:underline"
         >
           {ISEYC_EMAIL}
-        </a>
-        <a
-          href={CIVIC_BRAIN_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-1 rounded-full border border-gold-400/40 bg-forest-800 px-4 py-2 font-medium text-gold-400 transition hover:bg-forest-700"
-        >
-          Open ISEYC Civic Brain →
         </a>
       </div>
     </footer>

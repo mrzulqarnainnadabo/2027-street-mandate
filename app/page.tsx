@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import HowItWorks from "@/components/HowItWorks";
 import DutyCards from "@/components/DutyCards";
 import FormPanel from "@/components/FormPanel";
 import SuccessPanel from "@/components/SuccessPanel";
@@ -48,6 +49,7 @@ export default function Home() {
 
         {!done ? (
           <>
+            <HowItWorks />
             <DutyCards selected={duty} onSelect={setDuty} />
             {duty && <FormPanel duty={duty} onSuccess={handleSuccess} />}
           </>
