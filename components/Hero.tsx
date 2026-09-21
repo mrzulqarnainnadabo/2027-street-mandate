@@ -41,6 +41,9 @@ export default function Hero({
         One concrete demand. The right office. Your state. Reviewed by ISEYC before it enters the
         public record — never a candidate ranking or popularity poll.
       </p>
+      <a href="#mandate-form" className="civic-action mt-5 inline-flex">
+        State your mandate <span aria-hidden="true">↓</span>
+      </a>
 
       {unavailable ? (
         <div className="mx-auto mt-5 max-w-sm border-y border-forest-500/10 bg-forest-50 px-3 py-3 text-center">

@@ -73,7 +73,7 @@ export default function FormPanel({
   }
 
   return (
-    <section className="px-4 pt-7">
+    <section id="mandate-form" className="scroll-mt-4 px-4 pt-7">
       <div className="mx-auto max-w-xl border-y border-forest-500/15 bg-white px-4 py-5 sm:px-5">
         <div className="mb-5 border-b border-forest-500/10 pb-4">
           <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">Step 2</p>
