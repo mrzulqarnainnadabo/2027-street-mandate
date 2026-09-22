@@ -81,6 +81,16 @@ export default function SuccessPanel({
     }
   }
 
+  async function copyStatusLink() {
+    if (!statusUrl) return;
+    try {
+      await navigator.clipboard.writeText(statusUrl);
+      alert("Status link copied. Keep it to check your submission later.");
+    } catch {
+      alert(`Keep this status link:\n${statusUrl}`);
+    }
+  }
+
   return (
     <section className="px-4 pt-7">
       <div className="mx-auto max-w-xl border-y border-forest-500/15 bg-white px-4 py-6 text-center sm:px-6">
@@ -104,6 +114,13 @@ export default function SuccessPanel({
             >
               Check submission status
             </a>
+            <button
+              type="button"
+              onClick={copyStatusLink}
+              className="mt-2 min-h-[40px] w-full border border-dashed border-forest-500/20 px-3 text-xs font-medium text-forest-600"
+            >
+              Copy status link
+            </button>
           </div>
         ) : null}
 
