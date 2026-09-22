@@ -11,6 +11,7 @@ import {
   PROMPT_EXAMPLES,
 } from "@/lib/constants";
 import { getDeviceId } from "@/lib/fingerprint";
+import { useLang } from "@/components/LanguageProvider";
 
 export default function FormPanel({
   duty,
@@ -19,6 +20,7 @@ export default function FormPanel({
   duty: string;
   onSuccess: (sentence: string, state: string, mandateId?: string) => void;
 }) {
+  const { t } = useLang();
   const [office, setOffice] = useState("");
   const [state, setState] = useState("");
   const [lga, setLga] = useState("");
@@ -76,43 +78,34 @@ export default function FormPanel({
     <section id="mandate-form" className="scroll-mt-4 px-4 pt-7">
       <div className="mx-auto max-w-xl border-y border-forest-500/15 bg-white px-4 py-5 sm:px-5">
         <div className="mb-5 border-b border-forest-500/10 pb-4">
-          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">Step 2</p>
-          <h2 className="mt-1 font-display text-lg font-bold text-forest-900">
-            State your civic mandate
-          </h2>
-          <p className="mt-1 text-xs leading-relaxed text-forest-600">
-            Tie the demand to an office and a place so it can enter the public record as data — not
-            noise.
+          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">
+            {t("form.step")}
           </p>
+          <h2 className="mt-1 font-display text-lg font-bold text-forest-900">{t("form.title")}</h2>
+          <p className="mt-1 text-xs leading-relaxed text-forest-600">{t("form.intro")}</p>
         </div>
 
         <div className="mb-5 grid gap-2 text-[11px] leading-snug sm:grid-cols-2">
           <div className="border border-forest-500/12 bg-forest-50/50 px-3 py-2.5">
-            <p className="font-bold uppercase tracking-wide text-forest-600">More likely published</p>
-            <p className="mt-1 text-forest-700">
-              Specific service or outcome (e.g. medicines at the PHC, teachers present, cleared drains).
-            </p>
+            <p className="font-bold uppercase tracking-wide text-forest-600">{t("form.publishLikely")}</p>
+            <p className="mt-1 text-forest-700">{t("form.publishLikelyBody")}</p>
           </div>
           <div className="border border-forest-500/12 bg-forest-50/50 px-3 py-2.5">
-            <p className="font-bold uppercase tracking-wide text-forest-600">Usually rejected</p>
-            <p className="mt-1 text-forest-700">
-              Party slogans, candidate promotion, threats, personal attacks, empty insults.
-            </p>
+            <p className="font-bold uppercase tracking-wide text-forest-600">{t("form.rejectLikely")}</p>
+            <p className="mt-1 text-forest-700">{t("form.rejectLikelyBody")}</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="mb-2 block text-[13px] font-bold text-forest-900">
-              Which office must deliver this?
-            </label>
+            <label className="mb-2 block text-[13px] font-bold text-forest-900">{t("form.office")}</label>
             <select
               value={office}
               onChange={(e) => setOffice(e.target.value)}
               required
               className="field-control w-full px-3 text-sm outline-none"
             >
-              <option value="">Select responsible office…</option>
+              <option value="">{t("form.officePlaceholder")}</option>
               {OFFICES.map((o) => (
                 <option key={o.id} value={o.id}>
                   {o.label}
@@ -125,14 +118,14 @@ export default function FormPanel({
           </div>
 
           <div>
-            <label className="mb-2 block text-[13px] font-bold text-forest-900">Your state</label>
+            <label className="mb-2 block text-[13px] font-bold text-forest-900">{t("form.state")}</label>
             <select
               value={state}
               onChange={(e) => setState(e.target.value)}
               required
               className="field-control w-full px-3 text-sm outline-none"
             >
-              <option value="">Select state…</option>
+              <option value="">{t("form.statePlaceholder")}</option>
               {STATES.map((s) => (
                 <option key={s} value={s}>
                   {s}
@@ -143,7 +136,8 @@ export default function FormPanel({
 
           <div>
             <label className="mb-2 block text-[13px] font-bold text-forest-900">
-              LGA <span className="font-normal text-forest-500">(optional but useful)</span>
+              {t("form.lga")}{" "}
+              <span className="font-normal text-forest-500">{t("form.lgaOptional")}</span>
             </label>
             <input
               type="text"
@@ -152,24 +146,17 @@ export default function FormPanel({
               placeholder="e.g. Kaduna South"
               className="field-control w-full px-3 text-sm outline-none"
             />
-            <p className="mt-1 text-[10px] text-forest-500">
-              LGA helps the brief connect demands to the right local place.
-            </p>
+            <p className="mt-1 text-[10px] text-forest-500">{t("form.lgaHint")}</p>
           </div>
 
           <div>
             <div className="mb-2 flex items-baseline justify-between gap-3">
-              <label className="text-[13px] font-bold text-forest-900">
-                What must they deliver?
-              </label>
+              <label className="text-[13px] font-bold text-forest-900">{t("form.demand")}</label>
               <span className="shrink-0 text-[10px] tabular-nums text-forest-500">
                 {sentence.length}/{MAX_SENTENCE}
               </span>
             </div>
-            <p className="mb-2 text-[11px] leading-snug text-forest-600">
-              One concrete demand. Prefer something you could check in 6–12 months. Not a campaign
-              slogan.
-            </p>
+            <p className="mb-2 text-[11px] leading-snug text-forest-600">{t("form.demandHint")}</p>
             <textarea
               value={sentence}
               onChange={(e) => setSentence(e.target.value.slice(0, MAX_SENTENCE))}
@@ -181,7 +168,7 @@ export default function FormPanel({
             />
             <div className="mt-2 space-y-1.5">
               <p className="text-[10px] font-semibold uppercase tracking-wide text-forest-500">
-                Tap an example to start (edit before submit)
+                {t("form.examples")}
               </p>
               {examples.map((ex) => (
                 <button
@@ -197,18 +184,18 @@ export default function FormPanel({
           </div>
 
           <div className="border-t border-forest-500/10 pt-4">
-            <p className="mb-3 text-[11px] font-semibold text-forest-700">
-              Optional demographics · not shown on the public wall
-            </p>
+            <p className="mb-3 text-[11px] font-semibold text-forest-700">{t("form.demographics")}</p>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="mb-1.5 block text-[11px] font-medium text-forest-700">Age</label>
+                <label className="mb-1.5 block text-[11px] font-medium text-forest-700">
+                  {t("form.age")}
+                </label>
                 <select
                   value={ageBand}
                   onChange={(e) => setAgeBand(e.target.value)}
                   className="min-h-[46px] w-full rounded-md border border-forest-500/15 bg-white px-2 text-xs outline-none focus:border-forest-500"
                 >
-                  <option value="">Prefer not to say</option>
+                  <option value="">{t("form.preferNot")}</option>
                   {AGE_BANDS.map((a) => (
                     <option key={a} value={a}>
                       {a}
@@ -217,13 +204,15 @@ export default function FormPanel({
                 </select>
               </div>
               <div>
-                <label className="mb-1.5 block text-[11px] font-medium text-forest-700">Gender</label>
+                <label className="mb-1.5 block text-[11px] font-medium text-forest-700">
+                  {t("form.gender")}
+                </label>
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
                   className="min-h-[46px] w-full rounded-md border border-forest-500/15 bg-white px-2 text-xs outline-none focus:border-forest-500"
                 >
-                  <option value="">Prefer not to say</option>
+                  <option value="">{t("form.preferNot")}</option>
                   {GENDERS.map((g) => (
                     <option key={g} value={g}>
                       {g}
@@ -235,10 +224,7 @@ export default function FormPanel({
           </div>
 
           {error && (
-            <p
-              role="alert"
-              className="border-l-2 border-red-600 bg-red-50 px-3 py-2.5 text-xs text-red-700"
-            >
+            <p role="alert" className="border-l-2 border-red-600 bg-red-50 px-3 py-2.5 text-xs text-red-700">
               {error}
             </p>
           )}
@@ -248,13 +234,11 @@ export default function FormPanel({
             disabled={loading}
             className="min-h-[52px] w-full rounded-md bg-forest-500 px-4 text-sm font-bold text-white transition hover:bg-forest-700 active:translate-y-px disabled:opacity-60"
           >
-            {loading ? "Submitting mandate…" : "Submit my mandate"}
+            {loading ? t("form.submitting") : t("form.submit")}
           </button>
 
-          <p className="text-center text-[10px] leading-snug text-forest-500">
-            Non-partisan. No candidate rankings. Text appears on Civic Pulse only after ISEYC
-            publishes it.
-          </p>
+          <p className="text-center text-[10px] leading-snug text-forest-500">{t("form.disclaimer")}</p>
+          <p className="text-center text-[10px] leading-snug text-forest-500">{t("form.emergency")}</p>
         </form>
       </div>
     </section>
