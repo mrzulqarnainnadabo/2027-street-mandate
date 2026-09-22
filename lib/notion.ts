@@ -1,6 +1,19 @@
 import { Client } from "@notionhq/client";
 import { normalizeDuty } from "@/lib/constants";
 
+/**
+ * PUBLIC DATA BOUNDARY
+ *
+ * mapPageToVoice builds an explicit allowlist. Never spread Notion properties.
+ *
+ * Operator-only (must not appear on pulse / brief / public mandate):
+ * Device Fingerprint, Age Band, Gender,
+ * Responsible Institution, Response Requested, Response Received,
+ * Follow-up Date, Resolution Status, Response Evidence.
+ *
+ * See docs/public-data-boundary.md
+ */
+
 const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
@@ -43,6 +56,7 @@ function extractFromFingerprint(
   return (m?.[1] || "").trim();
 }
 
+/** Explicit public allowlist — never include operator/response fields. */
 function mapPageToVoice(page: any): PulseVoice | null {
   const props = page.properties;
   const sentence =
@@ -79,7 +93,6 @@ function mapPageToVoice(page: any): PulseVoice | null {
   };
 }
 
-/** Notion page ids may be with or without dashes */
 function notionPageId(id: string): string {
   const clean = id.replace(/-/g, "");
   if (clean.length !== 32) return id;
@@ -149,12 +162,6 @@ export async function submitVoice(data: {
   }
 }
 
-/**
- * Load Published mandates only.
- * Paginate until exhausted or soft cap.
- * `total` is always the number of Published pages successfully loaded (honest).
- * `truncated` is true if Notion still has more Published rows beyond the soft cap.
- */
 export async function getPublishedPulse(): Promise<{
   voices: PulseVoice[];
   tally: Record<string, number>;
@@ -217,7 +224,6 @@ export async function getPublishedPulse(): Promise<{
   }
 }
 
-/** Only returns a mandate if Status is Published */
 export async function getPublishedMandate(id: string): Promise<PulseVoice | null> {
   if (!process.env.NOTION_TOKEN || !DATABASE_ID) return null;
 
@@ -238,7 +244,7 @@ export async function getPublishedMandate(id: string): Promise<PulseVoice | null
   }
 }
 
-/** Read a submission's moderation status without exposing demographic or fingerprint fields. */
+/** Status receipt — civic fields + Status only. No demographics or response tracking. */
 export async function getMandateStatus(id: string): Promise<MandateStatus | null> {
   if (!process.env.NOTION_TOKEN || !DATABASE_ID) {
     throw new Error("Civic status is not configured: missing Notion environment variables.");
