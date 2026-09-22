@@ -31,6 +31,10 @@ function groupByOffice(items: Voice[]): { office: string; items: Voice[] }[] {
     .sort((a, b) => a.office.localeCompare(b.office));
 }
 
+function briefUrl(state: string) {
+  return `https://2027-street-mandate.vercel.app/brief?state=${encodeURIComponent(state)}`;
+}
+
 function buildPlainBrief(
   state: string,
   forState: Voice[],
@@ -60,10 +64,38 @@ function buildPlainBrief(
     lines.push("");
   }
 
-  lines.push(
-    `Brief: https://2027-street-mandate.vercel.app/brief?state=${encodeURIComponent(state)}`
-  );
+  lines.push(`Brief: ${briefUrl(state)}`);
   lines.push(`Submit: https://2027-street-mandate.vercel.app/`);
+  return lines.join("\n");
+}
+
+/** WhatsApp-safe short summary (URL length limits). Full text via Copy. */
+function buildWhatsAppBrief(state: string, forState: Voice[]): string {
+  const lines: string[] = [
+    `ISEYC 2027 Civic Mandate — ${state}`,
+    `${forState.length} published demand(s) for public delivery.`,
+    `Not a poll. Not a ranking. Not an endorsement.`,
+    ``,
+  ];
+
+  const preview = forState.slice(0, 5);
+  for (const v of preview) {
+    const duty = v.duty || v.mandate || "Duty";
+    const place = v.lga ? ` · ${v.lga}` : "";
+    const cut =
+      v.sentence.length > 100 ? `${v.sentence.slice(0, 97)}…` : v.sentence;
+    lines.push(`• [${duty}] "${cut}"${place}`);
+  }
+  if (forState.length > 5) {
+    lines.push(`…and ${forState.length - 5} more on the full brief.`);
+  }
+  if (forState.length === 0) {
+    lines.push(`No published mandates from ${state} yet. Add yours after ISEYC review.`);
+  }
+
+  lines.push(``);
+  lines.push(`Full brief: ${briefUrl(state)}`);
+  lines.push(`Submit a demand: https://2027-street-mandate.vercel.app/`);
   return lines.join("\n");
 }
 
@@ -149,6 +181,15 @@ function BriefInner() {
     }
   }
 
+  function shareWhatsApp() {
+    const text = buildWhatsAppBrief(state, forState);
+    window.open(
+      "https://wa.me/?text=" + encodeURIComponent(text),
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
+
   if (error) {
     return (
       <main className="px-4 py-8">
@@ -179,7 +220,7 @@ function BriefInner() {
       </h1>
       <p className="mt-2 text-sm leading-relaxed text-forest-700/90">
         Published citizen demands for one state, grouped by duty, then by office. Public memory —
-        not a poll, ranking, or endorsement.
+        not a poll, ranking, or endorsement. Share with ward groups, not as a scoreboard.
       </p>
 
       <label className="mt-6 block text-xs font-semibold text-forest-700 no-print">
@@ -212,22 +253,33 @@ function BriefInner() {
           </span>
         )}
         <div className="flex flex-wrap gap-2 no-print">
-          {!loading && forState.length > 0 ? (
+          {!loading ? (
             <>
               <button
                 type="button"
-                onClick={copyBrief}
-                className="min-h-[40px] rounded-md border border-forest-500/25 bg-white px-3 py-1.5 text-[11px] font-semibold text-forest-800"
+                onClick={shareWhatsApp}
+                className="min-h-[40px] rounded-md bg-forest-500 px-3 py-1.5 text-[11px] font-bold text-white"
               >
-                {copied ? "Copied" : "Copy brief text"}
+                WhatsApp brief
               </button>
-              <button
-                type="button"
-                onClick={() => window.print()}
-                className="min-h-[40px] rounded-md border border-forest-500/25 bg-white px-3 py-1.5 text-[11px] font-semibold text-forest-800"
-              >
-                Print / PDF
-              </button>
+              {forState.length > 0 ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={copyBrief}
+                    className="min-h-[40px] rounded-md border border-forest-500/25 bg-white px-3 py-1.5 text-[11px] font-semibold text-forest-800"
+                  >
+                    {copied ? "Copied" : "Copy full text"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    className="min-h-[40px] rounded-md border border-forest-500/25 bg-white px-3 py-1.5 text-[11px] font-semibold text-forest-800"
+                  >
+                    Print / PDF
+                  </button>
+                </>
+              ) : null}
             </>
           ) : null}
         </div>
@@ -240,12 +292,21 @@ function BriefInner() {
             Empty for this state is not a ranking and not a system failure. After ISEYC sets Status to
             Published, demands group here by duty and office.
           </p>
-          <Link
-            href="/"
-            className="mt-4 inline-block text-sm font-semibold text-forest-700 underline underline-offset-2 no-print"
-          >
-            Submit a mandate →
-          </Link>
+          <div className="mt-4 flex flex-col items-center gap-2 no-print">
+            <button
+              type="button"
+              onClick={shareWhatsApp}
+              className="min-h-[44px] rounded-md bg-forest-500 px-4 text-sm font-bold text-white"
+            >
+              Invite on WhatsApp
+            </button>
+            <Link
+              href="/"
+              className="text-sm font-semibold text-forest-700 underline underline-offset-2"
+            >
+              Submit a mandate →
+            </Link>
+          </div>
         </div>
       ) : (
         <div className="mt-6 space-y-8">
@@ -296,11 +357,11 @@ function BriefInner() {
       )}
 
       <div className="mt-10 border-t border-forest-500/10 pt-6 text-xs leading-relaxed text-forest-500 no-print">
-        <p className="font-semibold text-forest-700">How this helps</p>
+        <p className="font-semibold text-forest-700">How this helps in the field</p>
         <ul className="mt-2 list-disc space-y-1 pl-4">
-          <li>Shareable link: /brief?state={state}</li>
-          <li>Copy brief text for WhatsApp or X without ranking language.</li>
-          <li>Print / PDF for meetings and ward briefings.</li>
+          <li>WhatsApp brief: short summary + link for groups and ward meetings.</li>
+          <li>Copy full text when you need every demand in one message.</li>
+          <li>Print / PDF for offline meetings.</li>
           <li>Counts are published demands only — not votes or popularity.</li>
         </ul>
       </div>
