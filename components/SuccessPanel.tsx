@@ -1,5 +1,14 @@
 "use client";
 
+import {
+  copyText,
+  shareFacebook,
+  shareLinkedIn,
+  shareNative,
+  shareWhatsApp,
+  shareX,
+} from "@/lib/share";
+
 export default function SuccessPanel({
   sentence,
   state,
@@ -31,64 +40,46 @@ export default function SuccessPanel({
     `Add yours: ${homeUrl}`,
   ].join("\n");
 
-  async function shareNative() {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "ISEYC 2027 Civic Mandate",
-          text: shareBody,
-          url: homeUrl,
-        });
-        return;
-      } catch {
-        /* cancelled */
-      }
-    }
-    try {
-      await navigator.clipboard.writeText(shareBody);
-      alert("Copied. Paste into WhatsApp, X, or anywhere.");
-    } catch {
-      alert(shareBody);
+  const tweetText = `I submitted a civic mandate with ISEYC (under review).\n\n"${sentence}" — ${state}\n\nTell them what they must deliver → ${homeUrl}`;
+
+  async function onNative() {
+    const result = await shareNative({
+      title: "ISEYC 2027 Civic Mandate",
+      text: shareBody,
+      url: homeUrl,
+    });
+    if (result === "copied") {
+      alert("Copied. Paste into Instagram, TikTok, Facebook, or any app.");
     }
   }
 
-  function shareWhatsApp() {
-    window.open(
-      "https://wa.me/?text=" + encodeURIComponent(shareBody),
-      "_blank",
-      "noopener,noreferrer"
-    );
-  }
-
-  function shareX() {
-    window.open(
-      "https://twitter.com/intent/tweet?text=" +
-        encodeURIComponent(
-          `I submitted a civic mandate with ISEYC (under review).\n\n"${sentence}" — ${state}\n\nTell them what they must deliver → ${homeUrl}`
-        ),
-      "_blank",
-      "noopener,noreferrer"
+  async function copyAll() {
+    const ok = await copyText(shareBody);
+    alert(
+      ok
+        ? "Copied. Paste into Instagram, TikTok, WhatsApp, X, Facebook, LinkedIn, or email."
+        : shareBody
     );
   }
 
   async function copyDetailHint() {
     if (!detailUrl) return;
-    try {
-      await navigator.clipboard.writeText(detailUrl);
-      alert("Link copied. It only opens publicly after ISEYC sets Status to Published.");
-    } catch {
-      alert(`After review, public link:\n${detailUrl}`);
-    }
+    const ok = await copyText(detailUrl);
+    alert(
+      ok
+        ? "Link copied. It only opens publicly after ISEYC sets Status to Published."
+        : `After review, public link:\n${detailUrl}`
+    );
   }
 
   async function copyStatusLink() {
     if (!statusUrl) return;
-    try {
-      await navigator.clipboard.writeText(statusUrl);
-      alert("Status link copied. Keep it to check your submission later.");
-    } catch {
-      alert(`Keep this status link:\n${statusUrl}`);
-    }
+    const ok = await copyText(statusUrl);
+    alert(
+      ok
+        ? "Status link copied. Keep it to check your submission later."
+        : `Keep this status link:\n${statusUrl}`
+    );
   }
 
   return (
@@ -106,8 +97,12 @@ export default function SuccessPanel({
 
         {reference && statusUrl ? (
           <div className="mx-auto mt-4 max-w-md border border-forest-500/15 bg-forest-50 px-4 py-3 text-left">
-            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">Keep your reference</p>
-            <p className="mt-1 font-display text-lg font-bold tracking-wide text-forest-900">{reference}</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">
+              Keep your reference
+            </p>
+            <p className="mt-1 font-display text-lg font-bold tracking-wide text-forest-900">
+              {reference}
+            </p>
             <a
               href={statusUrl}
               className="mt-1 block text-xs font-semibold text-forest-700 underline underline-offset-2"
@@ -132,36 +127,58 @@ export default function SuccessPanel({
         </blockquote>
 
         <p className="mx-auto mt-4 max-w-md text-[11px] leading-snug text-forest-500">
-          Share the civic mandate if you wish. Public publication still depends on ISEYC review.
+          Share if you wish. Publication still depends on ISEYC review. Instagram &amp; TikTok: use
+          Copy or Share more, then paste in the app.
         </p>
 
-        <div className="mx-auto mt-4 grid max-w-md gap-2">
+        <div className="mx-auto mt-4 grid max-w-md grid-cols-2 gap-2">
           <button
             type="button"
-            onClick={shareWhatsApp}
-            className="min-h-[48px] w-full rounded-md bg-forest-500 px-4 text-sm font-bold text-white"
+            onClick={() => shareWhatsApp(shareBody)}
+            className="min-h-[48px] rounded-md bg-forest-500 px-2 text-xs font-bold text-white sm:text-sm"
           >
-            Share on WhatsApp
+            WhatsApp
           </button>
           <button
             type="button"
-            onClick={shareX}
-            className="min-h-[48px] w-full rounded-md bg-forest-900 px-4 text-sm font-bold text-cream"
+            onClick={() => shareX(tweetText)}
+            className="min-h-[48px] rounded-md bg-forest-900 px-2 text-xs font-bold text-cream sm:text-sm"
           >
-            Share on X
+            X
           </button>
           <button
             type="button"
-            onClick={shareNative}
-            className="min-h-[46px] w-full rounded-md border border-forest-500/25 bg-cream px-4 text-sm font-semibold text-forest-700"
+            onClick={() => shareFacebook(homeUrl)}
+            className="min-h-[48px] rounded-md border border-forest-500/25 bg-white px-2 text-xs font-semibold text-forest-800 sm:text-sm"
           >
-            Copy civic mandate
+            Facebook
+          </button>
+          <button
+            type="button"
+            onClick={() => shareLinkedIn(homeUrl)}
+            className="min-h-[48px] rounded-md border border-forest-500/25 bg-white px-2 text-xs font-semibold text-forest-800 sm:text-sm"
+          >
+            LinkedIn
+          </button>
+          <button
+            type="button"
+            onClick={onNative}
+            className="col-span-2 min-h-[46px] rounded-md border border-forest-500/25 bg-cream px-4 text-sm font-semibold text-forest-700"
+          >
+            Share more (Instagram, TikTok, Messages…)
+          </button>
+          <button
+            type="button"
+            onClick={copyAll}
+            className="col-span-2 min-h-[44px] rounded-md border border-dashed border-forest-500/20 px-4 text-xs font-medium text-forest-600"
+          >
+            Copy text for any platform
           </button>
           {detailUrl ? (
             <button
               type="button"
               onClick={copyDetailHint}
-              className="min-h-[42px] w-full border border-dashed border-forest-500/20 px-4 text-xs font-medium text-forest-600"
+              className="col-span-2 min-h-[42px] border border-dashed border-forest-500/20 px-4 text-xs font-medium text-forest-600"
             >
               Copy future public link (after publish)
             </button>
