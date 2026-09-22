@@ -97,9 +97,12 @@ function BriefInner() {
       })
       .then((d) => {
         if (!alive) return;
+        if (d?.error || !Array.isArray(d?.voices)) {
+          throw new Error("Malformed pulse payload");
+        }
         setError(false);
-        setVoices(d.voices || []);
-        setTotal(typeof d.total === "number" ? d.total : (d.voices || []).length);
+        setVoices(d.voices);
+        setTotal(typeof d.total === "number" ? d.total : d.voices.length);
       })
       .catch(() => {
         if (alive) setError(true);
@@ -158,8 +161,8 @@ function BriefInner() {
             State Civic Brief is temporarily unavailable.
           </p>
           <p className="mt-1.5 text-xs leading-relaxed text-forest-600">
-            Published civic records could not be loaded. No empty or zero count is shown as if no
-            mandates exist.
+            Published civic records could not be loaded. This is a service problem, not an empty
+            state record. No zero count is shown as if no mandates exist.
           </p>
         </div>
       </main>
@@ -201,9 +204,11 @@ function BriefInner() {
           <span>
             <strong className="tabular-nums text-forest-800">{forState.length}</strong> published
             from {state}
-            {total > 0 ? (
+            {total === 0 ? (
+              <span className="text-forest-500"> · national wall is empty (not a failure)</span>
+            ) : (
               <span className="text-forest-500"> · {total} published nationally on this wall</span>
-            ) : null}
+            )}
           </span>
         )}
         <div className="flex flex-wrap gap-2 no-print">
@@ -230,9 +235,10 @@ function BriefInner() {
 
       {!loading && forState.length === 0 ? (
         <div className="mt-8 border border-dashed border-forest-500/20 py-10 text-center">
-          <p className="text-sm text-forest-600">No published mandates from {state} yet.</p>
-          <p className="mt-2 text-xs text-forest-500">
-            After ISEYC sets Status to Published, demands group here by duty and office.
+          <p className="text-sm font-medium text-forest-800">No published mandates from {state} yet</p>
+          <p className="mt-2 text-xs leading-relaxed text-forest-500">
+            Empty for this state is not a ranking and not a system failure. After ISEYC sets Status to
+            Published, demands group here by duty and office.
           </p>
           <Link
             href="/"
@@ -318,11 +324,7 @@ export default function BriefPage() {
       <div className="no-print">
         <Header />
       </div>
-      <Suspense
-        fallback={
-          <main className="px-4 py-8 text-sm text-forest-600">Loading brief…</main>
-        }
-      >
+      <Suspense fallback={<main className="px-4 py-8 text-sm text-forest-600">Loading brief…</main>}>
         <BriefInner />
       </Suspense>
       <div className="no-print">

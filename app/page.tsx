@@ -31,8 +31,11 @@ export default function Home() {
       })
       .then((d) => {
         if (!alive) return;
+        if (d?.error || !Array.isArray(d?.voices)) {
+          throw new Error("malformed pulse");
+        }
         setStats({
-          total: typeof d.total === "number" ? d.total : 0,
+          total: typeof d.total === "number" ? d.total : d.voices.length,
           states: typeof d.states === "number" ? d.states : 0,
           status: "ready",
         });
@@ -65,11 +68,7 @@ export default function Home() {
     <div className="mx-auto min-h-screen max-w-2xl">
       <Header />
       <main>
-        <Hero
-          total={stats.total}
-          states={stats.states}
-          pulseStatus={stats.status}
-        />
+        <Hero total={stats.total} states={stats.states} pulseStatus={stats.status} />
 
         {!done ? (
           <>
