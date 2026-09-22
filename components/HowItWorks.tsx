@@ -10,8 +10,18 @@ export default function HowItWorks() {
         <li>Choose a duty of government.</li>
         <li>Name the office responsible — or say you are unsure.</li>
         <li>Add your state (and LGA if you know it).</li>
-        <li>Write one concrete demand.</li>
-        <li>ISEYC reviews. Only Published mandates appear on Civic Pulse.</li>
+        <li>Write one concrete demand for a service or outcome.</li>
+        <li>
+          Submit. You get a status reference. The mandate stays <strong className="font-semibold">New</strong>{" "}
+          until ISEYC review.
+        </li>
+        <li>
+          Only <strong className="font-semibold">Published</strong> mandates appear on Civic Pulse and the{" "}
+          <Link href="/brief" className="font-semibold underline underline-offset-2">
+            State Civic Brief
+          </Link>
+          .
+        </li>
       </ol>
 
       <div className="mx-auto mt-4 grid max-w-md gap-2 text-[11px] sm:grid-cols-2">
@@ -30,9 +40,10 @@ export default function HowItWorks() {
       </div>
 
       <p className="mx-auto mt-3 max-w-md text-center text-[10px] leading-snug text-forest-500">
-        Optional demographics stay private. Mandate text is public only after publication.{" "}
+        Zero published is an empty public record — not a ranking and not a failure. Optional demographics
+        stay private.{" "}
         <Link href="/about" className="font-semibold underline underline-offset-2">
-          Charter
+          Charter &amp; methodology
         </Link>
       </p>
     </section>
