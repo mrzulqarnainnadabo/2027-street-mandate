@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   OFFICES,
   STATES,
@@ -12,6 +12,7 @@ import {
 } from "@/lib/constants";
 import { getDeviceId } from "@/lib/fingerprint";
 import { useLang } from "@/components/LanguageProvider";
+import { clearDraft, loadDraft, saveDraft } from "@/lib/draft";
 
 export default function FormPanel({
   duty,
@@ -29,9 +30,39 @@ export default function FormPanel({
   const [gender, setGender] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [hydrated, setHydrated] = useState(false);
 
   const examples = PROMPT_EXAMPLES[duty] || PROMPT_EXAMPLES["Other"];
   const officeMeta = OFFICES.find((o) => o.id === office);
+
+  useEffect(() => {
+    const d = loadDraft();
+    if (d && d.duty === duty) {
+      setOffice(d.office || "");
+      setState(d.state || "");
+      setLga(d.lga || "");
+      setSentence(d.sentence || "");
+      setAgeBand(d.ageBand || "");
+      setGender(d.gender || "");
+    }
+    setHydrated(true);
+  }, [duty]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    const hasContent =
+      Boolean(office || state || lga.trim() || sentence.trim() || ageBand || gender);
+    if (!hasContent) return;
+    saveDraft({
+      duty,
+      office,
+      state,
+      lga,
+      sentence,
+      ageBand,
+      gender,
+    });
+  }, [duty, office, state, lga, sentence, ageBand, gender, hydrated]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -63,12 +94,24 @@ export default function FormPanel({
           deviceId: getDeviceId(),
         }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (res.status >= 500 || res.status === 503) {
+          throw new Error(
+            data.error ||
+              "Network or server problem. Your draft is saved on this phone — try again in a moment."
+          );
+        }
+        throw new Error(data.error || "Failed");
+      }
       const rawId = typeof data.id === "string" ? data.id.replace(/-/g, "") : undefined;
+      clearDraft();
       onSuccess(text, state, rawId);
     } catch (err: any) {
-      setError(err.message || "Something went wrong. Try again.");
+      setError(
+        err.message ||
+          "Something went wrong. Your draft is saved on this phone — try again when the network is stable."
+      );
     } finally {
       setLoading(false);
     }
@@ -83,6 +126,9 @@ export default function FormPanel({
           </p>
           <h2 className="mt-1 font-display text-lg font-bold text-forest-900">{t("form.title")}</h2>
           <p className="mt-1 text-xs leading-relaxed text-forest-600">{t("form.intro")}</p>
+          <p className="mt-2 text-[10px] leading-snug text-forest-500">
+            Drafts stay on this phone only until you submit. Closing the tab will not erase them.
+          </p>
         </div>
 
         <div className="mb-5 grid gap-2 text-[11px] leading-snug sm:grid-cols-2">

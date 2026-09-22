@@ -9,6 +9,7 @@ import FormPanel from "@/components/FormPanel";
 import SuccessPanel from "@/components/SuccessPanel";
 import LivePulse from "@/components/LivePulse";
 import Footer from "@/components/Footer";
+import { loadDraft } from "@/lib/draft";
 
 export default function Home() {
   const [duty, setDuty] = useState<string | null>(null);
@@ -16,11 +17,20 @@ export default function Home() {
   const [lastSentence, setLastSentence] = useState("");
   const [lastState, setLastState] = useState("");
   const [lastMandateId, setLastMandateId] = useState<string | undefined>(undefined);
+  const [draftRestored, setDraftRestored] = useState(false);
   const [stats, setStats] = useState<{
     total: number;
     states: number;
     status: "loading" | "ready" | "unavailable";
   }>({ total: 0, states: 0, status: "loading" });
+
+  useEffect(() => {
+    const d = loadDraft();
+    if (d?.duty) {
+      setDuty(d.duty);
+      setDraftRestored(true);
+    }
+  }, []);
 
   useEffect(() => {
     let alive = true;
@@ -53,6 +63,7 @@ export default function Home() {
     setLastState(state);
     setLastMandateId(mandateId);
     setDone(true);
+    setDraftRestored(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -62,6 +73,7 @@ export default function Home() {
     setLastSentence("");
     setLastState("");
     setLastMandateId(undefined);
+    setDraftRestored(false);
   }
 
   return (
@@ -73,6 +85,12 @@ export default function Home() {
         {!done ? (
           <>
             <HowItWorks />
+            {draftRestored && duty ? (
+              <p className="mx-4 mb-2 rounded-md border border-forest-500/15 bg-forest-50 px-3 py-2 text-center text-[11px] text-forest-700">
+                Draft restored on this phone. Finish and submit when ready — nothing is public until
+                you submit and ISEYC publishes.
+              </p>
+            ) : null}
             <DutyCards selected={duty} onSelect={setDuty} />
             {duty && <FormPanel duty={duty} onSuccess={handleSuccess} />}
           </>
