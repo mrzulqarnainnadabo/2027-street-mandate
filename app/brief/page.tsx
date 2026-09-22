@@ -6,6 +6,14 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { DUTIES, STATES } from "@/lib/constants";
+import {
+  copyText,
+  shareFacebook,
+  shareLinkedIn,
+  shareNative,
+  shareWhatsApp,
+  shareX,
+} from "@/lib/share";
 
 type Voice = {
   id: string;
@@ -69,8 +77,7 @@ function buildPlainBrief(
   return lines.join("\n");
 }
 
-/** WhatsApp-safe short summary (URL length limits). Full text via Copy. */
-function buildWhatsAppBrief(state: string, forState: Voice[]): string {
+function buildShortBrief(state: string, forState: Voice[]): string {
   const lines: string[] = [
     `ISEYC 2027 Civic Mandate — ${state}`,
     `${forState.length} published demand(s) for public delivery.`,
@@ -82,8 +89,7 @@ function buildWhatsAppBrief(state: string, forState: Voice[]): string {
   for (const v of preview) {
     const duty = v.duty || v.mandate || "Duty";
     const place = v.lga ? ` · ${v.lga}` : "";
-    const cut =
-      v.sentence.length > 100 ? `${v.sentence.slice(0, 97)}…` : v.sentence;
+    const cut = v.sentence.length > 100 ? `${v.sentence.slice(0, 97)}…` : v.sentence;
     lines.push(`• [${duty}] "${cut}"${place}`);
   }
   if (forState.length > 5) {
@@ -169,25 +175,29 @@ function BriefInner() {
   }, [forState]);
 
   const dutiesWithData = DUTIES.filter((d) => (byDuty[d.id] || []).length > 0);
+  const shortText = useMemo(() => buildShortBrief(state, forState), [state, forState]);
+  const url = briefUrl(state);
 
   async function copyBrief() {
     const text = buildPlainBrief(state, forState, dutiesWithData, byDuty);
-    try {
-      await navigator.clipboard.writeText(text);
+    const ok = await copyText(text);
+    if (ok) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
-    } catch {
+    } else {
       alert(text);
     }
   }
 
-  function shareWhatsApp() {
-    const text = buildWhatsAppBrief(state, forState);
-    window.open(
-      "https://wa.me/?text=" + encodeURIComponent(text),
-      "_blank",
-      "noopener,noreferrer"
-    );
+  async function onNativeShare() {
+    const result = await shareNative({
+      title: `ISEYC Civic Brief — ${state}`,
+      text: shortText,
+      url,
+    });
+    if (result === "copied") {
+      alert("Copied. Paste into Instagram, TikTok, or any app.");
+    }
   }
 
   if (error) {
@@ -252,38 +262,67 @@ function BriefInner() {
             )}
           </span>
         )}
-        <div className="flex flex-wrap gap-2 no-print">
-          {!loading ? (
-            <>
-              <button
-                type="button"
-                onClick={shareWhatsApp}
-                className="min-h-[40px] rounded-md bg-forest-500 px-3 py-1.5 text-[11px] font-bold text-white"
-              >
-                WhatsApp brief
-              </button>
-              {forState.length > 0 ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={copyBrief}
-                    className="min-h-[40px] rounded-md border border-forest-500/25 bg-white px-3 py-1.5 text-[11px] font-semibold text-forest-800"
-                  >
-                    {copied ? "Copied" : "Copy full text"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => window.print()}
-                    className="min-h-[40px] rounded-md border border-forest-500/25 bg-white px-3 py-1.5 text-[11px] font-semibold text-forest-800"
-                  >
-                    Print / PDF
-                  </button>
-                </>
-              ) : null}
-            </>
+      </div>
+
+      {!loading ? (
+        <div className="mt-3 grid grid-cols-2 gap-2 no-print sm:grid-cols-3">
+          <button
+            type="button"
+            onClick={() => shareWhatsApp(shortText)}
+            className="min-h-[40px] rounded-md bg-forest-500 px-2 text-[11px] font-bold text-white"
+          >
+            WhatsApp
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              shareX(
+                `ISEYC Civic Brief — ${state}: ${forState.length} published demand(s). Not a poll. ${url}`
+              )
+            }
+            className="min-h-[40px] rounded-md bg-forest-900 px-2 text-[11px] font-bold text-cream"
+          >
+            X
+          </button>
+          <button
+            type="button"
+            onClick={() => shareFacebook(url)}
+            className="min-h-[40px] rounded-md border border-forest-500/25 bg-white px-2 text-[11px] font-semibold text-forest-800"
+          >
+            Facebook
+          </button>
+          <button
+            type="button"
+            onClick={() => shareLinkedIn(url)}
+            className="min-h-[40px] rounded-md border border-forest-500/25 bg-white px-2 text-[11px] font-semibold text-forest-800"
+          >
+            LinkedIn
+          </button>
+          <button
+            type="button"
+            onClick={onNativeShare}
+            className="min-h-[40px] rounded-md border border-forest-500/25 bg-cream px-2 text-[11px] font-semibold text-forest-700"
+          >
+            Share more
+          </button>
+          <button
+            type="button"
+            onClick={copyBrief}
+            className="min-h-[40px] rounded-md border border-forest-500/25 bg-white px-2 text-[11px] font-semibold text-forest-800"
+          >
+            {copied ? "Copied" : "Copy full text"}
+          </button>
+          {forState.length > 0 ? (
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="col-span-2 min-h-[40px] rounded-md border border-forest-500/25 bg-white px-2 text-[11px] font-semibold text-forest-800 sm:col-span-3"
+            >
+              Print / PDF
+            </button>
           ) : null}
         </div>
-      </div>
+      ) : null}
 
       {!loading && forState.length === 0 ? (
         <div className="mt-8 border border-dashed border-forest-500/20 py-10 text-center">
@@ -292,21 +331,12 @@ function BriefInner() {
             Empty for this state is not a ranking and not a system failure. After ISEYC sets Status to
             Published, demands group here by duty and office.
           </p>
-          <div className="mt-4 flex flex-col items-center gap-2 no-print">
-            <button
-              type="button"
-              onClick={shareWhatsApp}
-              className="min-h-[44px] rounded-md bg-forest-500 px-4 text-sm font-bold text-white"
-            >
-              Invite on WhatsApp
-            </button>
-            <Link
-              href="/"
-              className="text-sm font-semibold text-forest-700 underline underline-offset-2"
-            >
-              Submit a mandate →
-            </Link>
-          </div>
+          <Link
+            href="/"
+            className="mt-4 inline-block text-sm font-semibold text-forest-700 underline underline-offset-2 no-print"
+          >
+            Submit a mandate →
+          </Link>
         </div>
       ) : (
         <div className="mt-6 space-y-8">
@@ -359,9 +389,9 @@ function BriefInner() {
       <div className="mt-10 border-t border-forest-500/10 pt-6 text-xs leading-relaxed text-forest-500 no-print">
         <p className="font-semibold text-forest-700">How this helps in the field</p>
         <ul className="mt-2 list-disc space-y-1 pl-4">
-          <li>WhatsApp brief: short summary + link for groups and ward meetings.</li>
-          <li>Copy full text when you need every demand in one message.</li>
-          <li>Print / PDF for offline meetings.</li>
+          <li>WhatsApp, X, Facebook, LinkedIn — share the brief, not a scoreboard.</li>
+          <li>Share more opens the phone sheet (Instagram, TikTok, Messages…).</li>
+          <li>Copy full text or Print / PDF for offline meetings.</li>
           <li>Counts are published demands only — not votes or popularity.</li>
         </ul>
       </div>
