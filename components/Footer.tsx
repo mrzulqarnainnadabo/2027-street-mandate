@@ -21,7 +21,7 @@ export default function Footer() {
       </p>
       <div className="mt-6 flex flex-col items-center gap-2 text-[11px]">
         <Link href="/about" className="font-medium text-gold-400 underline-offset-2 hover:underline">
-          Non-partisan charter &amp; rules
+          Charter, methodology &amp; rules
         </Link>
         <a
           href={ISEYC_WEB}
