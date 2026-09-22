@@ -24,7 +24,8 @@ function statusCopy(status: string): { label: string; message: string } {
   }
   return {
     label: "Under review",
-    message: "Your mandate has been received. It will appear publicly only after ISEYC review marks it Published.",
+    message:
+      "Your mandate has been received. It will appear publicly only after ISEYC review marks it Published.",
   };
 }
 
@@ -72,6 +73,10 @@ export default async function StatusPage({ params }: Props) {
   try {
     const mandate = await getMandateStatus(id);
 
+    if (!mandate) {
+      return <StatusUnavailable temporary={false} id={id} />;
+    }
+
     const copy = statusCopy(mandate.status);
     const reference = referenceFor(mandate.id);
     const publicUrl = `/mandate/${mandate.id}`;
@@ -111,13 +116,17 @@ export default async function StatusPage({ params }: Props) {
           </dl>
 
           <p className="mt-5 text-[11px] leading-snug text-forest-500">
-            Keep this link. It does not display age, gender, device fingerprint, or other private submission fields.
+            Keep this link. It does not display age, gender, device fingerprint, or other private
+            submission fields.
           </p>
         </article>
 
         <div className="mt-8 flex flex-col items-center gap-3 text-sm">
           {mandate.status === "Published" ? (
-            <Link href={publicUrl} className="w-full max-w-xs rounded-md bg-forest-500 py-3 text-center font-bold text-white">
+            <Link
+              href={publicUrl}
+              className="w-full max-w-xs rounded-md bg-forest-500 py-3 text-center font-bold text-white"
+            >
               View published mandate
             </Link>
           ) : null}
