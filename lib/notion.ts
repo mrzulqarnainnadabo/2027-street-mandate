@@ -99,6 +99,18 @@ function notionPageId(id: string): string {
   return `${clean.slice(0, 8)}-${clean.slice(8, 12)}-${clean.slice(12, 16)}-${clean.slice(16, 20)}-${clean.slice(20)}`;
 }
 
+/** True missing page only — not auth, rate limit, or config failures. */
+function isNotionNotFound(err: any): boolean {
+  const status = Number(err?.status || err?.body?.status || 0);
+  const code = String(err?.code || err?.body?.code || "");
+  if (code === "object_not_found" || status === 404) return true;
+  // Malformed page_id from a bad user link → treat as not found, not outage
+  if (status === 400 && /page_id|uuid|invalid/i.test(String(err?.message || err?.body?.message || ""))) {
+    return true;
+  }
+  return false;
+}
+
 export async function submitVoice(data: {
   sentence: string;
   duty: string;
@@ -266,11 +278,10 @@ export async function getMandateStatus(id: string): Promise<MandateStatus | null
     };
   } catch (err: any) {
     console.error("getMandateStatus:", err?.message || err);
-    const status = Number(err?.status || err?.body?.status || 0);
-    const code = err?.code || err?.body?.code;
-    if (status === 400 || status === 404 || code === "object_not_found") {
+    if (isNotionNotFound(err)) {
       return null;
     }
+    // Auth, rate limit, network, unexpected 400 → unavailable (page shows service message)
     throw new Error("Civic status could not load right now.");
   }
 }
