@@ -15,6 +15,7 @@ ISEYC moderates. Only **Published** rows appear on:
 - **Civic Pulse** (`/`) — public wall by duty
 - **State Civic Brief** (`/brief?state=Kaduna`) — State × Duty × Office (+ copy / print)
 - **Mandate page** (`/mandate/[id]`) — single published receipt
+- **Status receipt** (`/status/[id]`) — private-ish submission reference (not the public wall)
 
 This is **not** a poll, ranking, endorsement, or campaign tool.
 
@@ -26,14 +27,18 @@ Citizen submits
   → ISEYC reviews (reject hate / slogans / empty attacks)
   → Status = Published
   → appears on Civic Pulse + State Civic Brief
-  → operator may track response/follow-up internally
+  → operator may track response/follow-up internally (Notion only)
 ```
 
-The response-tracking layer is documented in [docs/mandate-to-response-protocol.md](docs/mandate-to-response-protocol.md).
+### Operator docs
 
-Without **Publish**, the wall correctly shows zero. That is empty data, not a system failure.
+- [Mandate-to-response protocol](docs/mandate-to-response-protocol.md)
+- [Public data boundary](docs/public-data-boundary.md)
+- [Operator pilot checklist](docs/operator-pilot-checklist.md)
 
-If Notion or env fails, `/api/pulse` returns **503** (not a fake zero) when that code is deployed. Submit uses **503** for configuration failures.
+Without **Publish**, the wall correctly shows **zero published**. That is an **empty public record**, not a system failure.
+
+If Notion or env fails, `/api/pulse` returns **503** (not a fake zero). Submit uses **503** for configuration failures.
 
 ## Env (Vercel)
 
@@ -48,20 +53,15 @@ Share the Notion database with the integration (Connections).
 
 Keep a **single** production project linked to this repo (recommended name: `2027-street-mandate`).
 
-Duplicate projects (`street-mandate-2027`, `iseyc-street-mandate`, `…-live`, etc.) each deploy on every push and can exhaust deployment capacity. Disconnect extras under **Project → Settings → Git**.
+Duplicate projects each deploy on every push and can exhaust capacity. Disconnect extras under **Project → Settings → Git** before the next production deploy.
 
-### Notion fields (do not rename in code without migration)
+### Notion fields
 
-| Field | Role |
-|-------|------|
-| Name | Mandate sentence (title) |
-| Top Mandate | Duty select |
-| State | State select |
-| Status | New / Published / … |
-| Device Fingerprint | Anti-spam + office/lga fallback |
-| Duty | Optional select |
-| Office | Optional select |
-| LGA | Optional rich text |
+**Public-shaped (via code allowlist):** Name, Top Mandate / Duty, State, Office, LGA, Status (Published only on public surfaces).
+
+**Operator-only (never public APIs):** Device Fingerprint, Age Band, Gender, Responsible Institution, Response Requested, Response Received, Follow-up Date, Resolution Status, Response Evidence.
+
+Do not rename fields in Notion without a code migration.
 
 ## Local
 
@@ -72,3 +72,7 @@ npm install && npm run build
 ## Product rule
 
 Measure **demands by duty and place**. Never candidate scores, parties, or “who is leading.”
+
+## Release note
+
+Ship when: main is green, **one** Vercel project remains linked, env vars set, and operators understand Publish vs New. Prefer deploying once after hardening, not after every commit.

@@ -22,6 +22,7 @@ export default function LivePulse() {
   const [officeFilter, setOfficeFilter] = useState("");
   const [dutyFilter, setDutyFilter] = useState("");
   const [error, setError] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -30,14 +31,20 @@ export default function LivePulse() {
         const res = await fetch("/api/pulse");
         if (!res.ok) throw new Error("Pulse unavailable");
         const data = await res.json();
+        if (data?.error) throw new Error(String(data.error));
+        if (!Array.isArray(data?.voices)) throw new Error("Malformed pulse payload");
         if (alive) {
           setError(false);
-          setVoices(data.voices || []);
-          setTotal(typeof data.total === "number" ? data.total : (data.voices || []).length);
+          setVoices(data.voices);
+          setTotal(typeof data.total === "number" ? data.total : data.voices.length);
           setTruncated(Boolean(data.truncated));
+          setLoaded(true);
         }
       } catch {
-        if (alive) setError(true);
+        if (alive) {
+          setError(true);
+          setLoaded(true);
+        }
       }
     }
     load();
@@ -82,8 +89,8 @@ export default function LivePulse() {
         <div className="mx-auto max-w-xl border-y border-forest-500/15 bg-forest-50 px-4 py-6 text-center">
           <p className="text-sm font-semibold text-forest-800">Civic Pulse is temporarily unavailable.</p>
           <p className="mt-1.5 text-xs leading-relaxed text-forest-600">
-            Published civic records could not be loaded. This wall will try again automatically.
-            No zero or empty count is being shown as a substitute.
+            Published civic records could not be loaded. This is a service problem, not an empty public
+            record. The wall will try again automatically. No zero count is shown as a substitute.
           </p>
         </div>
       </section>
@@ -101,12 +108,16 @@ export default function LivePulse() {
           <p className="mt-1 text-xs text-forest-500">
             Published mandates by duty · never candidate rankings
           </p>
-          {total > 0 ? (
+          {loaded ? (
             <p className="mt-2 text-[11px] tabular-nums text-forest-600">
-              {total} published on this wall
+              {total === 0
+                ? "0 published on this wall · empty record, not a failure"
+                : `${total} published on this wall`}
               {truncated ? " · more exist beyond this view" : ""}
             </p>
-          ) : null}
+          ) : (
+            <p className="mt-2 text-[11px] text-forest-500">Loading published record…</p>
+          )}
         </div>
 
         <div className="mb-5 grid gap-2 sm:grid-cols-3">
@@ -193,9 +204,9 @@ export default function LivePulse() {
         </div>
 
         {filteredVoices.length === 0 ? (
-          <p className="border-y border-dashed border-forest-500/20 py-8 text-center text-sm text-forest-500">
+          <div className="border-y border-dashed border-forest-500/20 py-8 text-center text-sm text-forest-600">
             {hasFilters ? (
-              <>
+              <p>
                 No published mandates match these filters.{" "}
                 <button
                   type="button"
@@ -208,11 +219,18 @@ export default function LivePulse() {
                 >
                   Clear filters
                 </button>
-              </>
+              </p>
             ) : (
-              "No published mandates yet. Submit one — it appears after moderation."
+              <>
+                <p className="font-medium text-forest-800">No published mandates yet</p>
+                <p className="mt-1.5 text-xs leading-relaxed text-forest-500">
+                  Submissions start as <strong className="font-semibold">New</strong>. They appear here
+                  only after ISEYC sets Status to <strong className="font-semibold">Published</strong>.
+                  Zero published is an empty public record — not a ranking and not a system failure.
+                </p>
+              </>
             )}
-          </p>
+          </div>
         ) : (
           <div className="space-y-2.5">
             {filteredVoices.map((v) => (
