@@ -42,6 +42,10 @@ export default function Hero({
         public record — never a candidate ranking or popularity poll.
       </p>
 
+      <a href="#mandate-form" className="civic-action mt-5 inline-flex">
+        State your mandate <span aria-hidden="true">↓</span>
+      </a>
+
       {unavailable ? (
         <div className="mx-auto mt-5 max-w-sm border-y border-forest-500/10 bg-forest-50 px-3 py-3 text-center">
           <p className="text-xs font-semibold text-forest-800">
@@ -77,7 +81,7 @@ export default function Hero({
       </p>
 
       <p className="mt-4 text-[11px] font-semibold text-forest-600">
-        Scroll to begin · choose a duty of government
+        Choose a duty of government below
       </p>
 
       <div className="mt-2 flex flex-wrap items-center justify-center gap-3 text-[11px]">
