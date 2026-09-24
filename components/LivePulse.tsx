@@ -108,6 +108,12 @@ export default function LivePulse() {
           <p className="mt-1 text-xs text-forest-500">
             Published mandates by duty · never candidate rankings
           </p>
+          <p className="mt-1.5 text-[11px] text-forest-600">
+            <Link href="/map" className="font-semibold underline underline-offset-2">
+              Responsibility map
+            </Link>
+            {" "}— which office often delivers a duty (Primary / Shared / Unclear)
+          </p>
           {loaded ? (
             <p className="mt-2 text-[11px] tabular-nums text-forest-600">
               {total === 0
