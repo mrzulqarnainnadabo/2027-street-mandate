@@ -82,6 +82,9 @@ export default function Hero({
       <p className="mt-4 text-[11px] font-semibold text-forest-600">{t("hero.chooseDuty")}</p>
 
       <div className="mt-2 flex flex-wrap items-center justify-center gap-3 text-[11px]">
+        <Link href="/map" className="text-forest-600 underline underline-offset-2">
+          Responsibility map
+        </Link>
         <Link href="/brief" className="text-forest-600 underline underline-offset-2">
           {t("header.brief")}
         </Link>

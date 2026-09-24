@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ISEYC_SEAL_SRC, ISEYC_WEB, ISEYC_EMAIL } from "@/lib/brand";
+import { PUBLISHED_DEMAND_LABEL } from "@/lib/record-classes";
 
 export const metadata = {
   title: "About & Non-Partisan Charter | ISEYC 2027 Civic Mandate",
@@ -49,6 +50,23 @@ export default function AboutPage() {
           <li>Not a substitute for INEC or any official institution</li>
           <li>Not a claim to speak for every Nigerian</li>
         </ul>
+
+        <h2 className="pt-1 font-display text-base font-bold text-forest-900">Record type</h2>
+        <p>
+          Published items are labelled <strong>{PUBLISHED_DEMAND_LABEL}</strong>. That means a citizen
+          asked for a concrete delivery outcome and ISEYC accepted the text for the public wall. It does{" "}
+          <strong>not</strong> mean the demand was verified as delivered, scored, or matched to a candidate.
+        </p>
+
+        <h2 className="pt-1 font-display text-base font-bold text-forest-900">Responsibility map</h2>
+        <p>
+          The{" "}
+          <Link href="/map" className="font-semibold underline underline-offset-2">
+            responsibility map
+          </Link>{" "}
+          is an ISEYC pilot classification of which offices often relate to a duty (Primary, Shared, or
+          Unclear). It is not a court judgment and not a ranking of persons.
+        </p>
 
         <h2 className="pt-1 font-display text-base font-bold text-forest-900">Moderation</h2>
         <p>
@@ -105,9 +123,9 @@ export default function AboutPage() {
 
         <h2 className="pt-1 font-display text-base font-bold text-forest-900">Privacy</h2>
         <p>
-          Optional age and gender are for internal understanding only and are not shown on the
-          public wall. Device information helps limit spam. The mandate sentence becomes public
-          only after publication.
+          Optional age and gender are hidden behind an optional disclosure and are for internal
+          understanding only — they are not shown on the public wall. Device information helps limit
+          spam and is not published. The mandate sentence becomes public only after publication.
         </p>
 
         <p className="text-xs text-forest-600">
@@ -122,7 +140,10 @@ export default function AboutPage() {
         </p>
       </div>
 
-      <p className="mt-8 text-center">
+      <p className="mt-8 flex flex-col items-center gap-2 text-center text-sm">
+        <Link href="/map" className="font-semibold text-forest-700 underline underline-offset-2">
+          Responsibility map
+        </Link>
         <Link href="/" className="text-sm font-semibold text-forest-600 underline underline-offset-2">
           ← Back to Civic Mandate
         </Link>
