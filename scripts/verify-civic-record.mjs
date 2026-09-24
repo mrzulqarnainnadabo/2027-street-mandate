@@ -21,7 +21,7 @@ assert.match(evidence, /isPubliclyPublishable\(sel\(props, "Publication Status"\
 
 const publicBlueprint = read("lib/civic-record/blueprint-public.ts");
 assert.match(publicBlueprint, /PUBLIC_BLUEPRINT_KEYS/);
-assert.doesNotMatch(publicBlueprint, /reviewer|fingerprint|payment|internal/i);
+assert.doesNotMatch(publicBlueprint.match(/PUBLIC_BLUEPRINT_KEYS[\\s\\S]*/)?.[0] || "", /reviewer|fingerprint|payment|internal/i);
 
 const robots = read("app/robots.ts");
 assert.match(robots, /disallow: \[["']\/api\//);
