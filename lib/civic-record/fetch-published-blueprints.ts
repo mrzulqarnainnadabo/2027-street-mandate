@@ -23,7 +23,17 @@ function mapPage(page: any): PublicBlueprintProposal | null {
   const props = page.properties;
   const publicationStatus = sel(props, "Status");
   const verificationStatus = sel(props, "Verification");
-  if (!isPubliclyPublishable(publicationStatus, verificationStatus)) return null;
+  const governance = {
+    status: publicationStatus,
+    verification: verificationStatus,
+    sourceUrl: props?.Source?.url || "",
+    reviewerA: rt(props, "Reviewer A"),
+    reviewerADecision: sel(props, "Reviewer A Decision"),
+    reviewerB: rt(props, "Reviewer B"),
+    reviewerBDecision: sel(props, "Reviewer B Decision"),
+    publicationDecision: sel(props, "Publication Decision"),
+  };
+  if (!isPubliclyPublishable(publicationStatus, verificationStatus, governance)) return null;
 
   const proposalText = rt(props, "Proposal Text");
   const sourceUrl = props?.Source?.url || "";
