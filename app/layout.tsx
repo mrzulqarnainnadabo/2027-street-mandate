@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { LanguageProvider } from "@/components/LanguageProvider";
+import FreezeBanner from "@/components/FreezeBanner";
 
 export const metadata: Metadata = {
   title: "ISEYC 2027 Civic Mandate",
@@ -33,7 +34,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="min-h-screen bg-cream text-forest-900 antialiased">
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          <FreezeBanner />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );
