@@ -73,6 +73,7 @@ function buildPlainBrief(
   }
 
   lines.push(`Brief: ${briefUrl(state)}`);
+  lines.push(`Responsibility map: https://2027-street-mandate.vercel.app/map`);
   lines.push(`Submit: https://2027-street-mandate.vercel.app/`);
   return lines.join("\n");
 }
@@ -231,6 +232,13 @@ function BriefInner() {
       <p className="mt-2 text-sm leading-relaxed text-forest-700/90">
         Published citizen demands for one state, grouped by duty, then by office. Public memory —
         not a poll, ranking, or endorsement. Share with ward groups, not as a scoreboard.
+      </p>
+      <p className="mt-2 text-xs text-forest-600 no-print">
+        Unsure which office owns a duty?{" "}
+        <Link href="/map" className="font-semibold underline underline-offset-2">
+          Open the responsibility map
+        </Link>
+        .
       </p>
 
       <label className="mt-6 block text-xs font-semibold text-forest-700 no-print">
@@ -393,6 +401,12 @@ function BriefInner() {
           <li>Share more opens the phone sheet (Instagram, TikTok, Messages…).</li>
           <li>Copy full text or Print / PDF for offline meetings.</li>
           <li>Counts are published demands only — not votes or popularity.</li>
+          <li>
+            <Link href="/map" className="font-semibold underline underline-offset-2">
+              Responsibility map
+            </Link>{" "}
+            shows Primary / Shared / Unclear offices for each duty.
+          </li>
         </ul>
       </div>
 
