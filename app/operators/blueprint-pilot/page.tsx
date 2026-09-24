@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ISEYC_SEAL_SRC } from "@/lib/brand";
 import { BLUEPRINT_DB_TITLE, BLUEPRINT_NOTION_PROPERTIES, BLUEPRINT_PILOT_RULES } from "@/lib/civic-record/blueprint-fields";
+import { COMMITMENT_DB_TITLE, COMMITMENT_NOTION_PROPERTIES } from "@/lib/civic-record/commitment-fields";
 import { CIVIC_RECORD_MISSION, FORBIDDEN_PUBLIC_FEATURES, PAYMENT_NEVER_CHANGES } from "@/lib/civic-record/firewall";
 import { NOT_PUBLICLY_SPECIFIED } from "@/lib/civic-record/types";
+import BlueprintDraftValidator from "@/components/operators/BlueprintDraftValidator";
 
 export const metadata: Metadata = {
   title: "Blueprint pilot | ISEYC operators",
@@ -44,6 +46,10 @@ export default function BlueprintPilotPage() {
         </p>
       </section>
 
+      <div className="mt-4">
+        <BlueprintDraftValidator />
+      </div>
+
       <section className="mt-4 rounded-xl border border-forest-500/15 bg-white p-4">
         <h2 className="font-display text-base font-bold text-forest-900">Hard rules</h2>
         <ul className="mt-2 list-disc space-y-1.5 pl-5 text-xs text-forest-800">
@@ -57,9 +63,25 @@ export default function BlueprintPilotPage() {
       </section>
 
       <section className="mt-4 rounded-xl border border-forest-500/15 bg-white p-4">
-        <h2 className="font-display text-base font-bold text-forest-900">Notion properties to create</h2>
+        <h2 className="font-display text-base font-bold text-forest-900">Notion properties — Blueprint</h2>
         <ol className="mt-2 list-decimal space-y-2 pl-5 text-xs text-forest-800">
           {BLUEPRINT_NOTION_PROPERTIES.map((p) => (
+            <li key={p.name}>
+              <strong>{p.name}</strong> <span className="text-forest-500">({p.type})</span>
+              <span className="block text-forest-600">{p.notes}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="mt-4 rounded-xl border border-forest-500/15 bg-white p-4">
+        <h2 className="font-display text-base font-bold text-forest-900">Later — Commitment DB (do not mix)</h2>
+        <p className="mt-1 text-xs text-forest-600">
+          Title: <strong>{COMMITMENT_DB_TITLE}</strong> — for office holders after they hold office, not
+          for aspirant proposals.
+        </p>
+        <ol className="mt-2 list-decimal space-y-2 pl-5 text-xs text-forest-800">
+          {COMMITMENT_NOTION_PROPERTIES.map((p) => (
             <li key={p.name}>
               <strong>{p.name}</strong> <span className="text-forest-500">({p.type})</span>
               <span className="block text-forest-600">{p.notes}</span>
@@ -72,17 +94,16 @@ export default function BlueprintPilotPage() {
         <h2 className="font-display text-base font-bold text-forest-900">Operator sequence</h2>
         <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-forest-800">
           <li>Collect public sources only (or written permission + public mirror).</li>
-          <li>Create the Blueprint Notion DB; share with integration only if needed later.</li>
-          <li>One row per discrete proposal (not one cell for an entire manifesto).</li>
-          <li>Run dual review below before Status = Published.</li>
-          <li>Log which fields stayed {NOT_PUBLICLY_SPECIFIED}.</li>
+          <li>Create the Blueprint Notion DB.</li>
+          <li>Validate a row with the JSON tool above (optional).</li>
+          <li>One row per discrete proposal.</li>
+          <li>Dual review before Status = Published.</li>
           <li>No public /blueprints page until methodology is stable.</li>
         </ol>
       </section>
 
       <section className="mt-4 rounded-xl border border-forest-500/15 bg-white p-4 text-xs text-forest-800">
         <h2 className="font-display text-base font-bold text-forest-900">Dual review before Publish</h2>
-        <p className="mt-1 text-forest-500">Two people when possible.</p>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <div className="rounded-lg border border-forest-500/10 bg-forest-50/50 p-3">
             <p className="font-bold text-forest-900">Reviewer A — Fidelity</p>
@@ -90,7 +111,6 @@ export default function BlueprintPilotPage() {
               <li>Proposal matches the cited source</li>
               <li>One proposal per row</li>
               <li>Gaps are {NOT_PUBLICLY_SPECIFIED}, not guessed</li>
-              <li>Office sought and duty area coherent</li>
             </ul>
           </div>
           <div className="rounded-lg border border-forest-500/10 bg-forest-50/50 p-3">
@@ -98,15 +118,14 @@ export default function BlueprintPilotPage() {
             <ul className="mt-1.5 list-disc space-y-1 pl-4">
               <li>No ISEYC praise or attack language</li>
               <li>No ranking or comparison to other actors</li>
-              <li>Source is inspectable</li>
-              <li>Would not read as campaign material from ISEYC</li>
+              <li>Would not read as ISEYC campaign material</li>
             </ul>
           </div>
         </div>
       </section>
 
       <section className="mt-4 rounded-xl border border-dashed border-forest-500/25 p-4 text-xs text-forest-600">
-        <h2 className="font-semibold text-forest-800">Forbidden on any future public Blueprint UI</h2>
+        <h2 className="font-semibold text-forest-800">Forbidden on future public UI</h2>
         <ul className="mt-2 list-disc space-y-1 pl-5">
           {FORBIDDEN_PUBLIC_FEATURES.map((f) => (
             <li key={f}>{f}</li>
