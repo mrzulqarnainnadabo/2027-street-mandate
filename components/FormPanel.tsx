@@ -30,6 +30,7 @@ export default function FormPanel({
   const [sentence, setSentence] = useState("");
   const [ageBand, setAgeBand] = useState("");
   const [gender, setGender] = useState("");
+  const [showOptionalDemo, setShowOptionalDemo] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [hydrated, setHydrated] = useState(false);
@@ -47,6 +48,7 @@ export default function FormPanel({
       setSentence(d.sentence || "");
       setAgeBand(d.ageBand || "");
       setGender(d.gender || "");
+      if (d.ageBand || d.gender) setShowOptionalDemo(true);
     }
     setHydrated(true);
   }, [duty]);
@@ -252,43 +254,52 @@ export default function FormPanel({
           </div>
 
           <div className="border-t border-forest-500/10 pt-4">
-            <p className="mb-3 text-[11px] font-semibold text-forest-700">{t("form.demographics")}</p>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="mb-1.5 block text-[11px] font-medium text-forest-700">
-                  {t("form.age")}
-                </label>
-                <select
-                  value={ageBand}
-                  onChange={(e) => setAgeBand(e.target.value)}
-                  className="min-h-[46px] w-full rounded-md border border-forest-500/15 bg-white px-2 text-xs outline-none focus:border-forest-500"
-                >
-                  <option value="">{t("form.preferNot")}</option>
-                  {AGE_BANDS.map((a) => (
-                    <option key={a} value={a}>
-                      {a}
-                    </option>
-                  ))}
-                </select>
+            <button
+              type="button"
+              onClick={() => setShowOptionalDemo((v) => !v)}
+              className="flex w-full items-center justify-between text-left text-[11px] font-semibold text-forest-700"
+            >
+              <span>Optional details — never published on the public wall</span>
+              <span className="text-forest-500">{showOptionalDemo ? "Hide" : "Show"}</span>
+            </button>
+            {showOptionalDemo ? (
+              <div className="mt-3 grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-[11px] font-medium text-forest-700">
+                    {t("form.age")}
+                  </label>
+                  <select
+                    value={ageBand}
+                    onChange={(e) => setAgeBand(e.target.value)}
+                    className="min-h-[46px] w-full rounded-md border border-forest-500/15 bg-white px-2 text-xs outline-none focus:border-forest-500"
+                  >
+                    <option value="">{t("form.preferNot")}</option>
+                    {AGE_BANDS.map((a) => (
+                      <option key={a} value={a}>
+                        {a}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-[11px] font-medium text-forest-700">
+                    {t("form.gender")}
+                  </label>
+                  <select
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    className="min-h-[46px] w-full rounded-md border border-forest-500/15 bg-white px-2 text-xs outline-none focus:border-forest-500"
+                  >
+                    <option value="">{t("form.preferNot")}</option>
+                    {GENDERS.map((g) => (
+                      <option key={g} value={g}>
+                        {g}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-              <div>
-                <label className="mb-1.5 block text-[11px] font-medium text-forest-700">
-                  {t("form.gender")}
-                </label>
-                <select
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  className="min-h-[46px] w-full rounded-md border border-forest-500/15 bg-white px-2 text-xs outline-none focus:border-forest-500"
-                >
-                  <option value="">{t("form.preferNot")}</option>
-                  {GENDERS.map((g) => (
-                    <option key={g} value={g}>
-                      {g}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+            ) : null}
           </div>
 
           {error && (
