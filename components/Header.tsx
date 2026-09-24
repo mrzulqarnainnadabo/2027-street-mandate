@@ -28,6 +28,9 @@ export default function Header() {
         </Link>
         <nav className="flex shrink-0 items-center gap-2 text-[11px] font-semibold text-forest-700 sm:gap-3">
           <LanguageSwitcher />
+          <Link href="/map" className="underline-offset-2 hover:underline">
+            Map
+          </Link>
           <Link href="/brief" className="underline-offset-2 hover:underline">
             {t("header.brief")}
           </Link>
