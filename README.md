@@ -69,7 +69,7 @@ Do not rename fields in Notion without a code migration.
 npm install && npm run build
 ```
 
-## Product rule
+## Blueprint Register governance\n\nBlueprints use the existing Notion pilot database. Public publication requires an inspectable source, non-UNVERIFIED verification, Reviewer A approval, Reviewer B approval by a different reviewer, and an explicit Publication Decision = Publish. The guarded operator review endpoint requires `Authorization: Bearer <CIVIC_OPERATOR_KEY>` and is disabled unless `CIVIC_OPERATOR_KEY` is configured. Payment or actor requests never alter publication state.\n\n## Product rule
 
 Measure **demands by duty and place**. Never candidate scores, parties, or “who is leading.”
 
