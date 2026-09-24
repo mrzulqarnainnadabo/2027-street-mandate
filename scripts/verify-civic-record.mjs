@@ -8,7 +8,7 @@ assert.match(boundary, /publicationStatus === ["']Published["']/);
 assert.match(boundary, /verificationStatus !== ["']UNVERIFIED["']/);
 
 const blueprint = read("lib/civic-record/fetch-published-blueprints.ts");
-assert.match(blueprint, /isPubliclyPublishable\(publicationStatus, verificationStatus\)/);
+assert.match(blueprint, /isPubliclyPublishable\(publicationStatus, verificationStatus, governance\)/);\nassert.match(blueprint, /Reviewer A Decision/);\nassert.match(blueprint, /Reviewer B Decision/);\nassert.match(blueprint, /Publication Decision/);
 assert.match(blueprint, /if \(!proposalText \|\| !sourceUrl\) return null/);
 assert.match(blueprint, /return \{/);
 
