@@ -14,7 +14,7 @@ import {
 import { getDeviceId } from "@/lib/fingerprint";
 import { useLang } from "@/components/LanguageProvider";
 import { clearDraft, loadDraft, saveDraft } from "@/lib/draft";
-import { rowsForDuty } from "@/lib/responsibility-map";
+import { rowsForDuty, suggestedPrimaryOffice } from "@/lib/responsibility-map";
 
 export default function FormPanel({
   duty,
@@ -38,6 +38,9 @@ export default function FormPanel({
   const examples = PROMPT_EXAMPLES[duty] || PROMPT_EXAMPLES["Other"];
   const officeMeta = OFFICES.find((o) => o.id === office);
   const mapRow = rowsForDuty(duty);
+  const suggested = suggestedPrimaryOffice(duty);
+  const suggestedValid =
+    suggested && OFFICES.some((o) => o.id === suggested) ? suggested : null;
 
   useEffect(() => {
     const d = loadDraft();
@@ -157,6 +160,18 @@ export default function FormPanel({
                 </li>
               ))}
             </ul>
+            {suggestedValid ? (
+              <button
+                type="button"
+                onClick={() => setOffice(suggestedValid)}
+                className="mt-2 w-full rounded-md border border-forest-500/20 bg-white px-3 py-2 text-left text-[11px] font-semibold text-forest-800 active:bg-forest-50"
+              >
+                Use suggested office: {suggestedValid}
+                <span className="mt-0.5 block font-normal text-forest-500">
+                  Pilot map · you can change it · not a ranking
+                </span>
+              </button>
+            ) : null}
             <Link
               href="/map"
               className="mt-1.5 inline-block font-semibold text-forest-800 underline underline-offset-2"

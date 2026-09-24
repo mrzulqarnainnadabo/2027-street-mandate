@@ -59,7 +59,7 @@ export const RESPONSIBILITY_ROWS: ResponsibilityRow[] = [
       { office: "House of Representatives", role: "Federal budgets and labour/industry legislation", confidence: "Shared" },
     ],
     note: "Job creation is multi-actor; avoid treating one mandate as a guarantee of employment.",
-    legalBasisHint: "Economic powers are concurrent and heavily programme-based.",
+    legalBasisHint: "Economic powers are concurrent and programme-based.",
   },
   {
     duty: "Power",
@@ -207,4 +207,12 @@ export const RESPONSIBILITY_ROWS: ResponsibilityRow[] = [
 
 export function rowsForDuty(duty: string): ResponsibilityRow | undefined {
   return RESPONSIBILITY_ROWS.find((r) => r.duty === duty);
+}
+
+/** First Primary office id that exists in the product OFFICES list, if any. */
+export function suggestedPrimaryOffice(duty: string): string | null {
+  const row = rowsForDuty(duty);
+  if (!row) return null;
+  const primary = row.offices.find((o) => o.confidence === "Primary");
+  return primary?.office ?? null;
 }
