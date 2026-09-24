@@ -1,43 +1,25 @@
-# Civic Record — Stage 2 status
+# Civic Record — Stage 2 / early Stage 3 status
 
-**Date:** 2026-09-24  
 **Deploy:** Do not merge to `main` until founder explicitly orders merge.
 
-## Complete
+## Stage 2 complete
 
-### Code (draft PR #40)
-- Entity types (Demand / Blueprint / Commitment / Evidence)
-- Neutrality + payment firewall constants
-- Notion field definitions for three pilots
-- `validateBlueprintDraft` / `validateCommitmentDraft`
-- Policy-area overlap helper (counts only, not scores)
-- Shared duty ids with Civic Mandate
-- Staff routes: `/operators`, `/operators/blueprint-pilot` (noindex)
-- Live Notion IDs in `notion-pilot-ids.ts`
+- Types, firewall, field schemas, validators, overlap helper
+- Staff `/operators` + blueprint pilot UI
+- Notion pilots: Blueprint, Commitment, Evidence + views + ops hub
+- IDs in `notion-pilot-ids.ts`
 
-### Notion (live)
-| Resource | ID / URL |
-|----------|----------|
-| Blueprint Register | `05b4dd95d02e4578b629a20a0f34f10b` |
-| Commitments | `130a06c6c9d149efab6cef4431aa0804` |
-| Evidence Vault | `2bc9d99c565d45219d301d866367bf15` |
-| Ops hub page | `3e55db88ef4681cba049d3c45843092e` |
-| Mandate (citizens) | `19b213d55bfc4ce8a653a05147cbbe2a` — **do not mix** |
+## Stage 3 started (library only)
 
-Views: Draft & New / Published only on relevant DBs.
+- `blueprint-public.ts` — public allowlist type
+- `fetch-published-blueprints.ts` — Published-only Notion reader
+- **No public route or page yet**
+- Optional env: `NOTION_BLUEPRINT_DATABASE_ID` (falls back to pilot id in code for staff tooling)
 
-## Not in scope until ordered
-- Public `/blueprints` pages
-- Vercel env for Blueprint DB
-- Notion API read in production routes
-- Billing / workspace SaaS
-- Rankings or demand-match %
+## Blocked on human pilot data
 
-## Founder / operator next step
-1. Move pilot DBs into main ISEYC workspace if private.
-2. Enter 5–10 **real public-source** Blueprint rows (one proposal each).
-3. Dual-review before Status = Published.
-4. Only then consider Stage 3 read API + calm public list.
+Enter 5–10 real public-source Blueprint rows, dual-review, set Published — then wire a calm public list if ordered.
 
-## Separate draft
-PR #39 — Mandate responsibility map UX — also unmerged.
+## Separate
+
+PR #39 Mandate map UX — still unmerged.
