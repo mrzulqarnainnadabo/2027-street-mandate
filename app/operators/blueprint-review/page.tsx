@@ -29,7 +29,7 @@ export default function BlueprintReviewPage() {
         <img src={ISEYC_SEAL_SRC} alt="" width={48} height={48} className="h-12 w-12" />
         <div><p className="text-[10px] uppercase tracking-widest text-gold-600">ISEYC staff</p><h1 className="font-display text-xl font-bold text-forest-900">Blueprint publication review</h1></div>
       </div>
-      <p className="mt-5 text-sm leading-relaxed text-forest-700">Process aid for the separate Blueprint Register. This page does not publish records; the publication decision remains a human operator action in the controlled record system.</p>
+      <p className="mt-5 text-sm leading-relaxed text-forest-700">Process aid for the separate Blueprint Register. The controlled review API now records Reviewer A, Reviewer B, and the final publication decision. It requires the server-side CIVIC_OPERATOR_KEY and never exposes that key to the browser.</p>
 
       <div className="mt-6 space-y-4">
         {gates.map(([title, items]) => (
@@ -38,7 +38,7 @@ export default function BlueprintReviewPage() {
             <ul className="mt-3 list-disc space-y-2 pl-5 text-xs leading-relaxed text-forest-800">{items.map((item) => <li key={item}>{item}</li>)}</ul>
           </section>
         ))}
-        <section className="rounded-xl border border-forest-500/15 bg-cream/70 p-5 text-xs leading-relaxed text-forest-800">
+        <section className="rounded-xl border border-forest-500/15 bg-cream/70 p-5 text-xs leading-relaxed text-forest-800">\n          <h2 className="font-display font-bold text-forest-900">Recorded workflow</h2>\n          <p className="mt-2">Draft / New → Reviewer A → Reviewer B → Publication Decision → Published. Reviewer B must be a different reviewer and cannot act before Reviewer A approves. Rejected records remain non-public.</p>
           <h2 className="font-display font-bold text-forest-900">Publication gate</h2>
           <p className="mt-2">Publish only when both reviewers have completed their checks and the record has an inspectable source. Never treat payment, access, or a request from an actor as a reason to change publication or verification status.</p>
         </section>
