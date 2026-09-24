@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   OFFICES,
   STATES,
@@ -13,6 +14,7 @@ import {
 import { getDeviceId } from "@/lib/fingerprint";
 import { useLang } from "@/components/LanguageProvider";
 import { clearDraft, loadDraft, saveDraft } from "@/lib/draft";
+import { rowsForDuty } from "@/lib/responsibility-map";
 
 export default function FormPanel({
   duty,
@@ -34,6 +36,7 @@ export default function FormPanel({
 
   const examples = PROMPT_EXAMPLES[duty] || PROMPT_EXAMPLES["Other"];
   const officeMeta = OFFICES.find((o) => o.id === office);
+  const mapRow = rowsForDuty(duty);
 
   useEffect(() => {
     const d = loadDraft();
@@ -141,6 +144,25 @@ export default function FormPanel({
             <p className="mt-1 text-forest-700">{t("form.rejectLikelyBody")}</p>
           </div>
         </div>
+
+        {mapRow ? (
+          <div className="mb-5 border border-forest-500/12 bg-cream/80 px-3 py-2.5 text-[11px] leading-snug text-forest-700">
+            <p className="font-bold text-forest-800">Offices often linked to {duty}</p>
+            <ul className="mt-1.5 space-y-0.5">
+              {mapRow.offices.slice(0, 3).map((o) => (
+                <li key={o.office}>
+                  {o.office} <span className="text-forest-500">({o.confidence})</span>
+                </li>
+              ))}
+            </ul>
+            <Link
+              href="/map"
+              className="mt-1.5 inline-block font-semibold text-forest-800 underline underline-offset-2"
+            >
+              Full responsibility map
+            </Link>
+          </div>
+        ) : null}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
