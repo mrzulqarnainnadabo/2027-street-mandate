@@ -1,0 +1,25 @@
+{
+  "actorDisplayName": "Example Public Figure",
+  "officeSought": "President",
+  "politicalPlatform": "Not publicly specified",
+  "dutyOrPolicyArea": "Health",
+  "proposalText": "Exact public proposal text goes here — quote or carefully paraphrase from the source only.",
+  "mechanism": "Not publicly specified",
+  "target": "Not publicly specified",
+  "timeline": "Not publicly specified",
+  "funding": "Not publicly specified",
+  "responsibleInstitution": "Not publicly specified",
+  "sourceUrlOrCitation": "https://example.com/speech-or-pdf",
+  "sourceDate": "Not publicly specified",
+  "version": "2026-09-pilot-v1",
+  "statementClass": "ACTOR_STATEMENT",
+  "verificationStatus": "UNVERIFIED",
+  "publicationStatus": "Draft",
+  "geographyScope": "Nigeria",
+  "_instructions": [
+    "One discrete proposal per row — not an entire manifesto in one cell.",
+    "Never invent mechanism/timeline/funding.",
+    "Replace Example Public Figure with the real public name only when documenting real sources.",
+    "Do not copy this file into the citizen Civic Mandate database."
+  ]
+}
