@@ -25,6 +25,14 @@ export default function HowItWorks() {
         </li>
       </ol>
 
+      <p className="mx-auto mt-3 max-w-md text-center text-[11px] leading-snug text-forest-600">
+        Unsure which office delivers a duty?{" "}
+        <Link href="/map" className="font-semibold underline underline-offset-2">
+          Open the responsibility map
+        </Link>
+        {" "}— Primary, Shared, or Unclear. Not rankings.
+      </p>
+
       <div className="mx-auto mt-4 grid max-w-md gap-2 text-[11px] sm:grid-cols-2">
         <div className="rounded-md border border-forest-500/10 bg-white px-3 py-2">
           <p className="font-bold uppercase tracking-wide text-forest-600">{t("how.publish")}</p>
