@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   OFFICES,
   STATES,
@@ -13,6 +14,8 @@ import {
 import { getDeviceId } from "@/lib/fingerprint";
 import { useLang } from "@/components/LanguageProvider";
 import { clearDraft, loadDraft, saveDraft } from "@/lib/draft";
+import { rowsForDuty, suggestedPrimaryOffices } from "@/lib/responsibility-map";
+import { campaignLanguageHint } from "@/lib/demand-quality";
 
 export default function FormPanel({
   duty,
@@ -28,12 +31,18 @@ export default function FormPanel({
   const [sentence, setSentence] = useState("");
   const [ageBand, setAgeBand] = useState("");
   const [gender, setGender] = useState("");
+  const [showOptionalDemo, setShowOptionalDemo] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [hydrated, setHydrated] = useState(false);
 
   const examples = PROMPT_EXAMPLES[duty] || PROMPT_EXAMPLES["Other"];
   const officeMeta = OFFICES.find((o) => o.id === office);
+  const mapRow = rowsForDuty(duty);
+  const primaryChips = suggestedPrimaryOffices(duty).filter((id) =>
+    OFFICES.some((o) => o.id === id)
+  );
+  const sloganHint = campaignLanguageHint(sentence);
 
   useEffect(() => {
     const d = loadDraft();
@@ -44,6 +53,7 @@ export default function FormPanel({
       setSentence(d.sentence || "");
       setAgeBand(d.ageBand || "");
       setGender(d.gender || "");
+      if (d.ageBand || d.gender) setShowOptionalDemo(true);
     }
     setHydrated(true);
   }, [duty]);
@@ -142,6 +152,47 @@ export default function FormPanel({
           </div>
         </div>
 
+        {mapRow ? (
+          <div className="mb-5 border border-forest-500/12 bg-cream/80 px-3 py-2.5 text-[11px] leading-snug text-forest-700">
+            <p className="font-bold text-forest-800">Offices often linked to {duty}</p>
+            <ul className="mt-1.5 space-y-0.5">
+              {mapRow.offices.slice(0, 3).map((o) => (
+                <li key={o.office}>
+                  {o.office} <span className="text-forest-500">({o.confidence})</span>
+                </li>
+              ))}
+            </ul>
+            {primaryChips.length > 0 ? (
+              <div className="mt-2 flex flex-wrap gap-2">
+                {primaryChips.map((id) => (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => setOffice(id)}
+                    className={`rounded-full border px-3 py-1.5 text-[11px] font-semibold active:scale-[0.98] ${
+                      office === id
+                        ? "border-forest-500 bg-forest-500 text-white"
+                        : "border-forest-500/25 bg-white text-forest-800"
+                    }`}
+                  >
+                    {id}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+            <p className="mt-1.5 text-[10px] text-forest-500">
+              Tap a Primary office to fill the form — pilot map, not a ranking. You can still choose
+              another office below.
+            </p>
+            <Link
+              href="/map"
+              className="mt-1.5 inline-block font-semibold text-forest-800 underline underline-offset-2"
+            >
+              Full responsibility map
+            </Link>
+          </div>
+        ) : null}
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="mb-2 block text-[13px] font-bold text-forest-900">{t("form.office")}</label>
@@ -212,6 +263,14 @@ export default function FormPanel({
               placeholder="e.g. Primary health centres stocked with essential medicines…"
               className="field-control min-h-[120px] w-full resize-none px-3 py-3 text-sm leading-relaxed outline-none"
             />
+            {sloganHint ? (
+              <p
+                role="status"
+                className="mt-2 border-l-2 border-gold-600 bg-gold-500/10 px-3 py-2 text-[11px] leading-snug text-forest-800"
+              >
+                {sloganHint}
+              </p>
+            ) : null}
             <div className="mt-2 space-y-1.5">
               <p className="text-[10px] font-semibold uppercase tracking-wide text-forest-500">
                 {t("form.examples")}
@@ -230,43 +289,52 @@ export default function FormPanel({
           </div>
 
           <div className="border-t border-forest-500/10 pt-4">
-            <p className="mb-3 text-[11px] font-semibold text-forest-700">{t("form.demographics")}</p>
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="mb-1.5 block text-[11px] font-medium text-forest-700">
-                  {t("form.age")}
-                </label>
-                <select
-                  value={ageBand}
-                  onChange={(e) => setAgeBand(e.target.value)}
-                  className="min-h-[46px] w-full rounded-md border border-forest-500/15 bg-white px-2 text-xs outline-none focus:border-forest-500"
-                >
-                  <option value="">{t("form.preferNot")}</option>
-                  {AGE_BANDS.map((a) => (
-                    <option key={a} value={a}>
-                      {a}
-                    </option>
-                  ))}
-                </select>
+            <button
+              type="button"
+              onClick={() => setShowOptionalDemo((v) => !v)}
+              className="flex w-full items-center justify-between text-left text-[11px] font-semibold text-forest-700"
+            >
+              <span>Optional details — never published on the public wall</span>
+              <span className="text-forest-500">{showOptionalDemo ? "Hide" : "Show"}</span>
+            </button>
+            {showOptionalDemo ? (
+              <div className="mt-3 grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1.5 block text-[11px] font-medium text-forest-700">
+                    {t("form.age")}
+                  </label>
+                  <select
+                    value={ageBand}
+                    onChange={(e) => setAgeBand(e.target.value)}
+                    className="min-h-[46px] w-full rounded-md border border-forest-500/15 bg-white px-2 text-xs outline-none focus:border-forest-500"
+                  >
+                    <option value="">{t("form.preferNot")}</option>
+                    {AGE_BANDS.map((a) => (
+                      <option key={a} value={a}>
+                        {a}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="mb-1.5 block text-[11px] font-medium text-forest-700">
+                    {t("form.gender")}
+                  </label>
+                  <select
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    className="min-h-[46px] w-full rounded-md border border-forest-500/15 bg-white px-2 text-xs outline-none focus:border-forest-500"
+                  >
+                    <option value="">{t("form.preferNot")}</option>
+                    {GENDERS.map((g) => (
+                      <option key={g} value={g}>
+                        {g}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-              <div>
-                <label className="mb-1.5 block text-[11px] font-medium text-forest-700">
-                  {t("form.gender")}
-                </label>
-                <select
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  className="min-h-[46px] w-full rounded-md border border-forest-500/15 bg-white px-2 text-xs outline-none focus:border-forest-500"
-                >
-                  <option value="">{t("form.preferNot")}</option>
-                  {GENDERS.map((g) => (
-                    <option key={g} value={g}>
-                      {g}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+            ) : null}
           </div>
 
           {error && (
