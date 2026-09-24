@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   copyText,
   shareFacebook,
@@ -125,6 +126,13 @@ export default function SuccessPanel({
             — {state} · pending review
           </footer>
         </blockquote>
+
+        <p className="mx-auto mt-3 max-w-md text-[11px] leading-snug text-forest-600">
+          <Link href="/map" className="font-semibold underline underline-offset-2">
+            Responsibility map
+          </Link>
+          {" "}— see which offices often deliver a duty (not rankings).
+        </p>
 
         <p className="mx-auto mt-4 max-w-md text-[11px] leading-snug text-forest-500">
           Share if you wish. Publication still depends on ISEYC review. Instagram &amp; TikTok: use
