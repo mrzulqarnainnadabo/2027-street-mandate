@@ -10,10 +10,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-/**
- * Stage 2 — manual Public Blueprint pilot.
- * Staff only. Not linked from public nav.
- */
 export default function BlueprintPilotPage() {
   return (
     <div className="mx-auto min-h-screen max-w-2xl px-4 py-10">
@@ -30,12 +26,22 @@ export default function BlueprintPilotPage() {
       <section className="mt-6 rounded-xl border border-forest-500/15 bg-white p-4 text-xs leading-relaxed text-forest-800">
         <h2 className="font-display text-base font-bold text-forest-900">Goal of this pilot</h2>
         <p className="mt-2">
-          Document <strong>one</strong> public-figure dossier (e.g. published agenda / LabourDirect-style
-          materials) into a <strong>separate</strong> Notion database using the fields below. Discover
-          which fields are empty in the wild. Do not build ranking UI. Do not mix rows into the citizen
-          Mandate database.
+          Document <strong>one</strong> public-figure dossier into a <strong>separate</strong> Notion
+          database. One discrete proposal per row. Discover empty fields. No ranking UI. Do not write
+          into the citizen Mandate database.
         </p>
         <p className="mt-2 font-semibold text-forest-900">Database title: {BLUEPRINT_DB_TITLE}</p>
+        <p className="mt-2">
+          Row shape example:{" "}
+          <a
+            className="font-semibold underline underline-offset-2"
+            href="/templates/blueprint-pilot-row.example.json"
+            target="_blank"
+            rel="noreferrer"
+          >
+            /templates/blueprint-pilot-row.example.json
+          </a>
+        </p>
       </section>
 
       <section className="mt-4 rounded-xl border border-forest-500/15 bg-white p-4">
@@ -46,7 +52,7 @@ export default function BlueprintPilotPage() {
           ))}
         </ul>
         <p className="mt-3 text-xs text-forest-600">
-          Empty public facts → write <code className="text-forest-900">{NOT_PUBLICLY_SPECIFIED}</code>
+          Empty public facts → <code className="text-forest-900">{NOT_PUBLICLY_SPECIFIED}</code>
         </p>
       </section>
 
@@ -66,12 +72,37 @@ export default function BlueprintPilotPage() {
         <h2 className="font-display text-base font-bold text-forest-900">Operator sequence</h2>
         <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-forest-800">
           <li>Collect public sources only (or written permission + public mirror).</li>
-          <li>Create the Blueprint Notion DB; share with the same integration if desired.</li>
-          <li>One row per discrete proposal (not one row for an entire manifesto).</li>
-          <li>Dual review before Status = Published (substance + neutrality).</li>
-          <li>Note which fields stayed {NOT_PUBLICLY_SPECIFIED} — that trains the real schema.</li>
-          <li>No public website page until methodology is stable and counsel boundary is clear.</li>
+          <li>Create the Blueprint Notion DB; share with integration only if needed later.</li>
+          <li>One row per discrete proposal (not one cell for an entire manifesto).</li>
+          <li>Run dual review below before Status = Published.</li>
+          <li>Log which fields stayed {NOT_PUBLICLY_SPECIFIED}.</li>
+          <li>No public /blueprints page until methodology is stable.</li>
         </ol>
+      </section>
+
+      <section className="mt-4 rounded-xl border border-forest-500/15 bg-white p-4 text-xs text-forest-800">
+        <h2 className="font-display text-base font-bold text-forest-900">Dual review before Publish</h2>
+        <p className="mt-1 text-forest-500">Two people when possible.</p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-lg border border-forest-500/10 bg-forest-50/50 p-3">
+            <p className="font-bold text-forest-900">Reviewer A — Fidelity</p>
+            <ul className="mt-1.5 list-disc space-y-1 pl-4">
+              <li>Proposal matches the cited source</li>
+              <li>One proposal per row</li>
+              <li>Gaps are {NOT_PUBLICLY_SPECIFIED}, not guessed</li>
+              <li>Office sought and duty area coherent</li>
+            </ul>
+          </div>
+          <div className="rounded-lg border border-forest-500/10 bg-forest-50/50 p-3">
+            <p className="font-bold text-forest-900">Reviewer B — Neutrality</p>
+            <ul className="mt-1.5 list-disc space-y-1 pl-4">
+              <li>No ISEYC praise or attack language</li>
+              <li>No ranking or comparison to other actors</li>
+              <li>Source is inspectable</li>
+              <li>Would not read as campaign material from ISEYC</li>
+            </ul>
+          </div>
+        </div>
       </section>
 
       <section className="mt-4 rounded-xl border border-dashed border-forest-500/25 p-4 text-xs text-forest-600">
@@ -91,7 +122,7 @@ export default function BlueprintPilotPage() {
 
       <p className="mt-8 flex flex-col items-center gap-2 text-center text-xs">
         <Link href="/operators" className="font-semibold text-forest-700 underline underline-offset-2">
-          Mandate dual-review checklist
+          Operator hub
         </Link>
         <Link href="/" className="text-forest-600 underline underline-offset-2">
           Civic Mandate (citizens)
