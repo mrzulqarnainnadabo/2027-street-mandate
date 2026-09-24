@@ -14,7 +14,8 @@ import {
 import { getDeviceId } from "@/lib/fingerprint";
 import { useLang } from "@/components/LanguageProvider";
 import { clearDraft, loadDraft, saveDraft } from "@/lib/draft";
-import { rowsForDuty, suggestedPrimaryOffice } from "@/lib/responsibility-map";
+import { rowsForDuty, suggestedPrimaryOffices } from "@/lib/responsibility-map";
+import { campaignLanguageHint } from "@/lib/demand-quality";
 
 export default function FormPanel({
   duty,
@@ -38,9 +39,10 @@ export default function FormPanel({
   const examples = PROMPT_EXAMPLES[duty] || PROMPT_EXAMPLES["Other"];
   const officeMeta = OFFICES.find((o) => o.id === office);
   const mapRow = rowsForDuty(duty);
-  const suggested = suggestedPrimaryOffice(duty);
-  const suggestedValid =
-    suggested && OFFICES.some((o) => o.id === suggested) ? suggested : null;
+  const primaryChips = suggestedPrimaryOffices(duty).filter((id) =>
+    OFFICES.some((o) => o.id === id)
+  );
+  const sloganHint = campaignLanguageHint(sentence);
 
   useEffect(() => {
     const d = loadDraft();
@@ -160,18 +162,28 @@ export default function FormPanel({
                 </li>
               ))}
             </ul>
-            {suggestedValid ? (
-              <button
-                type="button"
-                onClick={() => setOffice(suggestedValid)}
-                className="mt-2 w-full rounded-md border border-forest-500/20 bg-white px-3 py-2 text-left text-[11px] font-semibold text-forest-800 active:bg-forest-50"
-              >
-                Use suggested office: {suggestedValid}
-                <span className="mt-0.5 block font-normal text-forest-500">
-                  Pilot map · you can change it · not a ranking
-                </span>
-              </button>
+            {primaryChips.length > 0 ? (
+              <div className="mt-2 flex flex-wrap gap-2">
+                {primaryChips.map((id) => (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => setOffice(id)}
+                    className={`rounded-full border px-3 py-1.5 text-[11px] font-semibold active:scale-[0.98] ${
+                      office === id
+                        ? "border-forest-500 bg-forest-500 text-white"
+                        : "border-forest-500/25 bg-white text-forest-800"
+                    }`}
+                  >
+                    {id}
+                  </button>
+                ))}
+              </div>
             ) : null}
+            <p className="mt-1.5 text-[10px] text-forest-500">
+              Tap a Primary office to fill the form — pilot map, not a ranking. You can still choose
+              another office below.
+            </p>
             <Link
               href="/map"
               className="mt-1.5 inline-block font-semibold text-forest-800 underline underline-offset-2"
@@ -251,6 +263,14 @@ export default function FormPanel({
               placeholder="e.g. Primary health centres stocked with essential medicines…"
               className="field-control min-h-[120px] w-full resize-none px-3 py-3 text-sm leading-relaxed outline-none"
             />
+            {sloganHint ? (
+              <p
+                role="status"
+                className="mt-2 border-l-2 border-gold-600 bg-gold-500/10 px-3 py-2 text-[11px] leading-snug text-forest-800"
+              >
+                {sloganHint}
+              </p>
+            ) : null}
             <div className="mt-2 space-y-1.5">
               <p className="text-[10px] font-semibold uppercase tracking-wide text-forest-500">
                 {t("form.examples")}

@@ -209,10 +209,15 @@ export function rowsForDuty(duty: string): ResponsibilityRow | undefined {
   return RESPONSIBILITY_ROWS.find((r) => r.duty === duty);
 }
 
-/** First Primary office id that exists in the product OFFICES list, if any. */
+/** First Primary office id, if any. */
 export function suggestedPrimaryOffice(duty: string): string | null {
+  const all = suggestedPrimaryOffices(duty);
+  return all[0] ?? null;
+}
+
+/** All Primary offices for a duty (e.g. state vs federal roads). */
+export function suggestedPrimaryOffices(duty: string): string[] {
   const row = rowsForDuty(duty);
-  if (!row) return null;
-  const primary = row.offices.find((o) => o.confidence === "Primary");
-  return primary?.office ?? null;
+  if (!row) return [];
+  return row.offices.filter((o) => o.confidence === "Primary").map((o) => o.office);
 }
