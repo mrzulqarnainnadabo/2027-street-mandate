@@ -2,6 +2,7 @@ import { Client } from "@notionhq/client";
 import { BLUEPRINT_DATABASE_ENV, BLUEPRINT_PILOT_DATABASE_ID } from "./notion-pilot-ids";
 import type { PublicBlueprintProposal } from "./blueprint-public";
 import { isPubliclyPublishable } from "./public-boundary";
+import { assertBlueprintPageOwnership } from "./blueprint-ownership";
 
 const PAGE_SIZE = 50;
 const MAX_PAGES = 5;
@@ -20,13 +21,18 @@ function title(props: any): string {
   return props?.Name?.title?.[0]?.plain_text?.trim() || "";
 }
 function mapPage(page: any): PublicBlueprintProposal | null {
+  if (!page || page.object !== "page") return null;
+  if (page.archived || page.in_trash) return null;
+  if (!assertBlueprintPageOwnership(page).ok) return null;
   const props = page.properties;
   const publicationStatus = sel(props, "Status");
   const verificationStatus = sel(props, "Verification");
+  const statementClass = sel(props, "Statement Class");
   const governance = {
     status: publicationStatus,
     verification: verificationStatus,
     sourceUrl: props?.Source?.url || "",
+    statementClass,
     reviewerA: rt(props, "Reviewer A"),
     reviewerADecision: sel(props, "Reviewer A Decision"),
     reviewerB: rt(props, "Reviewer B"),
@@ -54,7 +60,7 @@ function mapPage(page: any): PublicBlueprintProposal | null {
     sourceUrl,
     sourceDate: rt(props, "Source Date") || "Not publicly specified",
     version: rt(props, "Version") || "Not publicly specified",
-    statementClass: sel(props, "Statement Class") || "ACTOR_STATEMENT",
+    statementClass,
     verification: verificationStatus,
     geographyScope: rt(props, "Geography Scope") || "Nigeria",
     created: page.created_time,
