@@ -48,10 +48,11 @@ export default function BlueprintReviewPage() {
           </h1>
         </div>
       </div>
-      <p className="mt-5 text-sm leading-relaxed text-forest-700">
-        Internal console for the Blueprint Register pilot. Mutations go through server actions that
-        keep <code className="text-xs">CIVIC_OPERATOR_KEY</code> off the client bundle. The browser
-        never becomes the source of truth — each action reloads authoritative Notion state.
+      <p className="mt-4 text-sm leading-relaxed text-forest-700">
+        Dual review → publish → public register. Server actions only; each step reloads authoritative Notion state.
+      </p>
+      <p className="mt-2 text-[11px] font-semibold uppercase tracking-wide text-forest-500">
+        Order: 1 Approve A · 2 Approve B (different person) · 3 Publish · then Hold/Reject to clean up tests
       </p>
 
       <BlueprintReviewConsole />
