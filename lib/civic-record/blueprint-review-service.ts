@@ -5,6 +5,15 @@ import {
 } from "./blueprint-governance";
 import { assertBlueprintPageOwnership, notionPageId } from "./blueprint-ownership";
 import { getOperatorBlueprint, type OperatorBlueprintRecord } from "./operator-blueprint";
+import {
+  institutionalConflictMessage,
+  resolveReviewDecision,
+  validateHoldNotes,
+  validateRejectionNotes,
+  validateReviewerANotSameAsB,
+  validateReviewerBPrerequisites,
+  validateReviewerIdentity,
+} from "./blueprint-review-rules";
 
 export type ReviewAction = "review_a" | "review_b" | "publish" | "reject";
 
@@ -68,60 +77,57 @@ export async function performBlueprintReviewMutation(
     const statusNow = getSelect("Status");
 
     if (input.action === "review_a" || input.action === "review_b") {
-      if (!reviewer) {
+      const identity = validateReviewerIdentity(reviewer);
+      if (!identity.ok) {
         return {
           ok: false,
-          status: 400,
-          error: "Reviewer name is required.",
+          status: identity.status,
+          error: identity.error,
           record: await getOperatorBlueprint(id),
         };
       }
 
-      let decision: "Approved" | "Rejected" =
-        input.decision === "Rejected" || notes.toLowerCase() === "reject"
-          ? "Rejected"
-          : "Approved";
-      if (input.decision === "Approved") decision = "Approved";
-      if (input.decision === "Rejected") decision = "Rejected";
-
-      if (decision === "Rejected" && notes.length < 8) {
+      const decision = resolveReviewDecision(input.decision, notes);
+      const rejectionNotes = validateRejectionNotes(decision, notes);
+      if (!rejectionNotes.ok) {
         return {
           ok: false,
-          status: 400,
-          error: "Rejection requires a meaningful internal reason (at least 8 characters).",
+          status: rejectionNotes.status,
+          error: rejectionNotes.error,
           record: await getOperatorBlueprint(id),
         };
       }
 
       const target = input.action === "review_a" ? "A" : "B";
 
-      if (target === "B" && getSelect("Reviewer A Decision") !== "Approved") {
-        return {
-          ok: false,
-          status: 409,
-          error: "Reviewer B cannot act until Reviewer A has approved.",
-          record: await getOperatorBlueprint(id),
-        };
+      if (target === "B") {
+        const bGate = validateReviewerBPrerequisites({
+          reviewerA: getText("Reviewer A"),
+          reviewerADecision: getSelect("Reviewer A Decision"),
+          reviewerBCandidate: reviewer,
+        });
+        if (!bGate.ok) {
+          return {
+            ok: false,
+            status: bGate.status,
+            error: bGate.error,
+            record: await getOperatorBlueprint(id),
+          };
+        }
       }
-      if (target === "B" && reviewer.toLowerCase() === getText("Reviewer A").toLowerCase()) {
-        return {
-          ok: false,
-          status: 409,
-          error: "Reviewer A and Reviewer B must be different reviewers.",
-          record: await getOperatorBlueprint(id),
-        };
-      }
-      if (
-        target === "A" &&
-        getText("Reviewer B") &&
-        reviewer.toLowerCase() === getText("Reviewer B").toLowerCase()
-      ) {
-        return {
-          ok: false,
-          status: 409,
-          error: "Reviewer A and Reviewer B must be different reviewers.",
-          record: await getOperatorBlueprint(id),
-        };
+      if (target === "A") {
+        const aGate = validateReviewerANotSameAsB({
+          reviewerACandidate: reviewer,
+          reviewerB: getText("Reviewer B"),
+        });
+        if (!aGate.ok) {
+          return {
+            ok: false,
+            status: aGate.status,
+            error: aGate.error,
+            record: await getOperatorBlueprint(id),
+          };
+        }
       }
 
       const properties: Record<string, any> = {
@@ -172,8 +178,7 @@ export async function performBlueprintReviewMutation(
         return {
           ok: false,
           status: 409,
-          error:
-            "Publication was not completed. The record changed before the request was processed. Review the current governance state and try again if appropriate.",
+          error: institutionalConflictMessage(),
           reasons: decision.reasons,
           record: await getOperatorBlueprint(id),
         };
@@ -190,11 +195,12 @@ export async function performBlueprintReviewMutation(
     }
 
     if (input.action === "reject") {
-      if (notes.length < 8) {
+      const hold = validateHoldNotes(notes);
+      if (!hold.ok) {
         return {
           ok: false,
-          status: 400,
-          error: "Hold/rejection requires a meaningful internal reason (at least 8 characters).",
+          status: hold.status,
+          error: hold.error,
           record: await getOperatorBlueprint(id),
         };
       }
