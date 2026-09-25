@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ISEYC_SEAL_SRC } from "@/lib/brand";
 import { NOT_PUBLICLY_SPECIFIED } from "@/lib/civic-record/types";
 import BlueprintReviewConsole from "@/components/operators/BlueprintReviewConsole";
+import OperatorStaffNav from "@/components/operators/OperatorStaffNav";
 
 export const metadata: Metadata = {
   title: "Blueprint review | ISEYC operators",
@@ -36,7 +37,8 @@ const gates = [
 
 export default function BlueprintReviewPage() {
   return (
-    <main className="mx-auto min-h-screen max-w-2xl px-4 py-10">
+    <main className="mx-auto min-h-screen max-w-2xl px-4 py-8 pb-16">
+      <OperatorStaffNav current="blueprint-review" />
       <div className="flex items-center gap-3">
         <img src={ISEYC_SEAL_SRC} alt="" width={48} height={48} className="h-12 w-12" />
         <div>

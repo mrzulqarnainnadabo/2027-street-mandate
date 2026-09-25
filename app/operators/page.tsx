@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import OperatorStaffNav from "@/components/operators/OperatorStaffNav";
 import { ISEYC_SEAL_SRC } from "@/lib/brand";
 import {
   BLUEPRINT_PILOT_NOTION_URL,
@@ -16,7 +17,8 @@ export const metadata: Metadata = {
 
 export default function OperatorsIndexPage() {
   return (
-    <div className="mx-auto min-h-screen max-w-2xl px-4 py-10">
+    <div className="mx-auto min-h-screen max-w-2xl px-4 py-8 pb-16">
+      <OperatorStaffNav current="hub" />
       <div className="mb-6 flex items-center gap-3">
         <img src={ISEYC_SEAL_SRC} alt="" width={48} height={48} className="h-12 w-12" />
         <div>
