@@ -2,11 +2,13 @@ import { Client } from "@notionhq/client";
 import {
   canOperatorPublishFromStatus,
   evaluateBlueprintPublication,
+  isPublishedRecordLocked,
 } from "./blueprint-governance";
 import { assertBlueprintPageOwnership, notionPageId } from "./blueprint-ownership";
 import { getOperatorBlueprint, type OperatorBlueprintRecord } from "./operator-blueprint";
 import {
   institutionalConflictMessage,
+  publishedRecordLockedMessage,
   resolveReviewDecision,
   validateHoldNotes,
   validateRejectionNotes,
@@ -70,6 +72,15 @@ export async function performBlueprintReviewMutation(
     }
 
     const props: any = page.properties || {};
+    const statusEarly = props?.Status?.select?.name || "";
+    if (isPublishedRecordLocked(statusEarly)) {
+      return {
+        ok: false,
+        status: 409,
+        error: publishedRecordLockedMessage(),
+        record: await getOperatorBlueprint(id),
+      };
+    }
     const getText = (name: string) => props?.[name]?.rich_text?.[0]?.plain_text?.trim() || "";
     const getSelect = (name: string) => props?.[name]?.select?.name || "";
     const sourceUrl = typeof props?.Source?.url === "string" ? props.Source.url : "";
@@ -87,7 +98,15 @@ export async function performBlueprintReviewMutation(
         };
       }
 
-      const decision = resolveReviewDecision(input.decision, notes);
+      const decision = resolveReviewDecision(input.decision);
+      if (!decision) {
+        return {
+          ok: false,
+          status: 400,
+          error: "Explicit decision is required: Approved or Rejected (approve/reject aliases accepted).",
+          record: await getOperatorBlueprint(id),
+        };
+      }
       const rejectionNotes = validateRejectionNotes(decision, notes);
       if (!rejectionNotes.ok) {
         return {
@@ -153,6 +172,7 @@ export async function performBlueprintReviewMutation(
       status: statusNow,
       verification: getSelect("Verification"),
       sourceUrl,
+      statementClass: getSelect("Statement Class"),
       reviewerA: getText("Reviewer A"),
       reviewerADecision: getSelect("Reviewer A Decision"),
       reviewerB: getText("Reviewer B"),
@@ -165,7 +185,7 @@ export async function performBlueprintReviewMutation(
         return {
           ok: false,
           status: 409,
-          error: "Cannot publish from Rejected or Flagged status. Reopen the record first.",
+          error: "Cannot publish from Rejected, Flagged, or already-Published status without a reopen protocol.",
           record: await getOperatorBlueprint(id),
         };
       }
