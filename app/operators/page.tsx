@@ -15,6 +15,39 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+function ToolCard({
+  href,
+  title,
+  body,
+  primary,
+}: {
+  href: string;
+  title: string;
+  body: string;
+  primary?: boolean;
+}) {
+  return (
+    <li
+      className={
+        primary
+          ? "rounded-xl border-2 border-forest-700 bg-white p-4 shadow-sm"
+          : "rounded-xl border border-forest-500/15 bg-white p-4"
+      }
+    >
+      <Link
+        href={href}
+        className="block text-base font-bold text-forest-900 underline decoration-forest-500/30 underline-offset-2"
+      >
+        {title}
+      </Link>
+      <p className="mt-1.5 text-xs leading-relaxed text-forest-600">{body}</p>
+      {primary ? (
+        <p className="mt-3 text-[10px] font-bold uppercase tracking-wide text-gold-600">Primary · open this for the pilot test</p>
+      ) : null}
+    </li>
+  );
+}
+
 export default function OperatorsIndexPage() {
   return (
     <div className="mx-auto min-h-screen max-w-2xl px-4 py-8 pb-16">
@@ -26,45 +59,60 @@ export default function OperatorsIndexPage() {
           <h1 className="font-display text-xl font-bold text-forest-900">Operator hub</h1>
         </div>
       </div>
-      <p className="text-sm text-forest-700">
-        Internal process pages and pilot databases. Not public product surfaces. Do not promote these URLs.
+      <p className="text-sm leading-relaxed text-forest-700">
+        Internal tools only. Do not share these URLs publicly.
       </p>
-      <ul className="mt-6 space-y-4 text-sm">
-        <li className="rounded-xl border border-forest-500/15 bg-white p-4">
-          <Link href="/operators/mandate-review" className="font-semibold text-forest-800 underline underline-offset-2">
-            Mandate dual-review checklist
-          </Link>
-          <p className="mt-1 text-xs text-forest-600">Review before publishing citizen demands.</p>
+
+      <h2 className="mt-8 text-[10px] font-bold uppercase tracking-widest text-forest-500">Review consoles</h2>
+      <ul className="mt-3 space-y-3 text-sm">
+        <ToolCard
+          primary
+          href="/operators/blueprint-review"
+          title="Blueprint publication review"
+          body="Dual review → publish → hold. Requires operator session. Use for the synthetic pilot row."
+        />
+        <ToolCard
+          href="/operators/mandate-review"
+          title="Mandate dual-review checklist"
+          body="Review citizen demands before publishing to Civic Pulse."
+        />
+        <ToolCard
+          href="/operators/blueprint-pilot"
+          title="Blueprint pilot checklist"
+          body="Field contract and JSON validator for Stage 2 drafts."
+        />
+      </ul>
+
+      <h2 className="mt-8 text-[10px] font-bold uppercase tracking-widest text-forest-500">Public surfaces</h2>
+      <ul className="mt-3 space-y-3 text-sm">
+        <ToolCard href="/blueprints" title="Public Blueprint Register" body="Published records only — what citizens see." />
+        <ToolCard href="/" title="Civic Mandate" body="Citizen demand product." />
+      </ul>
+
+      <h2 className="mt-8 text-[10px] font-bold uppercase tracking-widest text-forest-500">Notion pilots</h2>
+      <ul className="mt-3 space-y-2 rounded-xl border border-forest-500/15 bg-cream/50 p-4 text-xs">
+        <li>
+          <a href={CIVIC_RECORD_OPS_HUB_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">
+            Civic Record ops hub
+          </a>
         </li>
-        <li className="rounded-xl border border-forest-500/15 bg-white p-4">
-          <Link href="/operators/blueprint-review" className="font-semibold text-forest-800 underline underline-offset-2">
-            Blueprint publication review
-          </Link>
-          <p className="mt-1 text-xs text-forest-600">Operable queue: dual review, publish, and hold — server-authoritative; requires CIVIC_OPERATOR_KEY.</p>
+        <li>
+          <a href={BLUEPRINT_PILOT_NOTION_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">
+            Public Blueprint Register (Notion)
+          </a>
         </li>
-        <li className="rounded-xl border border-forest-500/15 bg-white p-4">
-          <Link href="/operators/blueprint-pilot" className="font-semibold text-forest-800 underline underline-offset-2">
-            Blueprint pilot checklist + JSON validator
-          </Link>
-          <p className="mt-1 text-xs text-forest-600">In-app Stage 2 workflow and field contract.</p>
+        <li>
+          <a href={COMMITMENT_PILOT_NOTION_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">
+            Accountability Commitments
+          </a>
         </li>
-        <li className="rounded-xl border border-forest-500/15 bg-white p-4">
-          <p className="text-[10px] font-bold uppercase tracking-wide text-gold-600">Notion pilots</p>
-          <ul className="mt-2 space-y-2 text-xs">
-            <li><a href={CIVIC_RECORD_OPS_HUB_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">Civic Record ops hub page</a></li>
-            <li><a href={BLUEPRINT_PILOT_NOTION_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">Public Blueprint Register</a></li>
-            <li><a href={COMMITMENT_PILOT_NOTION_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">Accountability Commitments</a></li>
-            <li><a href={EVIDENCE_PILOT_NOTION_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">Evidence Vault</a></li>
-          </ul>
-          <p className="mt-2 text-[10px] text-forest-500">Citizen Mandate DB (production): {MANDATE_DATABASE_ID_KNOWN} — do not mix rows.</p>
+        <li>
+          <a href={EVIDENCE_PILOT_NOTION_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">
+            Evidence Vault
+          </a>
         </li>
-        <li className="rounded-xl border border-forest-500/15 bg-white p-4">
-          <Link href="/blueprints" className="font-semibold text-forest-800 underline underline-offset-2">Public Blueprint Register</Link>
-          <p className="mt-1 text-xs text-forest-600">Published records only.</p>
-        </li>
-        <li className="rounded-xl border border-forest-500/15 bg-white p-4">
-          <Link href="/" className="font-semibold text-forest-800 underline underline-offset-2">Civic Mandate (citizens)</Link>
-          <p className="mt-1 text-xs text-forest-600">Public citizen-demand product.</p>
+        <li className="pt-2 text-[10px] text-forest-500">
+          Mandate DB (production): {MANDATE_DATABASE_ID_KNOWN} — do not mix with Blueprint rows.
         </li>
       </ul>
     </div>
