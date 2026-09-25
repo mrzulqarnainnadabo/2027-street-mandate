@@ -34,9 +34,12 @@ assert.match(robots, /operators/);
 
 const route = read("app/api/operators/blueprints/review/route.ts");
 assert.match(route, /isAuthorizedOperatorRequest/);
-assert.match(route, /assertBlueprintPageOwnership/);
+assert.match(route, /performBlueprintReviewMutation/);
 assert.doesNotMatch(route, /export function authorized/);
 assert.match(route, /from ["']@\/lib\/server\/operator-auth["']/);
+
+const reviewServiceEarly = read("lib/civic-record/blueprint-review-service.ts");
+assert.match(reviewServiceEarly, /assertBlueprintPageOwnership/);
 
 const auth = read("lib/server/operator-auth.ts");
 assert.match(auth, /timingSafeEqual/);
@@ -107,3 +110,25 @@ assert.match(ownership, /database_id/);
 assert.match(ownership, /archived/);
 
 console.log("Civic Record public-boundary + governance checks: PASS");
+
+const service = read("lib/civic-record/blueprint-review-service.ts");
+assert.match(service, /performBlueprintReviewMutation/);
+assert.match(service, /Rejection requires a meaningful internal reason/);
+assert.match(service, /Reviewer B cannot act until Reviewer A/);
+
+const actions = read("app/operators/blueprint-review/actions.ts");
+assert.match(actions, /"use server"/);
+assert.match(actions, /establishOperatorSession/);
+assert.doesNotMatch(actions, /NEXT_PUBLIC_CIVIC_OPERATOR_KEY/);
+
+const consoleUi = read("components/operators/BlueprintReviewConsole.tsx");
+assert.match(consoleUi, /submitBlueprintReviewAction/);
+assert.match(consoleUi, /authoritative/i);
+assert.doesNotMatch(consoleUi, /NEXT_PUBLIC_CIVIC_OPERATOR_KEY/);
+assert.doesNotMatch(consoleUi, /localStorage\.(get|set)Item/);
+
+const session = read("lib/server/operator-session.ts");
+assert.match(session, /httpOnly:\s*true/);
+assert.match(session, /createHmac/);
+
+console.log("Operator review console structure checks: PASS");
