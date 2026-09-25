@@ -25,8 +25,7 @@ export default function OperatorsIndexPage() {
         </div>
       </div>
       <p className="text-sm text-forest-700">
-        Internal process pages and pilot databases. Not public product surfaces. Do not promote these
-        URLs.
+        Internal process pages and pilot databases. Not public product surfaces. Do not promote these URLs.
       </p>
       <ul className="mt-6 space-y-4 text-sm">
         <li className="rounded-xl border border-forest-500/15 bg-white p-4">
@@ -36,10 +35,16 @@ export default function OperatorsIndexPage() {
           <p className="mt-1 text-xs text-forest-600">Review before publishing citizen demands.</p>
         </li>
         <li className="rounded-xl border border-forest-500/15 bg-white p-4">
+          <Link href="/operators/blueprint-review" className="font-semibold text-forest-800 underline underline-offset-2">
+            Blueprint publication review
+          </Link>
+          <p className="mt-1 text-xs text-forest-600">Operable queue: dual review, publish, and hold — server-authoritative; requires CIVIC_OPERATOR_KEY.</p>
+        </li>
+        <li className="rounded-xl border border-forest-500/15 bg-white p-4">
           <Link href="/operators/blueprint-pilot" className="font-semibold text-forest-800 underline underline-offset-2">
             Blueprint pilot checklist + JSON validator
           </Link>
-          <p className="mt-1 text-xs text-forest-600">In-app Stage 2 workflow.</p>
+          <p className="mt-1 text-xs text-forest-600">In-app Stage 2 workflow and field contract.</p>
         </li>
         <li className="rounded-xl border border-forest-500/15 bg-white p-4">
           <p className="text-[10px] font-bold uppercase tracking-wide text-gold-600">Notion pilots</p>
@@ -49,11 +54,15 @@ export default function OperatorsIndexPage() {
             <li><a href={COMMITMENT_PILOT_NOTION_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">Accountability Commitments</a></li>
             <li><a href={EVIDENCE_PILOT_NOTION_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">Evidence Vault</a></li>
           </ul>
-          <p className="mt-2 text-[10px] text-forest-500">Citizen Mandate DB (production): ${MANDATE_DATABASE_ID_KNOWN} — do not mix rows.</p>
+          <p className="mt-2 text-[10px] text-forest-500">Citizen Mandate DB (production): {MANDATE_DATABASE_ID_KNOWN} — do not mix rows.</p>
+        </li>
+        <li className="rounded-xl border border-forest-500/15 bg-white p-4">
+          <Link href="/blueprints" className="font-semibold text-forest-800 underline underline-offset-2">Public Blueprint Register</Link>
+          <p className="mt-1 text-xs text-forest-600">Published records only.</p>
         </li>
         <li className="rounded-xl border border-forest-500/15 bg-white p-4">
           <Link href="/" className="font-semibold text-forest-800 underline underline-offset-2">Civic Mandate (citizens)</Link>
-          <p className="mt-1 text-xs text-forest-600">Live public demand product.</p>
+          <p className="mt-1 text-xs text-forest-600">Public citizen-demand product.</p>
         </li>
       </ul>
     </div>

@@ -1,9 +1,8 @@
 /**
  * Public allowlist for Blueprint rows — never spread Notion properties.
- * No ranking, scores, or internal verification disputes on public surface
- * beyond a simple verification label if Published.
+ * Internal review notes, reviewer identity, raw Notion properties, and operator
+ * metadata must never cross the public boundary.
  */
-
 export type PublicBlueprintProposal = {
   id: string;
   actorDisplayName: string;
@@ -26,22 +25,7 @@ export type PublicBlueprintProposal = {
 };
 
 export const PUBLIC_BLUEPRINT_KEYS: (keyof PublicBlueprintProposal)[] = [
-  "id",
-  "actorDisplayName",
-  "officeSought",
-  "politicalPlatform",
-  "dutyOrPolicyArea",
-  "proposalText",
-  "mechanism",
-  "target",
-  "timeline",
-  "funding",
-  "responsibleInstitution",
-  "sourceUrl",
-  "sourceDate",
-  "version",
-  "statementClass",
-  "verification",
-  "geographyScope",
-  "created",
+  "id","actorDisplayName","officeSought","politicalPlatform","dutyOrPolicyArea",
+  "proposalText","mechanism","target","timeline","funding","responsibleInstitution",
+  "sourceUrl","sourceDate","version","statementClass","verification","geographyScope","created",
 ];
