@@ -1,92 +1,90 @@
 # ISEYC Civic Record — Blueprint Pilot Readiness Checklist
 
-**Branch:** `feat/blueprint-governance-workflow`  
-**Audit date:** 2026-09-25  
-**Scope:** Pre-merge institutional audit (no deploy, no production claim)
+**Branch:** `feat/blueprint-governance-workflow`
+**Updated:** 2026-09-25 (post targeted hardening)
+**Scope:** Pre-merge · no deploy · no production claim
 
-Status legend: **PASS** | **FAIL** | **NOT TESTED** | **BLOCKED** | **LEGAL REVIEW REQUIRED** | **HUMAN PILOT REQUIRED**
+Legend: **PASS** | **FAIL** | **NOT TESTED** | **BLOCKED** | **HUMAN PILOT REQUIRED** | **LEGAL REVIEW REQUIRED** | **GOVERNANCE DECISION REQUIRED**
 
 ---
 
 ## Technical
 
-| Item | Status | Evidence / note |
-|------|--------|-----------------|
-| `npm test` | **PASS** | Structure + pure governance unit checks |
-| Typecheck / build | **PASS** | `next build` includes type validation |
-| Public boundary in code | **PASS** | `isPubliclyPublishable` + dual-review gate |
-| Public boundary live against production | **NOT TESTED** | No live Published pilot rows exercised end-to-end |
-| Authorization fail-closed | **PASS** | Missing/wrong key; no `NEXT_PUBLIC_` key |
-| Ownership on mutation + detail | **PASS** | `assertBlueprintPageOwnership` |
-| Ownership on list query | **PASS** (DB filter) | Queries Blueprint pilot DB only |
-| Archived / trash on list | **NOT TESTED** | Detail path blocks archived/trash; list relies on Notion behaviour |
-| Alternate mutation path | **PASS** | Only review API + server actions → shared service |
+| Item | Status |
+|------|--------|
+| `npm test` | **PASS** (when run locally on this branch) |
+| Typecheck / build | **PASS** (when run locally) |
+| Public boundary code | **PASS** |
+| Public boundary live production | **NOT TESTED — REQUIRES HUMAN PILOT** |
+| Authorization fail-closed | **PASS** (code) |
+| Ownership mutation + detail | **PASS** (code) |
+| Archived/trash on list + detail | **PASS** (code guards) · live API behaviour **NOT TESTED — REQUIRES HUMAN PILOT** |
+| Published record ordinary mutation lock | **PASS** (code) |
+| Explicit review decision (no notes-as-signal) | **PASS** (code) |
+| Missing Statement Class fails closed | **PASS** (code) |
 
 ## Governance
 
-| Item | Status | Evidence / note |
-|------|--------|-----------------|
-| Source required for public | **PASS** | mapPage requires `sourceUrl` |
-| Verification not UNVERIFIED | **PASS** | public-boundary + evaluateBlueprintPublication |
-| Dual human review | **PASS** | A + B Approved, identities different |
-| Publication Decision = Publish | **PASS** | Gate requires select value |
-| Neutrality firewall constants | **PASS** | `firewall.ts`, draft validators |
-| Post-publish correction path | **HUMAN PILOT REQUIRED** | Published can still be re-mutated by operators; policy not locked |
-| Reopen from Rejected/Flagged | **PASS** (code) | Publish blocked until human reopen of Status |
+| Item | Status |
+|------|--------|
+| Dual human review | **PASS** (code) |
+| Source + verification required | **PASS** (code) |
+| Source verification ≠ truth verification | **PASS** (documented in code) |
+| Post-publication correction protocol | **GOVERNANCE DECISION REQUIRED** |
+| Multi-operator identity / audit trail | **GOVERNANCE DECISION REQUIRED** (shared secret is interim only) |
+| Election-period operating policy | **GOVERNANCE DECISION REQUIRED** |
 
 ## Data
 
-| Item | Status | Evidence / note |
-|------|--------|-----------------|
-| Public DTO allowlist | **PASS** | `PUBLIC_BLUEPRINT_KEYS` — no reviewer/notes |
-| Internal fields protected | **PASS** (code) | Operator DTO separate; public map omits notes |
-| Mandate / Blueprint separation | **PASS** | Separate DB IDs; ownership rejects wrong parent |
-| Live Notion schema match | **PASS** | Pilot DB `05b4dd95…` includes governance columns |
-| Provenance distinctions (statement vs implementation) | **PASS** (partial) | Statement Class exists; outcome/evidence not yet full chain |
+| Item | Status |
+|------|--------|
+| Public DTO allowlist | **PASS** |
+| Internal fields not in public DTO | **PASS** (code) |
+| Mandate / Blueprint DB separation | **PASS** (code) |
+| Live Notion schema match | **PASS** (fetched 2026-09-25) |
+| Live dry-run of full lifecycle | **NOT TESTED — REQUIRES HUMAN PILOT** |
 
 ## Operations
 
-| Item | Status | Evidence / note |
-|------|--------|-----------------|
-| Operator key configured in production | **NOT TESTED** | Env-dependent; audit does not read secrets |
-| Reviewer A / B workflow UI | **PASS** (code) | `/operators/blueprint-review` |
-| Rejection / hold path | **PASS** (code + pure tests) | Notes ≥ 8 chars |
-| Publication path | **PASS** (code) | Server re-evaluates full gate |
-| Correction / withdraw path | **HUMAN PILOT REQUIRED** | Verification has WITHDRAWN; process not fully specified |
+| Item | Status |
+|------|--------|
+| `CIVIC_OPERATOR_KEY` in production | **NOT TESTED — REQUIRES HUMAN PILOT** |
+| Shared operator secret | **Interim controlled-pilot mechanism — not production-grade multi-operator IAM** |
+| Reviewer A/B console | **PASS** (code) |
+| Rejection/hold | **PASS** (code) |
 
-## Pilot restrictions
+## Legal (not legal advice)
 
 | Item | Status |
 |------|--------|
-| No real political records until governance team approves | **HUMAN PILOT REQUIRED** |
-| No candidate rankings / scores / recommendations | **PASS** (code + copy intent) |
-| No NIN / political profiling | **PASS** (no such fields in Blueprint path) |
-
-## Legal (engineering flag only — not legal advice)
-
-| Item | Status |
-|------|--------|
-| Publication of public-figure statements | **LEGAL REVIEW REQUIRED** |
-| Defamation / fair reporting of quoted proposals | **LEGAL REVIEW REQUIRED** |
-| NDPR / privacy for any residual personal data | **LEGAL REVIEW REQUIRED** |
-| Source licensing / republication | **LEGAL REVIEW REQUIRED** |
-| Election-period neutrality obligations | **LEGAL REVIEW REQUIRED** |
+| Public-figure statement republication | **LEGAL REVIEW REQUIRED** |
+| Defamation / fair reporting | **LEGAL REVIEW REQUIRED** |
+| NDPR / privacy | **LEGAL REVIEW REQUIRED** |
+| Source licensing | **LEGAL REVIEW REQUIRED** |
+| Election-period neutrality | **LEGAL REVIEW REQUIRED** |
 
 ---
 
-## Architecture chain (as implemented)
+## KNOWN OPEN DECISIONS
 
-Citizen Mandate (separate Notion DB)  
-→ Responsibility Map (static/code)  
-→ Blueprint (pilot DB + dual review)  
-→ Commitment / Evidence (pilot DBs; lighter gates)  
-→ Outcome (schema intent; not fully productised)
+1. **Post-publication correction / reopen** — Published rows are locked against ordinary review mutations. How (and who) may reopen, correct, or withdraw a published Blueprint is a human governance decision. Not implemented as a product workflow.
+2. **Multi-operator identity** — `CIVIC_OPERATOR_KEY` is a shared interim secret, not a complete identity/audit system.
+3. **Live Notion dry-run** — Non-political template row through A → B → publish must be run by humans with real env vars.
+4. **Legal counsel** — See legal table above.
+5. **Source licensing** — How external speech/PDF/interview sources may be quoted publicly.
+6. **Election-period policy** — Whether and how the register operates during regulated campaign periods.
 
-**Mutation path (only):** Browser → server action or Bearer API → `performBlueprintReviewMutation` → Notion  
-**Public path (only):** Notion → `getPublishedBlueprints` / `getPublishedBlueprint` → `/blueprints` pages
+---
 
-## Overall pre-merge verdict
+## Caching / publication lag (actual behaviour)
 
-**CONDITIONAL — ready for human institutional code review of PR #43.**  
-**Not ready to claim a completed live pilot.**  
-**Not ready for production deployment without founder merge + env configuration + non-political dry-run.**
+- Operator console: dynamic / session-driven; mutations hit Notion immediately on success.
+- Public `/blueprints` routes: server-rendered; **no** explicit `revalidateTag` invalidation on publish in this codebase.
+- **Do not claim real-time public visibility.** Expect normal Next/Vercel caching lag until a human confirms measured behaviour.
+
+---
+
+## Overall verdict
+
+**CONDITIONAL** — suitable for **human institutional review of PR #43**.
+**Not** production-certified. **Not** a completed live pilot.
