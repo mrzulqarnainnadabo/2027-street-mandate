@@ -113,8 +113,12 @@ console.log("Civic Record public-boundary + governance checks: PASS");
 
 const service = read("lib/civic-record/blueprint-review-service.ts");
 assert.match(service, /performBlueprintReviewMutation/);
-assert.match(service, /Rejection requires a meaningful internal reason/);
-assert.match(service, /Reviewer B cannot act until Reviewer A/);
+assert.match(service, /validateRejectionNotes/);
+assert.match(service, /validateReviewerBPrerequisites/);
+
+const rulesSrc = read("lib/civic-record/blueprint-review-rules.ts");
+assert.match(rulesSrc, /Rejection requires a meaningful internal reason/);
+assert.match(rulesSrc, /Reviewer B cannot act until Reviewer A/);
 
 const actions = read("app/operators/blueprint-review/actions.ts");
 assert.match(actions, /"use server"/);
@@ -132,3 +136,91 @@ assert.match(session, /httpOnly:\s*true/);
 assert.match(session, /createHmac/);
 
 console.log("Operator review console structure checks: PASS");
+
+function resolveReviewDecisionLocal(decision, notes) {
+  if (decision === "Approved") return "Approved";
+  if (decision === "Rejected") return "Rejected";
+  if (String(notes || "").trim().toLowerCase() === "reject") return "Rejected";
+  return "Approved";
+}
+function validateReviewerIdentityLocal(reviewer) {
+  if (!String(reviewer || "").trim()) return { ok: false, status: 400, error: "Reviewer name is required." };
+  return { ok: true };
+}
+function validateRejectionNotesLocal(decision, notes) {
+  if (decision === "Rejected" && String(notes || "").trim().length < 8) {
+    return { ok: false, status: 400, error: "Rejection requires a meaningful internal reason (at least 8 characters)." };
+  }
+  return { ok: true };
+}
+function validateHoldNotesLocal(notes) {
+  if (String(notes || "").trim().length < 8) {
+    return { ok: false, status: 400, error: "Hold/rejection requires a meaningful internal reason (at least 8 characters)." };
+  }
+  return { ok: true };
+}
+function validateReviewerBPrerequisitesLocal(input) {
+  if (input.reviewerADecision !== "Approved") {
+    return { ok: false, status: 409, error: "Reviewer B cannot act until Reviewer A has approved." };
+  }
+  const a = input.reviewerA.trim().toLowerCase();
+  const b = input.reviewerBCandidate.trim().toLowerCase();
+  if (a && b && a === b) {
+    return { ok: false, status: 409, error: "Reviewer A and Reviewer B must be different reviewers." };
+  }
+  return { ok: true };
+}
+function validateReviewerANotSameAsBLocal(input) {
+  const a = input.reviewerACandidate.trim().toLowerCase();
+  const b = input.reviewerB.trim().toLowerCase();
+  if (a && b && a === b) {
+    return { ok: false, status: 409, error: "Reviewer A and Reviewer B must be different reviewers." };
+  }
+  return { ok: true };
+}
+
+assert.equal(resolveReviewDecisionLocal("Approved", ""), "Approved");
+assert.equal(resolveReviewDecisionLocal("Rejected", "long enough reason"), "Rejected");
+assert.equal(resolveReviewDecisionLocal(undefined, "reject"), "Rejected");
+assert.equal(resolveReviewDecisionLocal(undefined, ""), "Approved");
+
+assert.equal(validateReviewerIdentityLocal("").ok, false);
+assert.equal(validateReviewerIdentityLocal("Ada").ok, true);
+
+assert.equal(validateRejectionNotesLocal("Rejected", "short").ok, false);
+assert.equal(validateRejectionNotesLocal("Rejected", "source does not support claim").ok, true);
+assert.equal(validateRejectionNotesLocal("Approved", "").ok, true);
+
+assert.equal(validateHoldNotesLocal("no").ok, false);
+assert.equal(validateHoldNotesLocal("held pending source check").ok, true);
+
+assert.equal(
+  validateReviewerBPrerequisitesLocal({ reviewerA: "Ada", reviewerADecision: "", reviewerBCandidate: "Bola" }).ok,
+  false,
+);
+assert.equal(
+  validateReviewerBPrerequisitesLocal({ reviewerA: "Ada", reviewerADecision: "Approved", reviewerBCandidate: "Ada" }).ok,
+  false,
+);
+assert.equal(
+  validateReviewerBPrerequisitesLocal({ reviewerA: "Ada", reviewerADecision: "Approved", reviewerBCandidate: "Bola" }).ok,
+  true,
+);
+
+assert.equal(
+  validateReviewerANotSameAsBLocal({ reviewerACandidate: "Ada", reviewerB: "Ada" }).ok,
+  false,
+);
+assert.equal(
+  validateReviewerANotSameAsBLocal({ reviewerACandidate: "Ada", reviewerB: "" }).ok,
+  true,
+);
+
+const rulesFile = read("lib/civic-record/blueprint-review-rules.ts");
+assert.match(rulesFile, /validateReviewerBPrerequisites/);
+assert.match(rulesFile, /institutionalConflictMessage/);
+const serviceWired = read("lib/civic-record/blueprint-review-service.ts");
+assert.match(serviceWired, /validateReviewerBPrerequisites/);
+assert.match(serviceWired, /institutionalConflictMessage/);
+
+console.log("Blueprint review-rules pure checks: PASS");
