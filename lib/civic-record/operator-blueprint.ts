@@ -88,6 +88,7 @@ export function mapOperatorBlueprint(page: any): OperatorBlueprintRecord | null 
     status: sel(props, "Status"),
     verification: sel(props, "Verification"),
     sourceUrl,
+    statementClass: sel(props, "Statement Class"),
     reviewerA: rt(props, "Reviewer A"),
     reviewerADecision: sel(props, "Reviewer A Decision"),
     reviewerB: rt(props, "Reviewer B"),
