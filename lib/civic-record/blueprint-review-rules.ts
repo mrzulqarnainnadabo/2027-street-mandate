@@ -11,15 +11,17 @@ export type RuleResult =
   | { ok: true }
   | { ok: false; status: number; error: string };
 
-/** Resolve explicit decision; default Approved only when decision omitted and notes are not "reject". */
+/**
+ * Decision must be explicit. Notes must never imply approve/reject.
+ * Accepts Approved|Rejected (Notion values) or approve|reject aliases.
+ */
 export function resolveReviewDecision(
-  decision: ReviewDecision | undefined,
-  notes: string,
-): ReviewDecision {
-  if (decision === "Approved") return "Approved";
-  if (decision === "Rejected") return "Rejected";
-  if (notes.trim().toLowerCase() === "reject") return "Rejected";
-  return "Approved";
+  decision: string | undefined,
+): ReviewDecision | null {
+  const d = (decision || "").trim();
+  if (d === "Approved" || d === "approve") return "Approved";
+  if (d === "Rejected" || d === "reject") return "Rejected";
+  return null;
 }
 
 export function validateReviewerIdentity(reviewer: string): RuleResult {
@@ -54,10 +56,6 @@ export function validateHoldNotes(notes: string): RuleResult {
   return { ok: true };
 }
 
-/**
- * Reviewer B may only act after Reviewer A approved,
- * and A/B identities must differ (case-insensitive).
- */
 export function validateReviewerBPrerequisites(input: {
   reviewerA: string;
   reviewerADecision: string;
@@ -82,7 +80,6 @@ export function validateReviewerBPrerequisites(input: {
   return { ok: true };
 }
 
-/** When setting Reviewer A, block if identity already used as Reviewer B. */
 export function validateReviewerANotSameAsB(input: {
   reviewerACandidate: string;
   reviewerB: string;
@@ -101,4 +98,8 @@ export function validateReviewerANotSameAsB(input: {
 
 export function institutionalConflictMessage(): string {
   return "Publication was not completed. The record changed before the request was processed. Review the current governance state and try again if appropriate.";
+}
+
+export function publishedRecordLockedMessage(): string {
+  return "Published Blueprint records are locked against ordinary review mutations. A separate reopen/correction protocol is required (governance decision — not available on this path).";
 }
