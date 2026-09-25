@@ -60,20 +60,21 @@ function mapPage(page: any): PublicBlueprintProposal | null {
     created: page.created_time,
   };
 }
+
 async function queryPublishedBlueprintPages(): Promise<any[]> {
-  if (!process.env.NOTION_TOKEN) return [];
   const notion = new Client({ auth: process.env.NOTION_TOKEN });
+  const database_id = blueprintDatabaseId();
   const pages: any[] = [];
   let cursor: string | undefined;
   for (let i = 0; i < MAX_PAGES; i++) {
     const response: any = await notion.databases.query({
-      database_id: blueprintDatabaseId(),
+      database_id,
       filter: { property: "Status", select: { equals: "Published" } },
       sorts: [{ timestamp: "created_time", direction: "descending" }],
       page_size: PAGE_SIZE,
       ...(cursor ? { start_cursor: cursor } : {}),
     });
-    pages.push(...(response.results as any[]));
+    pages.push(...(response.results || []));
     if (!response.has_more || !response.next_cursor) break;
     cursor = response.next_cursor;
   }
@@ -101,9 +102,14 @@ export async function getPublishedBlueprints(filters?: {
 
 export async function getPublishedBlueprint(id: string): Promise<PublicBlueprintProposal | null> {
   if (!process.env.NOTION_TOKEN || !id) return null;
-  const normalizedId = id.replace(/-/g, "");
-  for (const page of await queryPublishedBlueprintPages()) {
-    if (String(page.id).replace(/-/g, "") === normalizedId) return mapPage(page);
+  const { notionPageId, assertBlueprintPageOwnership } = await import("./blueprint-ownership");
+  const notion = new Client({ auth: process.env.NOTION_TOKEN });
+  try {
+    const page: any = await notion.pages.retrieve({ page_id: notionPageId(id) });
+    const ownership = assertBlueprintPageOwnership(page);
+    if (!ownership.ok) return null;
+    return mapPage(page);
+  } catch {
+    return null;
   }
-  return null;
 }
