@@ -38,7 +38,7 @@ export default function OperatorsIndexPage() {
           <Link href="/operators/blueprint-review" className="font-semibold text-forest-800 underline underline-offset-2">
             Blueprint publication review
           </Link>
-          <p className="mt-1 text-xs text-forest-600">Source fidelity + neutrality gates before a Blueprint can be Published.</p>
+          <p className="mt-1 text-xs text-forest-600">Operable queue: dual review, publish, and hold — server-authoritative; requires CIVIC_OPERATOR_KEY.</p>
         </li>
         <li className="rounded-xl border border-forest-500/15 bg-white p-4">
           <Link href="/operators/blueprint-pilot" className="font-semibold text-forest-800 underline underline-offset-2">
