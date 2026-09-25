@@ -16,3 +16,4 @@ export * from "./blueprint-governance";
 export * from "./blueprint-ownership";
 export * from "./operator-blueprint";
 export * from "./blueprint-review-service";
+export * from "./blueprint-review-rules";
