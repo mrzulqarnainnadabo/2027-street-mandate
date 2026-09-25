@@ -12,3 +12,5 @@ export * from "./blueprint-public";
 export * from "./fetch-published-blueprints";
 export * from "./commitment-public";
 export * from "./fetch-published-commitments";
+export * from "./blueprint-governance";
+export * from "./blueprint-ownership";
