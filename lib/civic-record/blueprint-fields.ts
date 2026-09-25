@@ -26,6 +26,16 @@ export const BLUEPRINT_NOTION_PROPERTIES = [
   { name: "Verification", type: "select", notes: "UNVERIFIED | SOURCE_CONFIRMED | DISPUTED | …" },
   { name: "Status", type: "select", notes: "Draft | New | Published | Flagged | Rejected" },
   { name: "Geography Scope", type: "rich_text", notes: "e.g. Nigeria | Kaduna | …" },
+  // Internal governance (never public DTO)
+  { name: "Reviewer A", type: "rich_text", notes: "Human identity — internal" },
+  { name: "Reviewer A Decision", type: "select", notes: "Approved | Rejected" },
+  { name: "Reviewer A Date", type: "date", notes: "ISO date of Review A" },
+  { name: "Reviewer B", type: "rich_text", notes: "Must differ from Reviewer A" },
+  { name: "Reviewer B Decision", type: "select", notes: "Approved | Rejected" },
+  { name: "Reviewer B Date", type: "date", notes: "ISO date of Review B" },
+  { name: "Publication Decision", type: "select", notes: "Publish | Reject | Hold" },
+  { name: "Publication Date", type: "date", notes: "Set only when Published" },
+  { name: "Review Notes", type: "rich_text", notes: "Internal only — never public" },
 ] as const;
 
 export const BLUEPRINT_PILOT_RULES = [
@@ -35,5 +45,5 @@ export const BLUEPRINT_PILOT_RULES = [
   "Paying for workspace (later) never changes Status or Verification.",
   "No ranking, scoring, or demand-match percentage against any actor.",
   "Citizen Mandate database stays separate; do not write blueprints into Mandate rows.",
-  "Dual review before any Published blueprint row (same spirit as Mandate operators).",
+  "Dual review before any Published blueprint row (same institutional standard as Mandate).",
 ] as const;

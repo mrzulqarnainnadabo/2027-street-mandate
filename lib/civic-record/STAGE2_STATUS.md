@@ -23,3 +23,11 @@ Enter 5–10 real public-source Blueprint rows, dual-review, set Published — t
 ## Separate
 
 PR #39 Mandate map UX — still unmerged.
+
+## Operator review console (branch work)
+
+- `/operators/blueprint-review` — queue + Reviewer A/B + publish/hold
+- Auth: `CIVIC_OPERATOR_KEY` via httpOnly session (never `NEXT_PUBLIC_`)
+- Mutations: `performBlueprintReviewMutation` (shared by API + server actions)
+- Pure rules: `blueprint-review-rules.ts` (unit-testable without Notion)
+- **Not on production until explicit deploy/merge**
