@@ -29,7 +29,7 @@ export default async function BlueprintsPage({ searchParams }: Props) {
         <h1 className="mt-2 font-display text-3xl font-bold text-forest-900">Public Blueprint Register</h1>
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-forest-700">
           Documented public proposals, presented as public records rather than endorsements or rankings.
-          Each published record has a source and a publication review.
+          Verification confirms that a cited source contains the recorded statement — not that ISEYC certified the political truth of the proposal.
         </p>
       </header>
 
