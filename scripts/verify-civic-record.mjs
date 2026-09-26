@@ -143,3 +143,18 @@ assert.match(govSrc, /source verification/i);
 
 console.log("Operator review console structure checks: PASS");
 console.log("Blueprint targeted hardening checks: PASS");
+
+/* Weekly State Civic Brief — field instrument (PR #46) */
+const weekOf = read("lib/week-of.ts");
+assert.match(weekOf, /export function weekOfLabel/);
+assert.match(weekOf, /mondayOffset/);
+
+const briefPage = read("app/brief/page.tsx");
+assert.match(briefPage, /from "@\/lib\/week-of"/);
+assert.match(briefPage, /Weekly State Civic Brief/);
+assert.match(briefPage, /Not a poll\. Not a ranking\. Not an endorsement\./);
+assert.match(briefPage, /not a scoreboard/i);
+assert.match(briefPage, /not a system failure/i);
+assert.doesNotMatch(briefPage, /endorse|vote for|ranking of candidates|poll results/i);
+
+console.log("Weekly Civic Brief framing checks: PASS");

@@ -14,6 +14,7 @@ import {
   shareWhatsApp,
   shareX,
 } from "@/lib/share";
+import { weekOfLabel } from "@/lib/week-of";
 
 type Voice = {
   id: string;
@@ -47,40 +48,62 @@ function buildPlainBrief(
   state: string,
   forState: Voice[],
   dutiesWithData: readonly Duty[],
-  byDuty: Record<string, Voice[]>
+  byDuty: Record<string, Voice[]>,
+  week: { label: string; range: string }
 ): string {
+  const generated = new Date().toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
   const lines: string[] = [
-    `ISEYC 2027 Civic Mandate — State Civic Brief`,
+    `ISEYC 2027 Civic Mandate — Weekly State Civic Brief`,
     `State: ${state}`,
-    `Published demands: ${forState.length}`,
+    week.label,
+    `Generated: ${generated}`,
+    `Published demands in this brief: ${forState.length}`,
     ``,
     `Not a poll. Not a ranking. Not an endorsement.`,
     `Public memory of what citizens asked public office to deliver.`,
+    `Use in ward meetings and Street Rep briefings — not as a scoreboard.`,
     ``,
   ];
 
-  for (const d of dutiesWithData) {
-    const items = byDuty[d.id] || [];
-    lines.push(`${d.label} (${items.length})`);
-    for (const { office, items: officeItems } of groupByOffice(items)) {
-      lines.push(`  [${office}]`);
-      for (const v of officeItems) {
-        const place = v.lga ? ` (${v.lga})` : "";
-        lines.push(`  - "${v.sentence}"${place}`);
+  if (forState.length === 0) {
+    lines.push(`No published mandates from ${state} in the public record yet.`);
+    lines.push(`Empty is not a ranking and not a system failure.`);
+    lines.push(`After ISEYC sets Status to Published, demands group here by duty and office.`);
+    lines.push(``);
+  } else {
+    for (const d of dutiesWithData) {
+      const items = byDuty[d.id] || [];
+      lines.push(`${d.label} (${items.length})`);
+      for (const { office, items: officeItems } of groupByOffice(items)) {
+        lines.push(`  [${office}]`);
+        for (const v of officeItems) {
+          const place = v.lga ? ` (${v.lga})` : "";
+          lines.push(`  - "${v.sentence}"${place}`);
+        }
       }
+      lines.push("");
     }
-    lines.push("");
   }
 
   lines.push(`Brief: ${briefUrl(state)}`);
   lines.push(`Responsibility map: https://2027-street-mandate.vercel.app/map`);
-  lines.push(`Submit: https://2027-street-mandate.vercel.app/`);
+  lines.push(`Submit a demand: https://2027-street-mandate.vercel.app/`);
+  lines.push(`ISEYC · non-partisan · duty over personality`);
   return lines.join("\n");
 }
 
-function buildShortBrief(state: string, forState: Voice[]): string {
+function buildShortBrief(
+  state: string,
+  forState: Voice[],
+  week: { label: string }
+): string {
   const lines: string[] = [
-    `ISEYC 2027 Civic Mandate — ${state}`,
+    `ISEYC Weekly Civic Brief — ${state}`,
+    week.label,
     `${forState.length} published demand(s) for public delivery.`,
     `Not a poll. Not a ranking. Not an endorsement.`,
     ``,
@@ -102,7 +125,7 @@ function buildShortBrief(state: string, forState: Voice[]): string {
 
   lines.push(``);
   lines.push(`Full brief: ${briefUrl(state)}`);
-  lines.push(`Submit a demand: https://2027-street-mandate.vercel.app/`);
+  lines.push(`Submit: https://2027-street-mandate.vercel.app/`);
   return lines.join("\n");
 }
 
@@ -119,6 +142,8 @@ function BriefInner() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const week = useMemo(() => weekOfLabel(), []);
 
   useEffect(() => {
     if (paramState && (STATES as readonly string[]).includes(paramState) && paramState !== state) {
@@ -176,11 +201,14 @@ function BriefInner() {
   }, [forState]);
 
   const dutiesWithData = DUTIES.filter((d) => (byDuty[d.id] || []).length > 0);
-  const shortText = useMemo(() => buildShortBrief(state, forState), [state, forState]);
+  const shortText = useMemo(
+    () => buildShortBrief(state, forState, week),
+    [state, forState, week]
+  );
   const url = briefUrl(state);
 
   async function copyBrief() {
-    const text = buildPlainBrief(state, forState, dutiesWithData, byDuty);
+    const text = buildPlainBrief(state, forState, dutiesWithData, byDuty, week);
     const ok = await copyText(text);
     if (ok) {
       setCopied(true);
@@ -192,7 +220,7 @@ function BriefInner() {
 
   async function onNativeShare() {
     const result = await shareNative({
-      title: `ISEYC Civic Brief — ${state}`,
+      title: `ISEYC Weekly Civic Brief — ${state}`,
       text: shortText,
       url,
     });
@@ -224,14 +252,19 @@ function BriefInner() {
   return (
     <main className="px-4 py-8">
       <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600 no-print">
-        Data for delivery
+        Weekly field instrument · Data for delivery
       </p>
       <h1 className="print-title mt-1 font-display text-2xl font-bold text-forest-900">
         State Civic Brief — {state}
       </h1>
+      <p className="mt-1 text-xs font-semibold text-forest-600">
+        {week.label}
+        <span className="font-normal text-forest-500"> · snapshot for ward meetings</span>
+      </p>
       <p className="mt-2 text-sm leading-relaxed text-forest-700/90">
         Published citizen demands for one state, grouped by duty, then by office. Public memory —
-        not a poll, ranking, or endorsement. Share with ward groups, not as a scoreboard.
+        not a poll, ranking, or endorsement. Share with Street Reps and ward groups — not as a
+        scoreboard.
       </p>
       <p className="mt-2 text-xs text-forest-600 no-print">
         Unsure which office owns a duty?{" "}
@@ -285,7 +318,7 @@ function BriefInner() {
             type="button"
             onClick={() =>
               shareX(
-                `ISEYC Civic Brief — ${state}: ${forState.length} published demand(s). Not a poll. ${url}`
+                `ISEYC Weekly Civic Brief — ${state} (${week.label}): ${forState.length} published demand(s). Not a poll. ${url}`
               )
             }
             className="min-h-[40px] rounded-md bg-forest-900 px-2 text-[11px] font-bold text-cream"
@@ -320,24 +353,27 @@ function BriefInner() {
           >
             {copied ? "Copied" : "Copy full text"}
           </button>
-          {forState.length > 0 ? (
-            <button
-              type="button"
-              onClick={() => window.print()}
-              className="col-span-2 min-h-[40px] rounded-md border border-forest-500/25 bg-white px-2 text-[11px] font-semibold text-forest-800 sm:col-span-3"
-            >
-              Print / PDF
-            </button>
-          ) : null}
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="col-span-2 min-h-[40px] rounded-md border border-forest-500/25 bg-white px-2 text-[11px] font-semibold text-forest-800 sm:col-span-3"
+          >
+            Print / PDF for meetings
+          </button>
         </div>
       ) : null}
 
       {!loading && forState.length === 0 ? (
         <div className="mt-8 border border-dashed border-forest-500/20 py-10 text-center">
-          <p className="text-sm font-medium text-forest-800">No published mandates from {state} yet</p>
+          <p className="text-sm font-medium text-forest-800">
+            No published mandates from {state} yet
+          </p>
           <p className="mt-2 text-xs leading-relaxed text-forest-500">
-            Empty for this state is not a ranking and not a system failure. After ISEYC sets Status to
-            Published, demands group here by duty and office.
+            Empty for this state is not a ranking and not a system failure. After ISEYC sets Status
+            to Published, demands group here by duty and office — ready for weekly ward briefings.
+          </p>
+          <p className="mt-3 text-xs text-forest-600">
+            Field path: submit → ISEYC review → Published → appears in this brief.
           </p>
           <Link
             href="/"
@@ -395,11 +431,10 @@ function BriefInner() {
       )}
 
       <div className="mt-10 border-t border-forest-500/10 pt-6 text-xs leading-relaxed text-forest-500 no-print">
-        <p className="font-semibold text-forest-700">How this helps in the field</p>
+        <p className="font-semibold text-forest-700">How to use this weekly</p>
         <ul className="mt-2 list-disc space-y-1 pl-4">
-          <li>WhatsApp, X, Facebook, LinkedIn — share the brief, not a scoreboard.</li>
-          <li>Share more opens the phone sheet (Instagram, TikTok, Messages…).</li>
-          <li>Copy full text or Print / PDF for offline meetings.</li>
+          <li>WhatsApp / X / Facebook / LinkedIn — share the brief, not a scoreboard.</li>
+          <li>Copy full text or Print / PDF for offline ward meetings.</li>
           <li>Counts are published demands only — not votes or popularity.</li>
           <li>
             <Link href="/map" className="font-semibold underline underline-offset-2">
@@ -407,11 +442,12 @@ function BriefInner() {
             </Link>{" "}
             shows Primary / Shared / Unclear offices for each duty.
           </li>
+          <li>Refresh next week with the same URL — week label updates automatically.</li>
         </ul>
       </div>
 
       <p className="mt-6 text-[10px] text-forest-500">
-        Non-partisan public record · ISEYC · Not an election poll or endorsement
+        Non-partisan public record · ISEYC · Not an election poll or endorsement · {week.label}
       </p>
 
       <p className="mt-8 text-center no-print">
