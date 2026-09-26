@@ -5,7 +5,7 @@
 
 export type ReviewDecision = "Approved" | "Rejected";
 
-export type ReviewActionKind = "review_a" | "review_b" | "publish" | "reject";
+export type ReviewActionKind = "review_a" | "review_b" | "publish" | "reject" | "unpublish";
 
 export type RuleResult =
   | { ok: true }
@@ -56,6 +56,18 @@ export function validateHoldNotes(notes: string): RuleResult {
   return { ok: true };
 }
 
+/** Unpublish (withdraw from public register) requires the same audit notes bar as hold. */
+export function validateUnpublishNotes(notes: string): RuleResult {
+  if (notes.trim().length < 8) {
+    return {
+      ok: false,
+      status: 400,
+      error: "Unpublish requires a meaningful internal reason (at least 8 characters).",
+    };
+  }
+  return { ok: true };
+}
+
 export function validateReviewerBPrerequisites(input: {
   reviewerA: string;
   reviewerADecision: string;
@@ -101,5 +113,5 @@ export function institutionalConflictMessage(): string {
 }
 
 export function publishedRecordLockedMessage(): string {
-  return "Published Blueprint records are locked against ordinary review mutations. A separate reopen/correction protocol is required (governance decision — not available on this path).";
+  return "Published Blueprint records are locked against ordinary review mutations. Use Unpublish (with an internal reason) to withdraw the record from the public register.";
 }
