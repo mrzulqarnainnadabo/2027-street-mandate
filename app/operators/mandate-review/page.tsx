@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ISEYC_SEAL_SRC } from "@/lib/brand";
+import OperatorStaffNav from "@/components/operators/OperatorStaffNav";
 
 export const metadata: Metadata = {
   title: "Mandate review | ISEYC",
@@ -13,7 +14,8 @@ export const metadata: Metadata = {
  */
 export default function MandateReviewPage() {
   return (
-    <div className="mx-auto min-h-screen max-w-2xl px-4 py-10">
+    <div className="mx-auto min-h-screen max-w-2xl px-4 py-10 pb-16">
+      <OperatorStaffNav current="mandate-review" />
       <div className="mb-6 flex items-center gap-3">
         <img src={ISEYC_SEAL_SRC} alt="" width={48} height={48} className="h-12 w-12" />
         <div>
@@ -35,7 +37,7 @@ export default function MandateReviewPage() {
           <ul className="mt-2 list-disc space-y-1.5 pl-5 text-xs leading-relaxed">
             <li>Demand is a concrete service or outcome (not a party slogan or empty insult)</li>
             <li>Duty matches the demand</li>
-            <li>Office is plausible, or left as Not sure</li>
+            <li>Office is plausible, or left as Not sure / Unsure</li>
             <li>State (and LGA if any) coherent</li>
             <li>Not framed as an emergency ISEYC will dispatch</li>
           </ul>
@@ -60,11 +62,25 @@ export default function MandateReviewPage() {
           <ul className="mt-2 list-disc space-y-1.5 pl-5 text-xs leading-relaxed">
             <li>Record both reviewers (Notion comment: names + date)</li>
             <li>Set Status = Published</li>
-            <li>Do not fill response-tracking fields unless running the five-record pilot</li>
+            <li>Do not fill response-tracking fields unless running a controlled response pilot</li>
           </ul>
         </section>
 
         <section className="rounded-xl border border-forest-500/15 bg-cream/80 p-4">
+          <h2 className="font-display text-base font-bold text-forest-900">After Publish — verify</h2>
+          <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-xs leading-relaxed">
+            <li>Civic Pulse on home shows the demand (Published only).</li>
+            <li>
+              <Link href="/brief?state=Kaduna" className="font-semibold underline underline-offset-2">
+                State Civic Brief
+              </Link>{" "}
+              groups it under duty → office (counts are not votes).
+            </li>
+            <li>Public mandate page opens; no private response fields leak.</li>
+          </ol>
+        </section>
+
+        <section className="rounded-xl border border-forest-500/15 bg-white p-4">
           <h2 className="font-display text-base font-bold text-forest-900">Solo operator</h2>
           <p className="mt-2 text-xs leading-relaxed">
             Publish only clean office/duty demands. Hold anything that names a person, party, or
@@ -80,21 +96,21 @@ export default function MandateReviewPage() {
         </section>
 
         <section className="rounded-xl border border-dashed border-forest-500/20 p-4 text-xs text-forest-600">
-          <p className="font-semibold text-forest-800">Public product links (for checking after Publish)</p>
+          <p className="font-semibold text-forest-800">Public product links (check after Publish)</p>
           <ul className="mt-2 space-y-1">
             <li>
               <Link href="/" className="underline underline-offset-2">
-                Civic Mandate home
+                Civic Mandate home (Pulse)
+              </Link>
+            </li>
+            <li>
+              <Link href="/brief?state=Kaduna" className="underline underline-offset-2">
+                State Civic Brief — Kaduna
               </Link>
             </li>
             <li>
               <Link href="/map" className="underline underline-offset-2">
                 Responsibility map
-              </Link>
-            </li>
-            <li>
-              <Link href="/brief" className="underline underline-offset-2">
-                State Civic Brief
               </Link>
             </li>
             <li>

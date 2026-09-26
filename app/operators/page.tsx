@@ -68,13 +68,15 @@ export default function OperatorsIndexPage() {
       <div className="mt-4 rounded-xl border border-forest-500/20 bg-cream/80 px-4 py-3 text-xs leading-relaxed text-forest-800">
         <p className="font-bold text-forest-900">Status</p>
         <p className="mt-1">
-          Blueprint dual-review pilot: <strong>complete</strong> (synthetic path verified;
-          public register empty after cleanup).
+          Blueprint dual-review pilot: <strong>complete</strong>.
         </p>
         <p className="mt-1">
-          Weekly State Civic Brief: <strong>live</strong> on production. Next field step: publish
-          1–3 non-partisan Kaduna mandates (Notion Status → Published) so the brief is useful in
-          ward meetings.
+          Weekly State Civic Brief: <strong>live</strong>. Kaduna field seeds: Health, Power, Water
+          (Published) — brief is no longer empty.
+        </p>
+        <p className="mt-1">
+          Next: more real citizen demands via the public form → dual-review checklist → Status =
+          Published. Share the brief with Street Reps as public memory, not a scoreboard.
         </p>
       </div>
 
@@ -91,7 +93,7 @@ export default function OperatorsIndexPage() {
         <ToolCard
           href="/operators/mandate-review"
           title="Mandate dual-review checklist"
-          body="Review citizen demands before publishing to Civic Pulse."
+          body="Review citizen demands before setting Notion Status = Published."
         />
         <ToolCard
           href="/operators/blueprint-pilot"
