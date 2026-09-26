@@ -72,8 +72,9 @@ export default function OperatorsIndexPage() {
           public register empty after cleanup).
         </p>
         <p className="mt-1">
-          Next product step: <strong>Weekly State Civic Brief</strong> field framing
-          (PR #46 on GitHub — not merged until founder approves).
+          Weekly State Civic Brief: <strong>live</strong> on production. Next field step: publish
+          1–3 non-partisan Kaduna mandates (Notion Status → Published) so the brief is useful in
+          ward meetings.
         </p>
       </div>
 
