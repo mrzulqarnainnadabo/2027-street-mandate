@@ -42,7 +42,9 @@ function ToolCard({
       </Link>
       <p className="mt-1.5 text-xs leading-relaxed text-forest-600">{body}</p>
       {primary ? (
-        <p className="mt-3 text-[10px] font-bold uppercase tracking-wide text-gold-600">Primary · open this for the pilot test</p>
+        <p className="mt-3 text-[10px] font-bold uppercase tracking-wide text-gold-600">
+          Primary review console
+        </p>
       ) : null}
     </li>
   );
@@ -63,13 +65,27 @@ export default function OperatorsIndexPage() {
         Internal tools only. Do not share these URLs publicly.
       </p>
 
-      <h2 className="mt-8 text-[10px] font-bold uppercase tracking-widest text-forest-500">Review consoles</h2>
+      <div className="mt-4 rounded-xl border border-forest-500/20 bg-cream/80 px-4 py-3 text-xs leading-relaxed text-forest-800">
+        <p className="font-bold text-forest-900">Status</p>
+        <p className="mt-1">
+          Blueprint dual-review pilot: <strong>complete</strong> (synthetic path verified;
+          public register empty after cleanup).
+        </p>
+        <p className="mt-1">
+          Next product step: <strong>Weekly State Civic Brief</strong> field framing
+          (PR #46 on GitHub — not merged until founder approves).
+        </p>
+      </div>
+
+      <h2 className="mt-8 text-[10px] font-bold uppercase tracking-widest text-forest-500">
+        Review consoles
+      </h2>
       <ul className="mt-3 space-y-3 text-sm">
         <ToolCard
           primary
           href="/operators/blueprint-review"
           title="Blueprint publication review"
-          body="Dual review → publish → hold. Requires operator session. Use for the synthetic pilot row."
+          body="Dual review → publish → unpublish with reason. Requires operator session."
         />
         <ToolCard
           href="/operators/mandate-review"
@@ -83,31 +99,64 @@ export default function OperatorsIndexPage() {
         />
       </ul>
 
-      <h2 className="mt-8 text-[10px] font-bold uppercase tracking-widest text-forest-500">Public surfaces</h2>
+      <h2 className="mt-8 text-[10px] font-bold uppercase tracking-widest text-forest-500">
+        Public surfaces
+      </h2>
       <ul className="mt-3 space-y-3 text-sm">
-        <ToolCard href="/blueprints" title="Public Blueprint Register" body="Published records only — what citizens see." />
+        <ToolCard
+          href="/brief?state=Kaduna"
+          title="State Civic Brief (Kaduna)"
+          body="Weekly field instrument — published demands by duty and office."
+        />
+        <ToolCard
+          href="/blueprints"
+          title="Public Blueprint Register"
+          body="Published records only — what citizens see."
+        />
         <ToolCard href="/" title="Civic Mandate" body="Citizen demand product." />
       </ul>
 
-      <h2 className="mt-8 text-[10px] font-bold uppercase tracking-widest text-forest-500">Notion pilots</h2>
+      <h2 className="mt-8 text-[10px] font-bold uppercase tracking-widest text-forest-500">
+        Notion pilots
+      </h2>
       <ul className="mt-3 space-y-2 rounded-xl border border-forest-500/15 bg-cream/50 p-4 text-xs">
         <li>
-          <a href={CIVIC_RECORD_OPS_HUB_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">
+          <a
+            href={CIVIC_RECORD_OPS_HUB_URL}
+            className="font-semibold text-forest-800 underline underline-offset-2"
+            target="_blank"
+            rel="noreferrer"
+          >
             Civic Record ops hub
           </a>
         </li>
         <li>
-          <a href={BLUEPRINT_PILOT_NOTION_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">
+          <a
+            href={BLUEPRINT_PILOT_NOTION_URL}
+            className="font-semibold text-forest-800 underline underline-offset-2"
+            target="_blank"
+            rel="noreferrer"
+          >
             Public Blueprint Register (Notion)
           </a>
         </li>
         <li>
-          <a href={COMMITMENT_PILOT_NOTION_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">
+          <a
+            href={COMMITMENT_PILOT_NOTION_URL}
+            className="font-semibold text-forest-800 underline underline-offset-2"
+            target="_blank"
+            rel="noreferrer"
+          >
             Accountability Commitments
           </a>
         </li>
         <li>
-          <a href={EVIDENCE_PILOT_NOTION_URL} className="font-semibold text-forest-800 underline underline-offset-2" target="_blank" rel="noreferrer">
+          <a
+            href={EVIDENCE_PILOT_NOTION_URL}
+            className="font-semibold text-forest-800 underline underline-offset-2"
+            target="_blank"
+            rel="noreferrer"
+          >
             Evidence Vault
           </a>
         </li>
