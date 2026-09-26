@@ -40,8 +40,37 @@ function groupByOffice(items: Voice[]): { office: string; items: Voice[] }[] {
     .sort((a, b) => a.office.localeCompare(b.office));
 }
 
+/** Within an office, group by LGA so Street Reps can brief their own area. */
+function groupByLga(items: Voice[]): { lga: string; items: Voice[] }[] {
+  const map = new Map<string, Voice[]>();
+  for (const v of items) {
+    const key = (v.lga || "").trim() || "LGA not specified";
+    if (!map.has(key)) map.set(key, []);
+    map.get(key)!.push(v);
+  }
+  return Array.from(map.entries())
+    .map(([lga, list]) => ({ lga, items: list }))
+    .sort((a, b) => {
+      if (a.lga === "LGA not specified") return 1;
+      if (b.lga === "LGA not specified") return -1;
+      return a.lga.localeCompare(b.lga);
+    });
+}
+
 function briefUrl(state: string) {
   return `https://2027-street-mandate.vercel.app/brief?state=${encodeURIComponent(state)}`;
+}
+
+function lgaSummary(forState: Voice[]): string[] {
+  const counts = new Map<string, number>();
+  for (const v of forState) {
+    const k = (v.lga || "").trim();
+    if (!k) continue;
+    counts.set(k, (counts.get(k) || 0) + 1);
+  }
+  return Array.from(counts.entries())
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+    .map(([name, n]) => `${name} (${n})`);
 }
 
 function buildPlainBrief(
@@ -56,23 +85,28 @@ function buildPlainBrief(
     month: "short",
     year: "numeric",
   });
+  const lgas = lgaSummary(forState);
   const lines: string[] = [
-    `ISEYC 2027 Civic Mandate — Weekly State Civic Brief`,
-    `State: ${state}`,
+    `ISEYC 2027 Civic Mandate — ${state} State Civic Brief`,
     week.label,
     `Generated: ${generated}`,
+    ``,
+    `This is not a poll and not a ranking.`,
+    `It is a public record of what citizens are asking public office to deliver.`,
+    `Use in ward meetings and Street Rep briefings — as public memory, not a scoreboard.`,
+    ``,
     `Published demands in this brief: ${forState.length}`,
-    ``,
-    `Not a poll. Not a ranking. Not an endorsement.`,
-    `Public memory of what citizens asked public office to deliver.`,
-    `Use in ward meetings and Street Rep briefings — not as a scoreboard.`,
-    ``,
   ];
+
+  if (lgas.length > 0) {
+    lines.push(`LGAs named: ${lgas.join("; ")}`);
+  }
+  lines.push(``);
 
   if (forState.length === 0) {
     lines.push(`No published mandates from ${state} in the public record yet.`);
     lines.push(`Empty is not a ranking and not a system failure.`);
-    lines.push(`After ISEYC sets Status to Published, demands group here by duty and office.`);
+    lines.push(`After ISEYC sets Status to Published, demands group here by duty, office, and LGA.`);
     lines.push(``);
   } else {
     for (const d of dutiesWithData) {
@@ -80,19 +114,24 @@ function buildPlainBrief(
       lines.push(`${d.label} (${items.length})`);
       for (const { office, items: officeItems } of groupByOffice(items)) {
         lines.push(`  [${office}]`);
-        for (const v of officeItems) {
-          const place = v.lga ? ` (${v.lga})` : "";
-          lines.push(`  - "${v.sentence}"${place}`);
+        for (const { lga, items: lgaItems } of groupByLga(officeItems)) {
+          if (lga !== "LGA not specified") {
+            lines.push(`    ${lga}`);
+          }
+          for (const v of lgaItems) {
+            lines.push(`    - "${v.sentence}"`);
+          }
         }
       }
       lines.push("");
     }
   }
 
-  lines.push(`Brief: ${briefUrl(state)}`);
+  lines.push(`Read the full brief:`);
+  lines.push(briefUrl(state));
   lines.push(`Responsibility map: https://2027-street-mandate.vercel.app/map`);
-  lines.push(`Submit a demand: https://2027-street-mandate.vercel.app/`);
-  lines.push(`ISEYC · non-partisan · duty over personality`);
+  lines.push(`Add your own clear demand: https://2027-street-mandate.vercel.app/`);
+  lines.push(`— ISEYC · non-partisan · duty over personality`);
   return lines.join("\n");
 }
 
@@ -102,30 +141,43 @@ function buildShortBrief(
   week: { label: string }
 ): string {
   const lines: string[] = [
-    `ISEYC Weekly Civic Brief — ${state}`,
-    week.label,
-    `${forState.length} published demand(s) for public delivery.`,
-    `Not a poll. Not a ranking. Not an endorsement.`,
+    `ISEYC 2027 Civic Mandate — ${state} State Civic Brief`,
     ``,
+    `This is not a poll and not a ranking.`,
+    `It is a public record of what citizens are asking public office to deliver.`,
+    ``,
+    week.label,
   ];
 
-  const preview = forState.slice(0, 5);
-  for (const v of preview) {
-    const duty = v.duty || v.mandate || "Duty";
-    const place = v.lga ? ` · ${v.lga}` : "";
-    const cut = v.sentence.length > 100 ? `${v.sentence.slice(0, 97)}…` : v.sentence;
-    lines.push(`• [${duty}] "${cut}"${place}`);
-  }
-  if (forState.length > 5) {
-    lines.push(`…and ${forState.length - 5} more on the full brief.`);
-  }
   if (forState.length === 0) {
-    lines.push(`No published mandates from ${state} yet. Add yours after ISEYC review.`);
+    lines.push(`No published mandates from ${state} yet.`);
+    lines.push(`Empty is not a ranking. Add a clear demand after ISEYC review.`);
+  } else {
+    lines.push(`This week’s published demands (${forState.length}):`);
+    lines.push(``);
+    const preview = forState.slice(0, 6);
+    for (const v of preview) {
+      const duty = v.duty || v.mandate || "Duty";
+      const place = v.lga ? ` · ${v.lga}` : "";
+      const office = (v.office || "").trim();
+      const officeBit = office ? ` · ${office}` : "";
+      const cut = v.sentence.length > 110 ? `${v.sentence.slice(0, 107)}…` : v.sentence;
+      lines.push(`• ${duty}${officeBit}${place}`);
+      lines.push(`  ${cut}`);
+    }
+    if (forState.length > 6) {
+      lines.push(`…and ${forState.length - 6} more on the full brief.`);
+    }
   }
 
   lines.push(``);
-  lines.push(`Full brief: ${briefUrl(state)}`);
-  lines.push(`Submit: https://2027-street-mandate.vercel.app/`);
+  lines.push(`Read the full brief (share with ward groups as public memory, not a scoreboard):`);
+  lines.push(briefUrl(state));
+  lines.push(``);
+  lines.push(`Add your own clear demand:`);
+  lines.push(`https://2027-street-mandate.vercel.app/`);
+  lines.push(``);
+  lines.push(`— ISEYC · non-partisan · duty over personality`);
   return lines.join("\n");
 }
 
@@ -142,12 +194,14 @@ function BriefInner() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [lgaFilter, setLgaFilter] = useState<string | null>(null);
 
   const week = useMemo(() => weekOfLabel(), []);
 
   useEffect(() => {
     if (paramState && (STATES as readonly string[]).includes(paramState) && paramState !== state) {
       setState(paramState);
+      setLgaFilter(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paramState]);
@@ -181,13 +235,21 @@ function BriefInner() {
 
   function onStateChange(next: string) {
     setState(next);
+    setLgaFilter(null);
     router.replace(`/brief?state=${encodeURIComponent(next)}`, { scroll: false });
   }
 
-  const forState = useMemo(
+  const forStateAll = useMemo(
     () => voices.filter((v) => v.state === state),
     [voices, state]
   );
+
+  const lgaChips = useMemo(() => lgaSummary(forStateAll), [forStateAll]);
+
+  const forState = useMemo(() => {
+    if (!lgaFilter) return forStateAll;
+    return forStateAll.filter((v) => (v.lga || "").trim() === lgaFilter);
+  }, [forStateAll, lgaFilter]);
 
   const byDuty = useMemo(() => {
     const map: Record<string, Voice[]> = {};
@@ -202,13 +264,13 @@ function BriefInner() {
 
   const dutiesWithData = DUTIES.filter((d) => (byDuty[d.id] || []).length > 0);
   const shortText = useMemo(
-    () => buildShortBrief(state, forState, week),
-    [state, forState, week]
+    () => buildShortBrief(state, forStateAll, week),
+    [state, forStateAll, week]
   );
   const url = briefUrl(state);
 
   async function copyBrief() {
-    const text = buildPlainBrief(state, forState, dutiesWithData, byDuty, week);
+    const text = buildPlainBrief(state, forStateAll, dutiesWithData, byDuty, week);
     const ok = await copyText(text);
     if (ok) {
       setCopied(true);
@@ -220,7 +282,7 @@ function BriefInner() {
 
   async function onNativeShare() {
     const result = await shareNative({
-      title: `ISEYC Weekly Civic Brief — ${state}`,
+      title: `ISEYC Civic Brief — ${state}`,
       text: shortText,
       url,
     });
@@ -262,9 +324,9 @@ function BriefInner() {
         <span className="font-normal text-forest-500"> · snapshot for ward meetings</span>
       </p>
       <p className="mt-2 text-sm leading-relaxed text-forest-700/90">
-        Published citizen demands for one state, grouped by duty, then by office. Public memory —
-        not a poll, ranking, or endorsement. Share with Street Reps and ward groups — not as a
-        scoreboard.
+        This is not a poll and not a ranking. It is a public record of what citizens are asking
+        public office to deliver — grouped by duty, office, and LGA when named. Share with Street
+        Reps and ward groups as public memory, not a scoreboard.
       </p>
       <p className="mt-2 text-xs text-forest-600 no-print">
         Unsure which office owns a duty?{" "}
@@ -289,6 +351,45 @@ function BriefInner() {
         </select>
       </label>
 
+      {!loading && lgaChips.length > 0 ? (
+        <div className="mt-3 no-print">
+          <p className="text-[10px] font-bold uppercase tracking-wide text-forest-500">
+            Filter by LGA (optional)
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setLgaFilter(null)}
+              className={
+                lgaFilter === null
+                  ? "min-h-[36px] rounded-full bg-forest-800 px-3 text-[11px] font-bold text-cream"
+                  : "min-h-[36px] rounded-full border border-forest-500/25 bg-white px-3 text-[11px] font-semibold text-forest-800"
+              }
+            >
+              All LGAs
+            </button>
+            {lgaChips.map((chip) => {
+              const name = chip.replace(/ \(\d+\)$/, "");
+              const active = lgaFilter === name;
+              return (
+                <button
+                  key={chip}
+                  type="button"
+                  onClick={() => setLgaFilter(name)}
+                  className={
+                    active
+                      ? "min-h-[36px] rounded-full bg-forest-800 px-3 text-[11px] font-bold text-cream"
+                      : "min-h-[36px] rounded-full border border-forest-500/25 bg-white px-3 text-[11px] font-semibold text-forest-800"
+                  }
+                >
+                  {chip}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ) : null}
+
       <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-y border-forest-500/10 py-3 text-xs text-forest-600">
         {loading ? (
           <span>Loading published records…</span>
@@ -296,6 +397,7 @@ function BriefInner() {
           <span>
             <strong className="tabular-nums text-forest-800">{forState.length}</strong> published
             from {state}
+            {lgaFilter ? <span className="text-forest-500"> · {lgaFilter}</span> : null}
             {total === 0 ? (
               <span className="text-forest-500"> · national wall is empty (not a failure)</span>
             ) : (
@@ -318,7 +420,7 @@ function BriefInner() {
             type="button"
             onClick={() =>
               shareX(
-                `ISEYC Weekly Civic Brief — ${state} (${week.label}): ${forState.length} published demand(s). Not a poll. ${url}`
+                `ISEYC ${state} Civic Brief — not a poll. ${forStateAll.length} published demand(s) for public delivery. ${url}`
               )
             }
             className="min-h-[40px] rounded-md bg-forest-900 px-2 text-[11px] font-bold text-cream"
@@ -366,14 +468,13 @@ function BriefInner() {
       {!loading && forState.length === 0 ? (
         <div className="mt-8 border border-dashed border-forest-500/20 py-10 text-center">
           <p className="text-sm font-medium text-forest-800">
-            No published mandates from {state} yet
+            {lgaFilter
+              ? `No published mandates from ${lgaFilter} yet`
+              : `No published mandates from ${state} yet`}
           </p>
           <p className="mt-2 text-xs leading-relaxed text-forest-500">
-            Empty for this state is not a ranking and not a system failure. After ISEYC sets Status
-            to Published, demands group here by duty and office — ready for weekly ward briefings.
-          </p>
-          <p className="mt-3 text-xs text-forest-600">
-            Field path: submit → ISEYC review → Published → appears in this brief.
+            Empty is not a ranking and not a system failure. After ISEYC sets Status to Published,
+            demands group here by duty, office, and LGA — ready for weekly ward briefings.
           </p>
           <Link
             href="/"
@@ -401,26 +502,34 @@ function BriefInner() {
                       <p className="mb-2 text-[10px] font-bold uppercase tracking-wide text-forest-500">
                         {office}
                       </p>
-                      <ul className="space-y-2.5">
-                        {officeItems.map((v) => (
-                          <li key={v.id}>
-                            <div className="block border border-forest-500/12 bg-white px-3 py-3">
-                              <p className="text-sm leading-snug text-forest-900">
-                                “{v.sentence}”
+                      <div className="space-y-3">
+                        {groupByLga(officeItems).map(({ lga, items: lgaItems }) => (
+                          <div key={lga}>
+                            {lga !== "LGA not specified" ? (
+                              <p className="mb-1.5 text-[11px] font-semibold text-forest-600">
+                                {lga}
                               </p>
-                              {v.lga ? (
-                                <p className="mt-1.5 text-[10px] text-forest-500">{v.lga}</p>
-                              ) : null}
-                              <Link
-                                href={`/mandate/${v.id}`}
-                                className="mt-1 inline-block text-[10px] text-forest-500 underline no-print"
-                              >
-                                Open record →
-                              </Link>
-                            </div>
-                          </li>
+                            ) : null}
+                            <ul className="space-y-2.5">
+                              {lgaItems.map((v) => (
+                                <li key={v.id}>
+                                  <div className="block border border-forest-500/12 bg-white px-3 py-3">
+                                    <p className="text-sm leading-snug text-forest-900">
+                                      “{v.sentence}”
+                                    </p>
+                                    <Link
+                                      href={`/mandate/${v.id}`}
+                                      className="mt-1 inline-block text-[10px] text-forest-500 underline no-print"
+                                    >
+                                      Open record →
+                                    </Link>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         ))}
-                      </ul>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -433,8 +542,9 @@ function BriefInner() {
       <div className="mt-10 border-t border-forest-500/10 pt-6 text-xs leading-relaxed text-forest-500 no-print">
         <p className="font-semibold text-forest-700">How to use this weekly</p>
         <ul className="mt-2 list-disc space-y-1 pl-4">
-          <li>WhatsApp / X / Facebook / LinkedIn — share the brief, not a scoreboard.</li>
+          <li>WhatsApp the short text to Street Rep groups — not as a scoreboard.</li>
           <li>Copy full text or Print / PDF for offline ward meetings.</li>
+          <li>Filter by LGA when your team works one area (e.g. Kaduna South).</li>
           <li>Counts are published demands only — not votes or popularity.</li>
           <li>
             <Link href="/map" className="font-semibold underline underline-offset-2">
