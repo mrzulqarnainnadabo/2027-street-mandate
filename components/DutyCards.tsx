@@ -10,14 +10,21 @@ export default function DutyCards({
   onSelect: (id: string) => void;
 }) {
   return (
-    <section className="px-4">
-      <h2 className="mb-1 text-center font-display text-base font-bold text-forest-800">
+    <section className="px-4" aria-labelledby="duty-step-heading">
+      <h2
+        id="duty-step-heading"
+        className="mb-1 text-center font-display text-base font-bold text-forest-800"
+      >
         What must public office deliver?
       </h2>
       <p className="mb-4 text-center text-[11px] text-forest-500">
         Step 1 · Pick one duty of government
       </p>
-      <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+      <div
+        className="grid grid-cols-1 gap-1.5 sm:grid-cols-2"
+        role="group"
+        aria-label="Duty of government"
+      >
         {DUTIES.map((m) => {
           const active = selected === m.id;
           return (
@@ -25,6 +32,7 @@ export default function DutyCards({
               key={m.id}
               type="button"
               onClick={() => onSelect(m.id)}
+              aria-pressed={active}
               className={`flex min-h-[48px] items-center gap-3 rounded-lg border px-3 py-3 text-left transition active:scale-[0.99] ${
                 active
                   ? "border-forest-500 bg-forest-50 ring-1 ring-forest-500"
