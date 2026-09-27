@@ -237,7 +237,9 @@ export async function getPublishedPulse(): Promise<{
 }
 
 export async function getPublishedMandate(id: string): Promise<PulseVoice | null> {
-  if (!process.env.NOTION_TOKEN || !DATABASE_ID) return null;
+  if (!process.env.NOTION_TOKEN || !DATABASE_ID) {
+    throw new Error("Civic mandate detail is not configured: missing Notion environment variables.");
+  }
 
   try {
     const page = (await notion.pages.retrieve({
@@ -252,7 +254,11 @@ export async function getPublishedMandate(id: string): Promise<PulseVoice | null
     return mapPageToVoice(page);
   } catch (err: any) {
     console.error("getPublishedMandate:", err?.message || err);
-    return null;
+    if (isNotionNotFound(err)) {
+      return null;
+    }
+    // Auth, rate limit, network → unavailable (do not fake "not published")
+    throw new Error("Published mandate could not load right now.");
   }
 }
 
