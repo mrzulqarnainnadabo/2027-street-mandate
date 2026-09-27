@@ -24,7 +24,8 @@ function statusCopy(status: string): { label: string; message: string } {
   }
   return {
     label: "Under review",
-    message: "Your mandate has been received. It will appear publicly only after ISEYC review marks it Published.",
+    message:
+      "Your mandate has been received. It will appear publicly only after ISEYC review marks it Published.",
   };
 }
 
@@ -68,6 +69,9 @@ export default async function StatusPage({ params }: Props) {
   const copy = statusCopy(mandate.status);
   const reference = referenceFor(mandate.id);
   const publicUrl = `/mandate/${mandate.id}`;
+  const briefUrl = mandate.state
+    ? `/brief?state=${encodeURIComponent(mandate.state)}`
+    : "/brief?state=Kaduna";
 
   return (
     <div className="mx-auto min-h-screen max-w-2xl px-4 py-10">
@@ -101,6 +105,12 @@ export default async function StatusPage({ params }: Props) {
             <dt className="font-medium text-forest-500">Duty</dt>
             <dd className="text-right text-forest-800">{mandate.duty}</dd>
           </div>
+          {mandate.lga ? (
+            <div className="flex justify-between gap-2 border-t border-forest-500/10 pt-2">
+              <dt className="font-medium text-forest-500">LGA</dt>
+              <dd className="text-right text-forest-800">{mandate.lga}</dd>
+            </div>
+          ) : null}
         </dl>
 
         <p className="mt-5 text-[11px] leading-snug text-forest-500">
@@ -110,9 +120,23 @@ export default async function StatusPage({ params }: Props) {
 
       <div className="mt-8 flex flex-col items-center gap-3 text-sm">
         {mandate.status === "Published" ? (
-          <Link href={publicUrl} className="w-full max-w-xs rounded-md bg-forest-500 py-3 text-center font-bold text-white">
-            View published mandate
-          </Link>
+          <>
+            <Link
+              href={publicUrl}
+              className="w-full max-w-xs rounded-md bg-forest-500 py-3 text-center font-bold text-white"
+            >
+              View published mandate
+            </Link>
+            <Link
+              href={briefUrl}
+              className="w-full max-w-xs rounded-md border border-forest-500/30 bg-white py-3 text-center text-sm font-semibold text-forest-800"
+            >
+              Open State Civic Brief
+            </Link>
+            <p className="max-w-xs text-center text-[11px] leading-snug text-forest-500">
+              The Brief groups Published demands by duty and office. Counts are not votes.
+            </p>
+          </>
         ) : null}
         <Link href="/" className="text-xs font-semibold text-forest-700 underline underline-offset-2">
           Submit another mandate
