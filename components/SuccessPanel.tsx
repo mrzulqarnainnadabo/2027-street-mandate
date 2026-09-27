@@ -28,6 +28,7 @@ export default function SuccessPanel({
   const homeUrl = origin + "/";
   const detailUrl = mandateId ? `${origin}/mandate/${mandateId}` : null;
   const statusUrl = mandateId ? `${origin}/status/${mandateId}` : null;
+  const briefUrl = `${origin}/brief?state=${encodeURIComponent(state || "Kaduna")}`;
   const reference = mandateId ? `ISEYC-${mandateId.slice(0, 8).toUpperCase()}` : null;
 
   const shareBody = [
@@ -93,7 +94,7 @@ export default function SuccessPanel({
         <h2 className="mt-1 font-display text-xl font-bold text-forest-900">Submitted for review</h2>
         <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-forest-700/85">
           Your mandate is <strong className="font-semibold">not public yet</strong>. It appears on
-          Civic Pulse only after ISEYC moderation marks it Published.
+          Civic Pulse and the State Civic Brief only after ISEYC moderation marks it Published.
         </p>
 
         {reference && statusUrl ? (
@@ -132,6 +133,17 @@ export default function SuccessPanel({
             Responsibility map
           </Link>
           {" "}— see which offices often deliver a duty (not rankings).
+        </p>
+
+        <p className="mx-auto mt-2 max-w-md text-[11px] leading-snug text-forest-600">
+          After publish, your demand can appear in the{" "}
+          <Link
+            href={`/brief?state=${encodeURIComponent(state || "Kaduna")}`}
+            className="font-semibold underline underline-offset-2"
+          >
+            {state || "State"} Civic Brief
+          </Link>
+          {" "}— weekly field instrument for ward meetings (not a poll).
         </p>
 
         <p className="mx-auto mt-4 max-w-md text-[11px] leading-snug text-forest-500">
