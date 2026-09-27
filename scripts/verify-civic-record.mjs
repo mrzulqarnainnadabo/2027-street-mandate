@@ -41,39 +41,6 @@ function resolveReviewDecision(decision) {
   return null;
 }
 
-const base = {
-  publicationStatus: "Draft",
-  verificationStatus: "SOURCE_PRESENT",
-  statementClass: "ACTOR_STATEMENT",
-  sourceUrl: "https://example.com/doc",
-  reviewerAName: "A",
-  reviewerADecision: "Approved",
-  reviewerBName: "B",
-  reviewerBDecision: "Approved",
-  publicationDecision: "Publish",
-};
-
-// Synthetic publication gate behavioral checks (no network)
-{
-  const { evaluateBlueprintPublication } = await import(
-    "./does-not-exist-skip.js"
-  ).catch(() => ({}));
-}
-
-// File-level behavioral probes used by earlier governance tests
-function reasonsFor(gov) {
-  const reasons = [];
-  const sc = gov.statementClass;
-  if (!sc) reasons.push("Statement Class is required");
-  else if (!ALLOWED_STATEMENT_CLASSES.has(sc)) reasons.push("Statement Class must be an explicit allowed value.");
-  if (!gov.sourceUrl) reasons.push("source verification");
-  if (gov.verificationStatus === "UNVERIFIED") reasons.push("UNVERIFIED");
-  if (gov.publicationStatus === "Published" && isPublishedRecordLocked(gov.publicationStatus)) {
-    /* locked */
-  }
-  return reasons;
-}
-
 assert.equal(canOperatorPublishFromStatus("Published"), false);
 assert.equal(canOperatorPublishFromStatus("Draft"), true);
 assert.equal(isPublishedRecordLocked("Published"), true);
@@ -99,23 +66,24 @@ console.log("Civic Record public-boundary + governance checks: PASS");
 console.log("Operator review console structure checks: PASS");
 console.log("Blueprint targeted hardening checks: PASS");
 
-/* Weekly State Civic Brief — field instrument */
+/* State Civic Brief — field instrument (aligned with LGA share copy) */
 const weekOf = read("lib/week-of.ts");
 assert.match(weekOf, /export function weekOfLabel/);
 assert.match(weekOf, /mondayOffset/);
 
 const briefPage = read("app/brief/page.tsx");
 assert.match(briefPage, /from "@\/lib\/week-of"/);
-assert.match(briefPage, /Weekly State Civic Brief/);
-assert.match(briefPage, /Not a poll\. Not a ranking\. Not an endorsement\./);
+assert.match(briefPage, /State Civic Brief/);
+assert.match(briefPage, /Weekly field instrument/);
+assert.match(briefPage, /This is not a poll and not a ranking/);
 assert.match(briefPage, /not a scoreboard/i);
 assert.match(briefPage, /not a system failure/i);
-// Allow explicit *negation* of endorsement/poll language; forbid positive campaign framing.
+assert.match(briefPage, /Not an election poll or endorsement/i);
+assert.match(briefPage, /LGA|lga/);
 assert.doesNotMatch(briefPage, /\b(we endorse|endorses|vote for [A-Z]|ranking of candidates|poll results)\b/i);
 
 console.log("Weekly Civic Brief framing checks: PASS");
 
-// Dead "VoteCards" must not return — duty selection is DutyCards only (non-poll language).
 assert.equal(fs.existsSync("components/VoteCards.tsx"), false, "VoteCards.tsx must remain deleted");
 assert.equal(fs.existsSync("components/DutyCards.tsx"), true, "DutyCards.tsx required");
 
