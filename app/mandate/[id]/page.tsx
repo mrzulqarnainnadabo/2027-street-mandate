@@ -13,7 +13,12 @@ type Props = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const m = await getPublishedMandate(id);
+  let m = null;
+  try {
+    m = await getPublishedMandate(id);
+  } catch {
+    return { title: "Mandate temporarily unavailable | ISEYC 2027 Civic Mandate" };
+  }
   if (!m) {
     return { title: "Mandate not found | ISEYC 2027 Civic Mandate" };
   }
@@ -28,7 +33,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function MandateDetailPage({ params }: Props) {
   const { id } = await params;
-  const m = await getPublishedMandate(id);
+  let m = null;
+  let serviceError = false;
+  try {
+    m = await getPublishedMandate(id);
+  } catch {
+    serviceError = true;
+  }
+
+  if (serviceError) {
+    return (
+      <div className="mx-auto min-h-screen max-w-2xl px-4 py-16 text-center">
+        <img src={ISEYC_SEAL_SRC} alt="ISEYC" width={64} height={64} className="mx-auto mb-4" />
+        <h1 className="font-display text-xl font-bold text-forest-900">Temporarily unavailable</h1>
+        <p className="mt-2 text-sm text-forest-600">
+          Published civic records could not be loaded right now. This is a service problem, not proof
+          that the mandate was rejected. Please try again later.
+        </p>
+        <Link href="/" className="mt-6 inline-block text-sm font-semibold text-forest-600 underline">
+          ← Back to Civic Mandate
+        </Link>
+      </div>
+    );
+  }
 
   if (!m) {
     return (

@@ -195,11 +195,13 @@ export default function FormPanel({
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="mb-2 block text-[13px] font-bold text-forest-900">{t("form.office")}</label>
+            <label htmlFor="mandate-office" className="mb-2 block text-[13px] font-bold text-forest-900">{t("form.office")}</label>
             <select
+              id="mandate-office"
               value={office}
               onChange={(e) => setOffice(e.target.value)}
               required
+              aria-invalid={Boolean(error && !office)}
               className="field-control w-full px-3 text-sm outline-none"
             >
               <option value="">{t("form.officePlaceholder")}</option>
@@ -215,11 +217,13 @@ export default function FormPanel({
           </div>
 
           <div>
-            <label className="mb-2 block text-[13px] font-bold text-forest-900">{t("form.state")}</label>
+            <label htmlFor="mandate-state" className="mb-2 block text-[13px] font-bold text-forest-900">{t("form.state")}</label>
             <select
+              id="mandate-state"
               value={state}
               onChange={(e) => setState(e.target.value)}
               required
+              aria-invalid={Boolean(error && !state)}
               className="field-control w-full px-3 text-sm outline-none"
             >
               <option value="">{t("form.statePlaceholder")}</option>
@@ -232,15 +236,17 @@ export default function FormPanel({
           </div>
 
           <div>
-            <label className="mb-2 block text-[13px] font-bold text-forest-900">
+            <label htmlFor="mandate-lga" className="mb-2 block text-[13px] font-bold text-forest-900">
               {t("form.lga")}{" "}
               <span className="font-normal text-forest-500">{t("form.lgaOptional")}</span>
             </label>
             <input
+              id="mandate-lga"
               type="text"
               value={lga}
               onChange={(e) => setLga(e.target.value.slice(0, 120))}
               placeholder="e.g. Kaduna South"
+              autoComplete="address-level2"
               className="field-control w-full px-3 text-sm outline-none"
             />
             <p className="mt-1 text-[10px] text-forest-500">{t("form.lgaHint")}</p>
@@ -248,13 +254,14 @@ export default function FormPanel({
 
           <div>
             <div className="mb-2 flex items-baseline justify-between gap-3">
-              <label className="text-[13px] font-bold text-forest-900">{t("form.demand")}</label>
+              <label htmlFor="mandate-demand" className="text-[13px] font-bold text-forest-900">{t("form.demand")}</label>
               <span className="shrink-0 text-[10px] tabular-nums text-forest-500">
                 {sentence.length}/{MAX_SENTENCE}
               </span>
             </div>
             <p className="mb-2 text-[11px] leading-snug text-forest-600">{t("form.demandHint")}</p>
             <textarea
+              id="mandate-demand"
               value={sentence}
               onChange={(e) => setSentence(e.target.value.slice(0, MAX_SENTENCE))}
               required
