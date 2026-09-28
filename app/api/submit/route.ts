@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { submitVoice } from "@/lib/notion";
+import { checkRateLimit, clientIpFromRequest } from "@/lib/rate-limit";
 import {
   DUTIES,
   OFFICES,
@@ -17,7 +18,28 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid submission." }, { status: 400 });
     }
 
-    const { sentence, duty, mandate, office, state, lga, ageBand, gender, deviceId } = body as Record<string, unknown>;
+    const { sentence, duty, mandate, office, state, lga, ageBand, gender, deviceId } =
+      body as Record<string, unknown>;
+
+    const ip = clientIpFromRequest(req);
+    const deviceKey =
+      typeof body.deviceId === "string" && body.deviceId.trim()
+        ? body.deviceId.trim().slice(0, 64)
+        : "";
+    const rate = checkRateLimit(`submit:${ip}:${deviceKey}`, 8, 15 * 60 * 1000);
+    if (!rate.ok) {
+      return NextResponse.json(
+        {
+          error:
+            "Too many submissions from this connection. Please wait a few minutes and try again. Your draft stays on this phone.",
+        },
+        {
+          status: 429,
+          headers: { "Retry-After": String(rate.retryAfterSec) },
+        }
+      );
+    }
+
     const dutyId = typeof duty === "string" && duty ? duty : mandate;
 
     if (typeof sentence !== "string" || sentence.trim().length < MIN_SENTENCE) {
@@ -40,10 +62,16 @@ export async function POST(req: NextRequest) {
     if (typeof state !== "string" || !STATES.includes(state as (typeof STATES)[number])) {
       return NextResponse.json({ error: "Invalid state." }, { status: 400 });
     }
-    if (ageBand !== undefined && (typeof ageBand !== "string" || !AGE_BANDS.includes(ageBand as (typeof AGE_BANDS)[number]))) {
+    if (
+      ageBand !== undefined &&
+      (typeof ageBand !== "string" || !AGE_BANDS.includes(ageBand as (typeof AGE_BANDS)[number]))
+    ) {
       return NextResponse.json({ error: "Invalid age band." }, { status: 400 });
     }
-    if (gender !== undefined && (typeof gender !== "string" || !GENDERS.includes(gender as (typeof GENDERS)[number]))) {
+    if (
+      gender !== undefined &&
+      (typeof gender !== "string" || !GENDERS.includes(gender as (typeof GENDERS)[number]))
+    ) {
       return NextResponse.json({ error: "Invalid gender." }, { status: 400 });
     }
     if (lga !== undefined && (typeof lga !== "string" || lga.trim().length > 120)) {
