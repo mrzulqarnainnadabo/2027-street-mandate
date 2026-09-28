@@ -1,7 +1,12 @@
 /**
  * Lightweight in-memory rate limit for serverless instances.
  * Not a global distributed limiter — still reduces burst abuse per instance.
- * Prefer IP; optionally fold deviceId into the key for soft client signals.
+ *
+ * IP trust model (Vercel):
+ * Prefer x-vercel-forwarded-for (platform-controlled).
+ * Then x-real-ip. Then first hop of x-forwarded-for.
+ * Clients cannot reliably spoof Vercel-set edge headers in production;
+ * treating arbitrary X-Forwarded-For alone as truth on a non-Vercel host would be unsafe.
  */
 
 type Bucket = { count: number; resetAt: number };
@@ -55,16 +60,23 @@ export function checkRateLimit(
   return { ok: true, remaining: Math.max(0, limit - bucket.count) };
 }
 
-/** Client IP from common proxy headers (Vercel / reverse proxy). */
+function firstIp(value: string | null): string | null {
+  if (!value) return null;
+  const first = value.split(",")[0]?.trim();
+  if (!first || first.length > 64) return null;
+  if (/[\s<>"']/.test(first)) return null;
+  return first;
+}
+
+/** Client IP from Vercel/proxy headers. Platform headers preferred over client-supplied lists. */
 export function clientIpFromRequest(req: {
   headers: { get(name: string): string | null };
 }): string {
-  const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) {
-    const first = forwarded.split(",")[0]?.trim();
-    if (first) return first;
-  }
-  const real = req.headers.get("x-real-ip")?.trim();
+  const vercel = firstIp(req.headers.get("x-vercel-forwarded-for"));
+  if (vercel) return vercel;
+  const real = firstIp(req.headers.get("x-real-ip"));
   if (real) return real;
+  const forwarded = firstIp(req.headers.get("x-forwarded-for"));
+  if (forwarded) return forwarded;
   return "unknown";
 }
