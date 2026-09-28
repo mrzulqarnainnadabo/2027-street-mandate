@@ -26,6 +26,12 @@ export default function MandateReviewPage() {
         </div>
       </div>
 
+      <p className="mb-6 border-l-2 border-gold-600 bg-cream/80 px-3 py-2 text-xs leading-relaxed text-forest-800">
+        <strong className="font-semibold">Status path:</strong> New → human review → Published
+        (public Pulse/Brief) or Rejected. Never treat counts as votes. Do not publish slogans or
+        named-candidate attacks.
+      </p>
+
       <p className="text-sm leading-relaxed text-forest-700">
         Use this before setting Notion <strong>Status = Published</strong>. This page is for operators
         only. It is not a public product surface and must not be promoted as a citizen feature.
@@ -45,7 +51,7 @@ export default function MandateReviewPage() {
 
         <section className="rounded-xl border border-forest-500/15 bg-white p-4">
           <h2 className="font-display text-base font-bold text-forest-900">
-            Reviewer B — Safety &amp; neutrality
+            Reviewer B — Safety & neutrality
           </h2>
           <p className="mt-1 text-[11px] text-forest-500">Different person from Reviewer A when possible.</p>
           <ul className="mt-2 list-disc space-y-1.5 pl-5 text-xs leading-relaxed">
