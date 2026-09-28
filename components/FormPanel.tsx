@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   OFFICES,
@@ -35,6 +35,7 @@ export default function FormPanel({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [hydrated, setHydrated] = useState(false);
+  const submittingRef = useRef(false);
 
   const examples = PROMPT_EXAMPLES[duty] || PROMPT_EXAMPLES["Other"];
   const officeMeta = OFFICES.find((o) => o.id === office);
@@ -76,6 +77,7 @@ export default function FormPanel({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (submittingRef.current || loading) return;
     setError("");
     const text = sentence.trim();
     if (!office || !state) {
@@ -88,6 +90,7 @@ export default function FormPanel({
       );
       return;
     }
+    submittingRef.current = true;
     setLoading(true);
     try {
       const res = await fetch("/api/submit", {
@@ -123,6 +126,7 @@ export default function FormPanel({
           "Something went wrong. Your draft is saved on this phone — try again when the network is stable."
       );
     } finally {
+      submittingRef.current = false;
       setLoading(false);
     }
   }
@@ -193,7 +197,7 @@ export default function FormPanel({
           </div>
         ) : null}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} aria-busy={loading} className="space-y-5">
           <div>
             <label htmlFor="mandate-office" className="mb-2 block text-[13px] font-bold text-forest-900">{t("form.office")}</label>
             <select

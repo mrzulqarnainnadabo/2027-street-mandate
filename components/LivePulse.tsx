@@ -98,7 +98,11 @@ export default function LivePulse() {
   }
 
   return (
-    <section className="mt-10 border-t border-forest-500/10 px-4 pb-16 pt-8">
+    <section
+      className="mt-10 border-t border-forest-500/10 px-4 pb-16 pt-8"
+      aria-busy={!loaded}
+      aria-live="polite"
+    >
       <div className="mx-auto max-w-xl">
         <div className="mb-5 border-b border-forest-500/10 pb-4 text-center">
           <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">

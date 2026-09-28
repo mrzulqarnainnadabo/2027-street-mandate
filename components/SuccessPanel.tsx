@@ -143,11 +143,12 @@ export default function SuccessPanel({
           >
             {state || "State"} Civic Brief
           </Link>
-          {" "}— weekly field instrument for ward meetings (not a poll).
+          {" "}— shows <strong className="font-semibold">Published</strong> demands only.
+          Yours will appear there after ISEYC review (not a poll or ranking).
         </p>
 
         <p className="mx-auto mt-4 max-w-md text-[11px] leading-snug text-forest-500">
-          Share if you wish. Publication still depends on ISEYC review. Instagram &amp; TikTok: use
+          Share if you wish. Publication still depends on ISEYC review. Instagram & TikTok: use
           Copy or Share more, then paste in the app.
         </p>
 
