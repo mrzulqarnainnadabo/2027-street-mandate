@@ -21,25 +21,6 @@ export async function POST(req: NextRequest) {
     const { sentence, duty, mandate, office, state, lga, ageBand, gender, deviceId } =
       body as Record<string, unknown>;
 
-    const ip = clientIpFromRequest(req);
-    const deviceKey =
-      typeof body.deviceId === "string" && body.deviceId.trim()
-        ? body.deviceId.trim().slice(0, 64)
-        : "";
-    const rate = checkRateLimit(`submit:${ip}:${deviceKey}`, 8, 15 * 60 * 1000);
-    if (!rate.ok) {
-      return NextResponse.json(
-        {
-          error:
-            "Too many submissions from this connection. Please wait a few minutes and try again. Your draft stays on this phone.",
-        },
-        {
-          status: 429,
-          headers: { "Retry-After": String(rate.retryAfterSec) },
-        }
-      );
-    }
-
     const dutyId = typeof duty === "string" && duty ? duty : mandate;
 
     if (typeof sentence !== "string" || sentence.trim().length < MIN_SENTENCE) {
@@ -79,6 +60,24 @@ export async function POST(req: NextRequest) {
     }
     if (deviceId !== undefined && (typeof deviceId !== "string" || deviceId.length > 200)) {
       return NextResponse.json({ error: "Invalid device reference." }, { status: 400 });
+    }
+
+    const ip = clientIpFromRequest(req);
+    const deviceKey =
+      typeof deviceId === "string" && deviceId.trim() ? deviceId.trim().slice(0, 64) : "";
+    // Count only validated attempts so form retries do not exhaust the window.
+    const rate = checkRateLimit(`submit:${ip}:${deviceKey}`, 8, 15 * 60 * 1000);
+    if (!rate.ok) {
+      return NextResponse.json(
+        {
+          error:
+            "Too many submissions from this connection. Please wait a few minutes and try again. Your draft stays on this phone.",
+        },
+        {
+          status: 429,
+          headers: { "Retry-After": String(rate.retryAfterSec) },
+        }
+      );
     }
 
     const id = await submitVoice({
