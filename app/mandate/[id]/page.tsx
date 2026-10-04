@@ -1,13 +1,16 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getPublishedMandate } from "@/lib/notion";
-import { ISEYC_SEAL_SRC } from "@/lib/brand";
+import { ISEYC_SEAL_SRC, PRODUCT_NAME } from "@/lib/brand";
 import {
   PUBLISHED_DEMAND_HINT,
   PUBLISHED_DEMAND_LABEL,
   NOT_PUBLICLY_SPECIFIED,
 } from "@/lib/record-classes";
 import { rowsForDuty } from "@/lib/responsibility-map";
+import TrackMandateButton from "@/components/TrackMandateButton";
+import WhatChangedTimeline from "@/components/WhatChangedTimeline";
+import MandateStoryDraftPanel from "@/components/MandateStoryDraftPanel";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -17,17 +20,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     m = await getPublishedMandate(id);
   } catch {
-    return { title: "Mandate temporarily unavailable | ISEYC 2027 Civic Mandate" };
+    return { title: `Mandate temporarily unavailable | ${PRODUCT_NAME}` };
   }
   if (!m) {
-    return { title: "Mandate not found | ISEYC 2027 Civic Mandate" };
+    return { title: `Mandate not found | ${PRODUCT_NAME}` };
   }
   const title = `Civic mandate · ${m.state}${m.duty ? ` · ${m.duty}` : ""}`;
   const description = m.sentence.slice(0, 160);
   return {
     title: `${title} | ISEYC`,
     description,
-    openGraph: { title, description, siteName: "ISEYC 2027 Civic Mandate" },
+    openGraph: { title, description, siteName: PRODUCT_NAME },
   };
 }
 
@@ -73,9 +76,7 @@ export default async function MandateDetailPage({ params }: Props) {
   }
 
   const where = [m.state, m.lga].filter(Boolean).join(" · ");
-  const briefHref = m.state
-    ? `/brief?state=${encodeURIComponent(m.state)}`
-    : "/brief";
+  const briefHref = m.state ? `/brief?state=${encodeURIComponent(m.state)}` : "/brief";
   const mapRow = m.duty ? rowsForDuty(m.duty) : undefined;
 
   return (
@@ -83,7 +84,7 @@ export default async function MandateDetailPage({ params }: Props) {
       <div className="mb-6 flex items-center justify-center gap-3">
         <img src={ISEYC_SEAL_SRC} alt="ISEYC" width={48} height={48} />
         <div className="text-left">
-          <p className="text-[10px] uppercase tracking-widest text-gold-600">ISEYC 2027 Civic Mandate</p>
+          <p className="text-[10px] uppercase tracking-widest text-gold-600">{PRODUCT_NAME}</p>
           <p className="text-xs font-semibold text-forest-700">{PUBLISHED_DEMAND_LABEL}</p>
         </div>
       </div>
@@ -118,6 +119,33 @@ export default async function MandateDetailPage({ params }: Props) {
 
         <p className="mt-5 text-[11px] leading-snug text-forest-500">{PUBLISHED_DEMAND_HINT}</p>
       </article>
+
+      <div className="mt-4">
+        <TrackMandateButton id={m.id} sentence={m.sentence} state={m.state} duty={m.duty} />
+      </div>
+
+      <WhatChangedTimeline
+        mandate={{
+          id: m.id,
+          sentence: m.sentence,
+          state: m.state,
+          lga: m.lga,
+          duty: m.duty,
+          office: m.office,
+          created: m.created,
+          status: "Published",
+        }}
+      />
+
+      <MandateStoryDraftPanel
+        id={m.id}
+        sentence={m.sentence}
+        state={m.state}
+        lga={m.lga}
+        duty={m.duty}
+        office={m.office}
+        created={m.created}
+      />
 
       {mapRow ? (
         <div className="mt-4 rounded-xl border border-forest-500/12 bg-cream/80 px-4 py-3">
@@ -154,11 +182,11 @@ export default async function MandateDetailPage({ params }: Props) {
         >
           View State Civic Brief{m.state ? ` · ${m.state}` : ""}
         </Link>
-        <Link href="/map" className="text-xs text-forest-600 underline underline-offset-2">
-          Responsibility map
+        <Link href="/tracked" className="text-xs text-forest-600 underline underline-offset-2">
+          Tracked on this device
         </Link>
-        <Link href="/about" className="text-xs text-forest-600 underline underline-offset-2">
-          Non-partisan charter
+        <Link href="/methodology" className="text-xs text-forest-600 underline underline-offset-2">
+          Methodology
         </Link>
       </div>
     </div>
