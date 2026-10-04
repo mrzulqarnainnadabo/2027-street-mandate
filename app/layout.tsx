@@ -2,22 +2,21 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import FreezeBanner from "@/components/FreezeBanner";
+import { PRODUCT_NAME, PRODUCT_TAGLINE } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "ISEYC 2027 Civic Mandate",
-  description:
-    "Don't tell us who you'll vote for. Tell them what they must deliver. Non-partisan civic mandates by ISEYC.",
+  title: PRODUCT_NAME,
+  description: `${PRODUCT_TAGLINE} Non-partisan civic mandates by ISEYC.`,
   icons: { icon: "/iseyc-seal.svg", apple: "/iseyc-seal.svg" },
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
-    title: "ISEYC Mandate",
+    title: "Civic Mandate",
     statusBarStyle: "default",
   },
   openGraph: {
-    title: "ISEYC 2027 Civic Mandate",
-    description:
-      "Don't tell us who you'll vote for. Tell them what they must deliver.",
+    title: PRODUCT_NAME,
+    description: PRODUCT_TAGLINE,
     type: "website",
     siteName: "ISEYC",
   },

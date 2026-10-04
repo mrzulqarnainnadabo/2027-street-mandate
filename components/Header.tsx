@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ISEYC_SEAL_SRC } from "@/lib/brand";
+import { ISEYC_SEAL_SRC, PRODUCT_NAME } from "@/lib/brand";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLang } from "@/components/LanguageProvider";
 
@@ -21,21 +21,30 @@ export default function Header() {
           />
           <div className="min-w-0 text-left">
             <div className="truncate font-display text-[13px] font-bold leading-tight text-forest-800">
-              ISEYC 2027 Civic Mandate
+              {PRODUCT_NAME}
             </div>
             <div className="truncate text-[10px] text-forest-500">{t("header.tagline")}</div>
           </div>
         </Link>
-        <nav className="flex shrink-0 items-center gap-2 text-[11px] font-semibold text-forest-700 sm:gap-3">
+        <nav
+          className="flex shrink-0 flex-wrap items-center justify-end gap-x-2 gap-y-1 text-[11px] font-semibold text-forest-700 sm:gap-x-3"
+          aria-label="Primary"
+        >
           <LanguageSwitcher />
-          <Link href="/map" className="underline-offset-2 hover:underline">
-            Map
+          <Link href="/states" className="underline-offset-2 hover:underline">
+            States
+          </Link>
+          <Link href="/blueprints" className="underline-offset-2 hover:underline">
+            Blueprints
+          </Link>
+          <Link href="/profiles" className="underline-offset-2 hover:underline">
+            Profiles
           </Link>
           <Link href="/brief" className="underline-offset-2 hover:underline">
             {t("header.brief")}
           </Link>
-          <Link href="/about" className="underline-offset-2 hover:underline">
-            {t("header.charter")}
+          <Link href="/methodology" className="underline-offset-2 hover:underline">
+            Method
           </Link>
         </nav>
       </div>
