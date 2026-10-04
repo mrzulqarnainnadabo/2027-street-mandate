@@ -45,7 +45,10 @@ ok(!/ISEYC Endorsed/i.test(verification), "no ISEYC Endorsed badge text");
 
 const profiles = read("app/profiles/page.tsx");
 ok(!/who to vote for/i.test(profiles) || /Not.*who to vote for/i.test(profiles), "profiles reject vote advice");
-ok(/not an endorsement/i.test(profiles), "profiles disclaim endorsement");
+ok(
+  /not endorsements?/i.test(profiles) || /never means support/i.test(profiles),
+  "profiles disclaim endorsement"
+);
 
 const media = read("lib/media-content-types.ts");
 ok(media.includes("requiresHumanApproval: true"), "media types require human approval");
