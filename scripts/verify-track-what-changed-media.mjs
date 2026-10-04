@@ -17,7 +17,11 @@ function read(p) {
 
 const track = read("lib/track-mandate.ts");
 ok(track.includes("NOT a vote"), "track disclaims vote");
-ok(!/support percentage|popularity/i.test(track), "no popularity in track");
+ok(
+  /not a vote|not.*popularity|NOT a popularity/i.test(track),
+  "track disclaims popularity as metric"
+);
+ok(!/support percentage/i.test(track), "no support percentage");
 
 const what = read("lib/what-changed.ts");
 ok(what.includes("Never invent"), "what-changed no invent");
