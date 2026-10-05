@@ -32,7 +32,7 @@ export default function SuccessPanel({
   const reference = mandateId ? `ISEYC-${mandateId.slice(0, 8).toUpperCase()}` : null;
 
   const shareBody = [
-    "I submitted a civic mandate on ISEYC’s 2027 Civic Mandate (under review).",
+    "I submitted a civic mandate on Civic Mandate Nigeria (under review).",
     "",
     `"${sentence}"`,
     `— from ${state}`,
@@ -46,7 +46,7 @@ export default function SuccessPanel({
 
   async function onNative() {
     const result = await shareNative({
-      title: "ISEYC 2027 Civic Mandate",
+      title: "Civic Mandate Nigeria",
       text: shareBody,
       url: homeUrl,
     });
