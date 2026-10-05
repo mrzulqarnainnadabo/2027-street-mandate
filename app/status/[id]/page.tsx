@@ -32,7 +32,7 @@ function statusCopy(status: string): { label: string; message: string } {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   return {
-    title: `Submission status ${referenceFor(id)} | ISEYC 2027 Civic Mandate`,
+    title: `Submission status ${referenceFor(id)} | Civic Mandate Nigeria`,
   };
 }
 
@@ -78,7 +78,7 @@ export default async function StatusPage({ params }: Props) {
       <div className="mb-6 flex items-center justify-center gap-3">
         <img src={ISEYC_SEAL_SRC} alt="ISEYC" width={48} height={48} />
         <div className="text-left">
-          <p className="text-[10px] uppercase tracking-widest text-gold-600">ISEYC 2027 Civic Mandate</p>
+          <p className="text-[10px] uppercase tracking-widest text-gold-600">Civic Mandate Nigeria</p>
           <p className="text-xs text-forest-600">Submission receipt</p>
         </div>
       </div>
