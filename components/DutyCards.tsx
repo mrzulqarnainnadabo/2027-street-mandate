@@ -10,18 +10,21 @@ export default function DutyCards({
   onSelect: (id: string) => void;
 }) {
   return (
-    <section className="px-4" aria-labelledby="duty-step-heading">
-      <h2
-        id="duty-step-heading"
-        className="mb-1 text-center font-display text-base font-bold text-forest-800"
-      >
-        What must public office deliver?
-      </h2>
-      <p className="mb-4 text-center text-[11px] text-forest-500">
-        Step 1 · Pick one duty of government
-      </p>
+    <section className="px-4 pt-6" aria-labelledby="duty-step-heading">
+      <div className="mb-4 text-center">
+        <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-forest-500">
+          Step 01
+        </p>
+        <h2
+          id="duty-step-heading"
+          className="mt-1 font-display text-base font-bold text-forest-800"
+        >
+          What must public office deliver?
+        </h2>
+        <p className="mt-1 text-[11px] text-forest-500">Pick one duty of government</p>
+      </div>
       <div
-        className="grid grid-cols-1 gap-1.5 sm:grid-cols-2"
+        className="grid grid-cols-1 gap-2 sm:grid-cols-2"
         role="group"
         aria-label="Duty of government"
       >
@@ -33,14 +36,14 @@ export default function DutyCards({
               type="button"
               onClick={() => onSelect(m.id)}
               aria-pressed={active}
-              className={`flex min-h-[48px] items-center gap-3 rounded-lg border px-3 py-3 text-left transition active:scale-[0.99] ${
+              className={`flex min-h-[52px] items-center gap-3 rounded-md border px-3 py-3 text-left transition active:scale-[0.99] ${
                 active
                   ? "border-forest-500 bg-forest-50 ring-1 ring-forest-500"
                   : "border-forest-500/12 bg-white hover:border-forest-500/30"
               }`}
             >
               <span
-                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-sm ${
+                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-base ${
                   active ? "bg-forest-500 text-cream" : "bg-forest-50 text-forest-700"
                 }`}
                 aria-hidden

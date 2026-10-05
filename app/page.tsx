@@ -77,7 +77,7 @@ export default function Home() {
   }
 
   return (
-    <div className="mx-auto min-h-screen max-w-2xl">
+    <div className="mx-auto min-h-screen max-w-3xl">
       <Header />
       <main>
         <Hero total={stats.total} states={stats.states} pulseStatus={stats.status} />
@@ -91,8 +91,10 @@ export default function Home() {
                 you submit and ISEYC publishes.
               </p>
             ) : null}
-            <DutyCards selected={duty} onSelect={setDuty} />
-            {duty && <FormPanel duty={duty} onSuccess={handleSuccess} />}
+            <div id="mandate-form" className="scroll-mt-20">
+              <DutyCards selected={duty} onSelect={setDuty} />
+              {duty && <FormPanel duty={duty} onSuccess={handleSuccess} />}
+            </div>
           </>
         ) : (
           <SuccessPanel
@@ -103,7 +105,9 @@ export default function Home() {
           />
         )}
 
-        <LivePulse />
+        <div id="civic-pulse" className="scroll-mt-16">
+          <LivePulse />
+        </div>
       </main>
       <Footer />
     </div>
