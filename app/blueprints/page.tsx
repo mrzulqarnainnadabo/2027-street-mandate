@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { getPublishedBlueprints } from "@/lib/civic-record/fetch-published-blueprints";
 import { CIVIC_RECORD_DUTY_OPTIONS } from "@/lib/civic-record/duties";
 
@@ -23,13 +25,32 @@ export default async function BlueprintsPage({ searchParams }: Props) {
   const duties = Array.from(new Set(data.proposals.map((p) => p.dutyOrPolicyArea))).sort();
 
   return (
-    <main className="mx-auto min-h-screen max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
+    <>
+    <Header />
+    <main className="mx-auto min-h-screen max-w-3xl px-4 py-8 sm:px-6 sm:py-12">
       <header className="border-b border-forest-500/15 pb-6">
         <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gold-600">ISEYC Civic Record</p>
         <h1 className="mt-2 font-display text-3xl font-bold text-forest-900">Public Blueprint Register</h1>
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-forest-700">
           Documented public proposals, presented as public records rather than endorsements or rankings.
           Verification confirms that a cited source contains the recorded statement — not that ISEYC certified the political truth of the proposal.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Link
+            href="/blueprints/submit"
+            className="inline-flex min-h-11 items-center rounded-lg bg-forest-800 px-4 text-xs font-bold text-white"
+          >
+            Submit a blueprint for review
+          </Link>
+          <Link
+            href="/"
+            className="inline-flex min-h-11 items-center rounded-lg border border-forest-500/20 px-4 text-xs font-semibold text-forest-800"
+          >
+            Citizen mandates
+          </Link>
+        </div>
+        <p className="mt-3 text-[11px] leading-relaxed text-forest-600">
+          Equal process. No paid ranking or faster publication. Submission creates New status only.
         </p>
       </header>
 
@@ -75,6 +96,12 @@ export default async function BlueprintsPage({ searchParams }: Props) {
             This register only displays records that have completed the ISEYC publication process.
             Draft or unverified material is intentionally not shown.
           </p>
+          <Link
+            href="/blueprints/submit"
+            className="mt-4 inline-flex min-h-11 items-center rounded-lg border border-forest-500/25 px-4 text-xs font-bold text-forest-800"
+          >
+            Open submission form
+          </Link>
         </section>
       ) : (
         <section className="mt-4 grid gap-4">
@@ -98,5 +125,7 @@ export default async function BlueprintsPage({ searchParams }: Props) {
         </section>
       )}
     </main>
+    <Footer />
+    </>
   );
 }
