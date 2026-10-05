@@ -41,7 +41,7 @@ function isHttpUrl(s: string): boolean {
 
 /**
  * Persist a public-facing Blueprint submission as Status=New, Verification=UNVERIFIED.
- * Publication Decision left unset — operators must dual-review.
+ * Publication Decision starts as Pending — operators must dual-review before Publish.
  */
 export async function submitBlueprintRecord(input: BlueprintSubmitInput): Promise<{ id: string }> {
   const validation = validateBlueprintDraft(input);
@@ -87,6 +87,7 @@ export async function submitBlueprintRecord(input: BlueprintSubmitInput): Promis
     Verification: { select: { name: "UNVERIFIED" } },
     Status: { select: { name: "New" } },
     "Geography Scope": rt(geography),
+    "Publication Decision": { select: { name: "Pending" } },
   };
 
   if (isHttpUrl(source)) {
