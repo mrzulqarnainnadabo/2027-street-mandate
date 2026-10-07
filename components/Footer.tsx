@@ -16,11 +16,14 @@ export default function Footer() {
             />
             <div>
               <p className="font-display text-sm font-bold text-cream">{PRODUCT_NAME}</p>
-              <p className="text-[10px] uppercase tracking-[0.14em] text-gold-400">ISEYC</p>
+              <p className="text-[10px] uppercase tracking-[0.14em] text-gold-400">
+                ISEYC · Non-partisan
+              </p>
             </div>
           </div>
-          <p className="max-w-xs text-xs leading-relaxed text-cream/70">
-            Non-partisan public civic instrument. No candidate rankings. No party colours as scores.
+          <p className="max-w-xs text-xs leading-relaxed text-cream/75">
+            A reviewed public record of citizen demands on public office — organised by place and
+            responsibility. Not a poll, ranking, or campaign tool.
           </p>
         </div>
 
@@ -29,25 +32,25 @@ export default function Footer() {
           aria-label="Footer"
         >
           <Link href="/" className="text-gold-400 underline-offset-2 hover:underline">
-            Mandates
+            Home
+          </Link>
+          <Link href="/intelligence" className="text-gold-400 underline-offset-2 hover:underline">
+            Intelligence
           </Link>
           <Link href="/states" className="text-gold-400 underline-offset-2 hover:underline">
             States
           </Link>
+          <Link href="/brief" className="text-gold-400 underline-offset-2 hover:underline">
+            State Brief
+          </Link>
           <Link href="/blueprints" className="text-gold-400 underline-offset-2 hover:underline">
             Blueprints
           </Link>
-          <Link href="/profiles" className="text-gold-400 underline-offset-2 hover:underline">
-            Profiles
-          </Link>
-          <Link href="/brief" className="text-gold-400 underline-offset-2 hover:underline">
-            Briefs
+          <Link href="/map" className="text-gold-400 underline-offset-2 hover:underline">
+            Responsibility map
           </Link>
           <Link href="/methodology" className="text-gold-400 underline-offset-2 hover:underline">
             Methodology
-          </Link>
-          <Link href="/map" className="text-gold-400 underline-offset-2 hover:underline">
-            Responsibility map
           </Link>
           <Link href="/about" className="text-gold-400 underline-offset-2 hover:underline">
             Charter
