@@ -112,7 +112,7 @@ export default function FormPanel({
         if (res.status >= 500 || res.status === 503) {
           throw new Error(
             data.error ||
-              "Network or server problem. Your draft is saved on this phone — try again in a moment."
+              "Network or server problem. Your draft is saved on this device — try again in a moment."
           );
         }
         throw new Error(data.error || "Failed");
@@ -123,7 +123,7 @@ export default function FormPanel({
     } catch (err: any) {
       setError(
         err.message ||
-          "Something went wrong. Your draft is saved on this phone — try again when the network is stable."
+          "Something went wrong. Your draft is saved on this device — try again when the network is stable."
       );
     } finally {
       submittingRef.current = false;
@@ -141,8 +141,29 @@ export default function FormPanel({
           <h2 className="mt-1 font-display text-lg font-bold text-forest-900">{t("form.title")}</h2>
           <p className="mt-1 text-xs leading-relaxed text-forest-600">{t("form.intro")}</p>
           <p className="mt-2 text-[10px] leading-snug text-forest-500">
-            Drafts stay on this phone only until you submit. Closing the tab will not erase them.
+            Drafts stay on this device only until you submit. Closing the tab will not erase them.
           </p>
+          <div className="mt-3 rounded-md border border-forest-500/15 bg-forest-50/80 px-3 py-2.5 text-[11px] leading-snug text-forest-700">
+            <p className="font-semibold text-forest-900">What happens after you submit</p>
+            <ul className="mt-1.5 list-disc space-y-1 pl-4">
+              <li>
+                Your demand is saved as <strong>New</strong> and reviewed by ISEYC. It is{" "}
+                <strong>not public yet</strong>.
+              </li>
+              <li>
+                If published, the <strong>demand text</strong>, <strong>duty</strong>,{" "}
+                <strong>office</strong>, <strong>state</strong>, and <strong>LGA</strong> (if given)
+                may appear on Civic Pulse, State Brief, and Intelligence.
+              </li>
+              <li>
+                Optional age/gender and device signals stay <strong>off the public record</strong>.
+              </li>
+              <li>
+                Publication does not mean government will act. It means the ask entered the public
+                civic record.
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="mb-5 grid gap-2 text-[11px] leading-snug sm:grid-cols-2">
