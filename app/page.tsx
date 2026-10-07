@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import HowItWorks from "@/components/HowItWorks";
+import TrustStandards from "@/components/TrustStandards";
 import DutyCards from "@/components/DutyCards";
 import FormPanel from "@/components/FormPanel";
 import SuccessPanel from "@/components/SuccessPanel";
@@ -81,14 +82,15 @@ export default function Home() {
       <Header />
       <main>
         <Hero total={stats.total} states={stats.states} pulseStatus={stats.status} />
+        <TrustStandards />
 
         {!done ? (
           <>
             <HowItWorks />
             {draftRestored && duty ? (
               <p className="mx-4 mb-2 rounded-md border border-forest-500/15 bg-forest-50 px-3 py-2 text-center text-[11px] text-forest-700">
-                Draft restored on this phone. Finish and submit when ready — nothing is public until
-                you submit and ISEYC publishes.
+                Draft restored on this device. Nothing is public until you submit and ISEYC marks the
+                record Published.
               </p>
             ) : null}
             <div id="mandate-form" className="scroll-mt-20">

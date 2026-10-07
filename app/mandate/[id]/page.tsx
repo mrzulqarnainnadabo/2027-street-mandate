@@ -102,29 +102,38 @@ export default async function MandateDetailPage({ params }: Props) {
           <dl className="mt-5 grid gap-2 text-xs text-forest-600">
             {where ? (
               <div className="flex justify-between gap-2 border-t border-forest-500/10 pt-2">
-                <dt className="font-medium text-forest-500">Location</dt>
+                <dt className="font-medium text-forest-500">Where</dt>
                 <dd className="text-right text-forest-800">{where}</dd>
               </div>
-            ) : null}
+            ) : (
+              <div className="flex justify-between gap-2 border-t border-forest-500/10 pt-2">
+                <dt className="font-medium text-forest-500">Where</dt>
+                <dd className="text-right text-forest-800">{NOT_PUBLICLY_SPECIFIED}</dd>
+              </div>
+            )}
             <div className="flex justify-between gap-2 border-t border-forest-500/10 pt-2">
-              <dt className="font-medium text-forest-500">Office</dt>
+              <dt className="font-medium text-forest-500">Responsibility named</dt>
               <dd className="text-right text-forest-800">{m.office || NOT_PUBLICLY_SPECIFIED}</dd>
             </div>
             <div className="flex justify-between gap-2 border-t border-forest-500/10 pt-2">
-              <dt className="font-medium text-forest-500">Duty</dt>
+              <dt className="font-medium text-forest-500">Public-service duty</dt>
               <dd className="text-right text-forest-800">{m.duty || NOT_PUBLICLY_SPECIFIED}</dd>
             </div>
             <div className="flex justify-between gap-2 border-t border-forest-500/10 pt-2">
               <dt className="font-medium text-forest-500">Record type</dt>
-              <dd className="text-right text-forest-800">Citizen demand</dd>
+              <dd className="text-right text-forest-800">Citizen demand · Reviewed</dd>
             </div>
             <div className="flex justify-between gap-2 border-t border-forest-500/10 pt-2">
-              <dt className="font-medium text-forest-500">Status</dt>
+              <dt className="font-medium text-forest-500">Publication status</dt>
               <dd className="text-right text-forest-800">Published</dd>
             </div>
           </dl>
 
           <p className="mt-5 text-[11px] leading-snug text-forest-500">{PUBLISHED_DEMAND_HINT}</p>
+          <p className="mt-2 text-[11px] leading-snug text-forest-500">
+            Submission is not government action. Response and evidence stages appear only when
+            documented on the public record.
+          </p>
         </article>
 
         <div className="mt-4">

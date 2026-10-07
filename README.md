@@ -1,4 +1,4 @@
-# ISEYC 2027 Civic Mandate
+# Civic Mandate Nigeria
 
 > Don’t tell them who you’ll vote for. Tell them what they must deliver.
 
@@ -14,6 +14,7 @@ ISEYC moderates. Only **Published** rows appear on:
 
 - **Civic Pulse** (`/`) — public wall by duty
 - **State Civic Brief** (`/brief?state=Kaduna`) — State × Duty × Office (+ copy / print)
+- **Civic Intelligence** (`/intelligence`) — synthesis of published records only (not national public opinion)
 - **Mandate page** (`/mandate/[id]`) — single published receipt
 - **Status receipt** (`/status/[id]`) — private-ish submission reference (not the public wall)
 
@@ -69,7 +70,11 @@ Do not rename fields in Notion without a code migration.
 npm install && npm run build
 ```
 
-## Blueprint Register governance\n\nBlueprints use the existing Notion pilot database. Public publication requires an inspectable source, non-UNVERIFIED verification, Reviewer A approval, Reviewer B approval by a different reviewer, and an explicit Publication Decision = Publish. The guarded operator review endpoint requires `Authorization: Bearer <CIVIC_OPERATOR_KEY>` and is disabled unless `CIVIC_OPERATOR_KEY` is configured. Payment or actor requests never alter publication state.\n\n## Product rule
+## Blueprint Register governance
+
+Blueprints use the existing Notion pilot database. Public publication requires an inspectable source, non-UNVERIFIED verification, Reviewer A approval, Reviewer B approval by a different reviewer, and an explicit Publication Decision = Publish. The guarded operator review endpoint requires `Authorization: Bearer <CIVIC_OPERATOR_KEY>` and is disabled unless `CIVIC_OPERATOR_KEY` is configured. Payment or actor requests never alter publication state.
+
+## Product rule
 
 Measure **demands by duty and place**. Never candidate scores, parties, or “who is leading.”
 

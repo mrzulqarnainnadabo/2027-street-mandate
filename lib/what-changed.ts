@@ -50,22 +50,25 @@ export function buildWhatChangedTimeline(m: PublicMandateFacts): TimelineEvent[]
 
   events.push({
     id: "response",
-    label: "Institutional response",
-    detail: "No public response is recorded on this page yet.",
+    label: "Response",
+    detail:
+      "No public response recorded. Absence of a response here does not prove that no institution has acted — only that none is documented on this public record.",
     confirmed: false,
   });
 
   events.push({
     id: "evidence",
-    label: "Public evidence",
-    detail: "No public evidence is attached on this page yet.",
+    label: "Evidence",
+    detail:
+      "No supporting evidence recorded on this public page. Evidence, when added, will be source-backed and human-reviewed.",
     confirmed: false,
   });
 
   events.push({
-    id: "resolution",
-    label: "Resolution",
-    detail: "No public resolution status is recorded on this page yet.",
+    id: "outcome",
+    label: "What changed",
+    detail:
+      "No public outcome is recorded. We only describe change when documented evidence supports it.",
     confirmed: false,
   });
 

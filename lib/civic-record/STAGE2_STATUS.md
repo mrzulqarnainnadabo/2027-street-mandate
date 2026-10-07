@@ -1,6 +1,16 @@
-# Civic Record — Stage 2 / early Stage 3 status
+# Civic Record — Stage status
 
-**Deploy:** Do not merge to `main` until founder explicitly orders merge.
+**Deploy rule:** Do not merge feature branches to `main` or deploy until the founder explicitly orders it.
+
+## Live on main (after PR #58 / #59)
+
+- Citizen Mandate lifecycle (submit → New → human Publish → Pulse / Brief)
+- Public data boundary (`mapPageToVoice` allowlist)
+- State Civic Brief + professional share copy
+- Public Blueprint Register routes (`/blueprints`, submit, detail) with dual-review gate
+- Operator blueprint review console (`/operators/blueprint-review`)
+- Product name: **Civic Mandate Nigeria**
+- Civic Intelligence foundation (`/intelligence`, `/api/civic-intelligence`) — Published-record synthesis only (this branch)
 
 ## Stage 2 complete
 
@@ -9,25 +19,24 @@
 - Notion pilots: Blueprint, Commitment, Evidence + views + ops hub
 - IDs in `notion-pilot-ids.ts`
 
-## Stage 3 started (library only)
+## Stage 3 in progress
 
 - `blueprint-public.ts` — public allowlist type
 - `fetch-published-blueprints.ts` — Published-only Notion reader
-- **No public route or page yet**
-- Optional env: `NOTION_BLUEPRINT_DATABASE_ID` (falls back to pilot id in code for staff tooling)
+- Public Blueprint list/detail pages exist; volume still limited by real dual-reviewed rows
+- Optional env: `NOTION_BLUEPRINT_DATABASE_ID`
 
-## Blocked on human pilot data
+## Still pilot / incomplete
 
-Enter 5–10 real public-source Blueprint rows, dual-review, set Published — then wire a calm public list if ordered.
+- Commitment + Evidence public surfaces (library present; thin public UX)
+- Demand clustering with human-correctable taxonomy
+- National-scale data layer (Notion remains appropriate until volume thresholds are hit)
+- In-app mandate review console (operators still primarily use Notion for Mandate Status)
+- Correction path automation (documented gap)
 
-## Separate
+## Governance constants
 
-PR #39 Mandate map UX — still unmerged.
-
-## Operator review console (branch work)
-
-- `/operators/blueprint-review` — queue + Reviewer A/B + publish/hold
-- Auth: `CIVIC_OPERATOR_KEY` via httpOnly session (never `NEXT_PUBLIC_`)
-- Mutations: `performBlueprintReviewMutation` (shared by API + server actions)
-- Pure rules: `blueprint-review-rules.ts` (unit-testable without Notion)
-- **Not on production until explicit deploy/merge**
+- Published-only public boundary
+- No rankings, vote advice, or candidate scores
+- Media drafts require human approval
+- Monetization must not buy editorial influence
