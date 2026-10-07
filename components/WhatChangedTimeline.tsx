@@ -5,9 +5,12 @@ export default function WhatChangedTimeline({ mandate }: { mandate: PublicMandat
 
   return (
     <section className="mt-4 rounded-xl border border-forest-500/12 bg-white px-4 py-4">
-      <h2 className="text-[10px] font-bold uppercase tracking-wide text-forest-500">What changed</h2>
-      <p className="mt-1 text-[11px] text-forest-500">
-        Only confirmed public facts. Missing stages are stated honestly — not invented.
+      <h2 className="text-[10px] font-bold uppercase tracking-wide text-forest-500">
+        Accountability path
+      </h2>
+      <p className="mt-1 text-[11px] leading-snug text-forest-500">
+        Demand → responsibility → response → evidence → change. Only confirmed public facts are
+        marked Confirmed. Missing stages are stated honestly — never invented.
       </p>
       <ol className="mt-3 space-y-3">
         {events.map((e) => (
