@@ -15,7 +15,7 @@ export async function GET() {
   return NextResponse.json(
     {
       ok: true,
-      service: "iseyc-2027-civic-mandate",
+      service: "civic-mandate-nigeria",
       notionConfigured,
       freezeBanner: process.env.NEXT_PUBLIC_CIVIC_FREEZE === "1",
       responsibilityMapVersion: RESPONSIBILITY_MAP_VERSION,

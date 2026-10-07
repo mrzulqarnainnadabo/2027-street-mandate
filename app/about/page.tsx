@@ -3,9 +3,9 @@ import { ISEYC_SEAL_SRC, ISEYC_WEB, ISEYC_EMAIL } from "@/lib/brand";
 import { PUBLISHED_DEMAND_LABEL } from "@/lib/record-classes";
 
 export const metadata = {
-  title: "About & Non-Partisan Charter | ISEYC 2027 Civic Mandate",
+  title: "About & Non-Partisan Charter | Civic Mandate Nigeria",
   description:
-    "ISEYC 2027 Civic Mandate is a non-partisan platform for citizen demands on public office — not candidate rankings.",
+    "Civic Mandate Nigeria is a non-partisan platform for citizen demands on public office — not candidate rankings.",
 };
 
 export default function AboutPage() {
@@ -23,7 +23,7 @@ export default function AboutPage() {
       <h1 className="text-center font-display text-2xl font-bold text-forest-900">
         Non-Partisan Charter
       </h1>
-      <p className="mt-2 text-center text-sm text-forest-600">ISEYC 2027 Civic Mandate</p>
+      <p className="mt-2 text-center text-sm text-forest-600">Civic Mandate Nigeria</p>
       <p className="mt-3 text-center text-xs font-medium text-gold-600">
         Don’t tell them who you’ll vote for. Tell them what they must deliver.
       </p>
@@ -53,49 +53,25 @@ export default function AboutPage() {
 
         <h2 className="pt-1 font-display text-base font-bold text-forest-900">Record type</h2>
         <p>
-          Published items are labelled <strong>{PUBLISHED_DEMAND_LABEL}</strong>. That means a citizen
-          asked for a concrete delivery outcome and ISEYC accepted the text for the public wall. It does{" "}
-          <strong>not</strong> mean the demand was verified as delivered, scored, or matched to a candidate.
+          Published rows are labelled <strong>{PUBLISHED_DEMAND_LABEL}</strong>. That label means
+          the demand passed human review for clarity and safety. It does not mean the demand is a
+          vote, a ranking, or an endorsement.
         </p>
+
+        <h2 className="pt-1 font-display text-base font-bold text-forest-900">Publication gate</h2>
+        <ul className="list-disc space-y-1 pl-5">
+          <li>Only submissions marked Published appear on Civic Pulse, State Civic Briefs, and public detail pages.</li>
+          <li>ISEYC may refuse threats, hate, party slogans, candidate promotion, empty noise, or content that risks harm.</li>
+          <li>Empty public record is not a ranking and not a system failure.</li>
+        </ul>
 
         <h2 className="pt-1 font-display text-base font-bold text-forest-900">Responsibility map</h2>
         <p>
-          The{" "}
-          <Link href="/map" className="font-semibold underline underline-offset-2">
-            responsibility map
-          </Link>{" "}
-          is an ISEYC pilot classification of which offices often relate to a duty (Primary, Shared, or
-          Unclear). It is not a court judgment and not a ranking of persons.
+          The responsibility map is an ISEYC pilot classification of which offices often relate to a duty (Primary, Shared, or
+          Unclear). It is a navigation aid, not a legal finding and not a ranking of people.
         </p>
 
-        <h2 className="pt-1 font-display text-base font-bold text-forest-900">Moderation</h2>
-        <p>
-          Submissions start as <strong>New</strong>. Only <strong>Published</strong> mandates
-          appear on the public wall and on shareable detail pages. We publish specific service
-          demands and public-interest expectations. We reject threats, hate, personal attacks,
-          party slogans, candidate promotion, harassment, and empty noise.
-        </p>
-
-        <h2 className="pt-1 font-display text-base font-bold text-forest-900">
-          How the public record is made
-        </h2>
-        <ol className="list-decimal space-y-1 pl-5">
-          <li>You submit one concrete service or outcome, with a state and responsible office.</li>
-          <li>ISEYC reviews the submission for clarity, public interest, safety, and non-partisanship.</li>
-          <li>A submission remains private to the moderation process while its status is New or under review.</li>
-          <li>Only submissions marked Published appear on Civic Pulse, State Civic Briefs, and public detail pages.</li>
-          <li>Similar demands may be grouped for clarity. Grouping does not mean the voices are votes or a popularity score.</li>
-        </ol>
-
-        <h2 className="pt-1 font-display text-base font-bold text-forest-900">What the numbers mean</h2>
-        <p>
-          A published count is the number of published records successfully loaded for the selected
-          scope and time of access. It is not a poll, vote total, ranking, endorsement, or claim to
-          represent every Nigerian. If the civic data service fails, the correct result is a temporary
-          unavailability message — never a made-up zero.
-        </p>
-
-        <h2 className="pt-1 font-display text-base font-bold text-forest-900">What happens after publication</h2>
+        <h2 className="pt-1 font-display text-base font-bold text-forest-900">Use of published demands</h2>
         <p>
           Publication preserves a citizen demand as public civic data. ISEYC may use briefs to request
           attention and document responses, but this platform does not provide emergency assistance,
@@ -133,7 +109,7 @@ export default function AboutPage() {
           <a className="underline" href={`mailto:${ISEYC_EMAIL}`}>
             {ISEYC_EMAIL}
           </a>
-          {" · "}
+          {" \u00b7 "}
           <a className="underline" href={ISEYC_WEB} target="_blank" rel="noreferrer">
             www.iseyc.com.ng
           </a>
@@ -145,7 +121,7 @@ export default function AboutPage() {
           Responsibility map
         </Link>
         <Link href="/" className="text-sm font-semibold text-forest-600 underline underline-offset-2">
-          ← Back to Civic Mandate
+          \u2190 Back to Civic Mandate
         </Link>
       </p>
     </div>

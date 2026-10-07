@@ -87,7 +87,8 @@ function buildPlainBrief(
   });
   const lgas = lgaSummary(forState);
   const lines: string[] = [
-    `ISEYC 2027 Civic Mandate — ${state} State Civic Brief`,
+    `CIVIC MANDATE NIGERIA`,
+    `${state} State Civic Brief`,
     week.label,
     `Generated: ${generated}`,
     ``,
@@ -131,7 +132,8 @@ function buildPlainBrief(
   lines.push(briefUrl(state));
   lines.push(`Responsibility map: https://2027-street-mandate.vercel.app/map`);
   lines.push(`Add your own clear demand: https://2027-street-mandate.vercel.app/`);
-  lines.push(`— ISEYC · non-partisan · duty over personality`);
+  lines.push(``);
+  lines.push(`— ISEYC · Civic Mandate Nigeria · Non-partisan · Duty over personality`);
   return lines.join("\n");
 }
 
@@ -141,7 +143,8 @@ function buildShortBrief(
   week: { label: string }
 ): string {
   const lines: string[] = [
-    `ISEYC 2027 Civic Mandate — ${state} State Civic Brief`,
+    `CIVIC MANDATE NIGERIA`,
+    `${state} State Civic Brief`,
     ``,
     `This is not a poll and not a ranking.`,
     `It is a public record of what citizens are asking public office to deliver.`,
@@ -171,13 +174,13 @@ function buildShortBrief(
   }
 
   lines.push(``);
-  lines.push(`Read the full brief (share with ward groups as public memory, not a scoreboard):`);
+  lines.push(`Full brief (share with ward groups as public memory, not a scoreboard):`);
   lines.push(briefUrl(state));
   lines.push(``);
   lines.push(`Add your own clear demand:`);
   lines.push(`https://2027-street-mandate.vercel.app/`);
   lines.push(``);
-  lines.push(`— ISEYC · non-partisan · duty over personality`);
+  lines.push(`— ISEYC · Civic Mandate Nigeria · Non-partisan · Duty over personality`);
   return lines.join("\n");
 }
 
