@@ -61,9 +61,10 @@ mustNotInclude(lib, "best candidate", "no candidate language");
 mustNotInclude(lib, "who should you vote", "no vote advice");
 mustNotInclude(lib, "electability", "no electability");
 
-mustInclude(page, "a poll", "page mentions poll disclaimer");
+mustInclude(page, "opinion poll", "page mentions poll disclaimer");
 mustInclude(page, "Published records only", "page stresses published-only");
-mustInclude(page, "not a claim about", "page disclaims national opinion");
+mustInclude(page, "scientific opinion poll", "page methodology note");
+mustInclude(page, "What Nigerians are asking for", "flagship title");
 mustInclude(page, "Methodology", "page shows methodology");
 mustInclude(page, "Limitations", "page shows limitations");
 mustInclude(page, "/api/civic-intelligence", "page loads intelligence API");
