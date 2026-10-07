@@ -63,13 +63,20 @@ export default function IntelligencePage() {
           Civic Intelligence · Published records only
         </p>
         <h1 className="mt-1 font-display text-2xl font-bold text-forest-900 sm:text-3xl">
-          What published records show
+          What Nigerians are asking for
         </h1>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-forest-700">
-          A synthesis of <strong>Published</strong> Civic Mandate records after human review.
-          This is <strong>not</strong> a poll, not a ranking of politicians, and not a claim about
-          what all Nigerians think.
+          A picture of public priorities emerging from <strong>Published</strong> Civic Mandate
+          records — organised by duty, place, and named responsibility.
         </p>
+        <div className="mt-4 rounded-md border border-forest-500/15 bg-forest-50 px-3.5 py-3 text-[12px] leading-relaxed text-forest-700">
+          <p className="font-semibold text-forest-900">Important methodology note</p>
+          <p className="mt-1">
+            This is <strong>not</strong> a scientific opinion poll and should not be read as a
+            representative survey of all Nigerians. It reflects only the issues contained in
+            published Civic Mandate records after human review.
+          </p>
+        </div>
 
         {state.status === "loading" && (
           <div className="mt-8 rounded-xl border border-forest-500/15 bg-white px-4 py-8 text-center text-sm text-forest-600">
