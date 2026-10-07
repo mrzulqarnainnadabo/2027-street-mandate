@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node scripts/verify-civic-record.mjs && node scripts/verify-demand-quality.mjs && node scripts/verify-operator-auth.mjs && node scripts/verify-share-neutrality.mjs && node scripts/verify-published-boundary.mjs && node scripts/verify-civic-mandate-nigeria-shell.mjs && node scripts/verify-track-what-changed-media.mjs && node scripts/verify-blueprint-submit.mjs"
+    "test": "node scripts/verify-civic-record.mjs && node scripts/verify-demand-quality.mjs && node scripts/verify-operator-auth.mjs && node scripts/verify-share-neutrality.mjs && node scripts/verify-published-boundary.mjs && node scripts/verify-civic-mandate-nigeria-shell.mjs && node scripts/verify-track-what-changed-media.mjs && node scripts/verify-blueprint-submit.mjs && node scripts/verify-civic-intelligence.mjs"
   },
   "dependencies": {
     "@notionhq/client": "^2.2.15",
