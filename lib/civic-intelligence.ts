@@ -146,6 +146,7 @@ export function buildCivicIntelligence(
 
   const topLgas = sortByCountDesc(Array.from(lgaMap.values())).slice(0, 20);
   const lgasRepresentedFull = lgaMap.size;
+  const statesRepresented = states.length;
 
   const methodology = [
     "Only records with Status = Published after human ISEYC review are included.",
@@ -169,7 +170,9 @@ export function buildCivicIntelligence(
   }
 
   if (publishedCount === 0) {
-    limitations.push("Zero published records: the public civic memory is empty until human review publishes demands.");
+    limitations.push(
+      "Zero published records: the public civic memory is empty until human review publishes demands."
+    );
   }
 
   let framingLine: string;
@@ -185,8 +188,6 @@ export function buildCivicIntelligence(
       : "";
     framingLine = `Among ${publishedCount} published Civic Mandate record${publishedCount === 1 ? "" : "s"} from ${statesRepresented} state${statesRepresented === 1 ? "" : "s"}, these are the duties and places that appear in the public record.${topBit} This describes published records only — not national public opinion.`;
   }
-
-  const statesRepresented = states.length;
 
   return {
     version: CIVIC_INTELLIGENCE_VERSION,
@@ -222,7 +223,9 @@ export function formatIntelligencePlain(snap: CivicIntelligenceSnapshot): string
   lines.push(`States represented: ${snap.statesRepresented}`);
   lines.push(`LGAs with labels: ${snap.lgasRepresented}`);
   if (snap.periodStart || snap.periodEnd) {
-    lines.push(`Period (record created_time): ${snap.periodStart || "—"} → ${snap.periodEnd || "—"}`);
+    lines.push(
+      `Period (record created_time): ${snap.periodStart || "—"} → ${snap.periodEnd || "—"}`
+    );
   }
   if (snap.truncated) lines.push("Note: snapshot may be truncated.");
   lines.push("");
