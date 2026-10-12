@@ -26,12 +26,13 @@ export default function Hero({
       </p>
 
       <h1 className="mt-2 max-w-xl font-display text-[1.5rem] font-bold leading-[1.28] text-forest-900 sm:text-[1.75rem]">
-        What are Nigerians asking public office to deliver?
+        What is on the public civic record so far?
       </h1>
 
       <p className="mt-3 max-w-lg text-[13px] leading-relaxed text-forest-700">
-        A public record of concrete public-service demands — organised by place and
-        responsibility, reviewed before publication. Not a poll. Not a ranking. Not a campaign.
+        A growing public record of concrete public-service demands — organised by place and
+        responsibility, reviewed before publication. This is a pilot record of published submissions,
+        not a survey of all Nigerians. Not a poll. Not a ranking. Not a campaign.
       </p>
 
       <div className="mt-5 flex flex-wrap items-center gap-2.5">
@@ -86,7 +87,7 @@ export default function Hero({
 
       {showCounts && !loading && (
         <p className="mt-2 text-[11px] leading-snug text-forest-500">
-          Building Nigeria&apos;s public civic record. Counts are published records only — not
+          Building Nigeria's public civic record. Counts are published records only — not
           votes and not a survey of all Nigerians. Coverage reflects states with Published
           records, not national completeness.{" "}
           <Link href="/methodology" className="font-semibold underline underline-offset-2">
