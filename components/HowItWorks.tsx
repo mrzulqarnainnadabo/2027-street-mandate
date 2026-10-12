@@ -3,36 +3,30 @@
 import Link from "next/link";
 import { useLang } from "@/components/LanguageProvider";
 
+/**
+ * Four-step citizen journey: submit → review → publish → follow-up.
+ * Kept intentionally short for ~10-second comprehension on mobile.
+ */
 const STEPS = [
   {
-    n: "01",
-    title: "Name the public service",
-    body: "Choose the duty of government the issue concerns.",
+    n: "1",
+    title: "Submit a concrete demand",
+    body: "Name the service, the place, and the office you believe should deliver — or say you are unsure.",
   },
   {
-    n: "02",
-    title: "Point to responsibility",
-    body: "Name the office you believe should deliver — or say you are unsure.",
-  },
-  {
-    n: "03",
-    title: "Locate the issue",
-    body: "Add your state and, if you know it, the LGA.",
-  },
-  {
-    n: "04",
-    title: "One concrete demand",
-    body: "Write a clear service or outcome — not a slogan or attack.",
-  },
-  {
-    n: "05",
+    n: "2",
     title: "Human review",
-    body: "ISEYC reviews for clarity, safety, and non-partisanship.",
+    body: "ISEYC checks for clarity, safety, and non-partisanship. Submission does not guarantee publication.",
   },
   {
-    n: "06",
+    n: "3",
     title: "Public record",
-    body: "Only Published demands appear on Pulse, Briefs, and Intelligence.",
+    body: "Only Approved Published records appear on Civic Pulse, State Briefs, and Civic Intelligence.",
+  },
+  {
+    n: "4",
+    title: "Follow-up",
+    body: "Track status with your receipt link. Published records can be shared; responses and outcomes are shown only when verified.",
   },
 ] as const;
 
@@ -58,7 +52,10 @@ export default function HowItWorks() {
             key={s.n}
             className="flex gap-3 rounded-md border border-forest-500/10 bg-white px-3 py-3"
           >
-            <span className="font-display text-sm font-bold tabular-nums text-gold-600" aria-hidden>
+            <span
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-forest-50 font-display text-sm font-bold tabular-nums text-gold-700"
+              aria-hidden
+            >
               {s.n}
             </span>
             <div>
