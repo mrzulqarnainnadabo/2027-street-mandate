@@ -19,10 +19,10 @@ export default function StatesPage() {
       <Header />
       <main className="px-4 py-8">
         <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-gold-600">
-          National civic directory
+          State directory · published records
         </p>
         <h1 className="mt-1.5 font-display text-2xl font-bold text-forest-900">
-          States &amp; FCT
+          States & FCT
         </h1>
         <p className="mt-2 max-w-lg text-sm leading-relaxed text-forest-700">
           Select a state to open its <strong>State Civic Brief</strong> — published delivery demands
