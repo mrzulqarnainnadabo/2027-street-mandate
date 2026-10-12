@@ -36,13 +36,13 @@ export default function Hero({
 
       <div className="mt-5 flex flex-wrap items-center gap-2.5">
         <a href="#mandate-form" className="civic-action inline-flex">
-          Tell us what matters where you live
+          Submit a demand
         </a>
         <Link
           href="/intelligence"
           className="inline-flex min-h-[48px] items-center rounded-md border border-forest-500/20 bg-white px-4 text-sm font-semibold text-forest-800 transition hover:border-forest-500/40 hover:bg-forest-50"
         >
-          What published records show
+          Explore published records
         </Link>
       </div>
 
@@ -86,8 +86,9 @@ export default function Hero({
 
       {showCounts && !loading && (
         <p className="mt-2 text-[11px] leading-snug text-forest-500">
-          Counts are published Civic Mandate records only — not votes and not a survey of all
-          Nigerians.{" "}
+          Building Nigeria&apos;s public civic record. Counts are published records only — not
+          votes and not a survey of all Nigerians. Coverage reflects states with Published
+          records, not national completeness.{" "}
           <Link href="/methodology" className="font-semibold underline underline-offset-2">
             Methodology
           </Link>
