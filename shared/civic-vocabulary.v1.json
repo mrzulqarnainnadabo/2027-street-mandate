@@ -1,0 +1,71 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-10-14",
+  "product": "ISEYC Civic Mandate Nigeria + Civic Brain",
+  "pilotScope": {
+    "primary": "Kaduna South LGA (3–5 wards target)",
+    "note": "Pilot published records only — not nationally representative"
+  },
+  "brandColors": {
+    "forestPreferred": "#0F4D34",
+    "forestAltUsedInBrain": "#1A3C1A",
+    "gold": "#C9A84C",
+    "cream": "#F5F1E8",
+    "recommendation": "Prefer #0F4D34 as canonical forest; Brain may map #1A3C1A as deep accent until unified."
+  },
+  "duties": [
+    {"id": "Health", "label": "Health", "pillars": ["Health & Wellbeing"]},
+    {"id": "Education", "label": "Education", "pillars": ["Education & Skills"]},
+    {"id": "Security", "label": "Security", "pillars": ["Safety & Security"]},
+    {"id": "Jobs & Economic Opportunity", "label": "Jobs & Economy", "pillars": ["Jobs & Livelihoods"]},
+    {"id": "Power", "label": "Power", "pillars": ["Infrastructure & Services"]},
+    {"id": "Water", "label": "Water", "pillars": ["Infrastructure & Services"]},
+    {"id": "Roads & Transport", "label": "Roads & Transport", "pillars": ["Infrastructure & Services"]},
+    {"id": "Agriculture", "label": "Agriculture", "pillars": ["Jobs & Livelihoods"]},
+    {"id": "Housing", "label": "Housing", "pillars": ["Infrastructure & Services"]},
+    {"id": "Environment", "label": "Environment", "pillars": ["Environment & Resilience"]},
+    {"id": "Digital Infrastructure", "label": "Digital Infrastructure", "pillars": ["Infrastructure & Services"]},
+    {"id": "Youth Development", "label": "Youth Development", "pillars": ["Education & Skills", "Jobs & Livelihoods"]},
+    {"id": "Women's Development", "label": "Women's Development", "pillars": ["Inclusion & Equity"]},
+    {"id": "Social Protection", "label": "Social Protection", "pillars": ["Inclusion & Equity"]},
+    {"id": "Public Finance", "label": "Public Finance", "pillars": ["Transparency & Accountability"]},
+    {"id": "Anti-Corruption / Transparency", "label": "Transparency", "pillars": ["Transparency & Accountability"]},
+    {"id": "Justice", "label": "Justice", "pillars": ["Safety & Security", "Transparency & Accountability"]},
+    {"id": "Other", "label": "Other", "pillars": []}
+  ],
+  "responsibilityPillars": [
+    "Health & Wellbeing",
+    "Education & Skills",
+    "Safety & Security",
+    "Jobs & Livelihoods",
+    "Infrastructure & Services",
+    "Environment & Resilience",
+    "Transparency & Accountability",
+    "Inclusion & Equity"
+  ],
+  "officeTiers": [
+    {"id": "federal_executive", "label": "Federal executive"},
+    {"id": "federal_legislature", "label": "Federal legislature"},
+    {"id": "state_executive", "label": "State executive"},
+    {"id": "state_legislature", "label": "State legislature"},
+    {"id": "local_government", "label": "Local government"},
+    {"id": "ward_community", "label": "Ward / community"},
+    {"id": "specialised_agency", "label": "Specialised agency"},
+    {"id": "unclear", "label": "Unclear"}
+  ],
+  "submissionStatuses": ["New", "Published", "Rejected", "Hold"],
+  "publicLifecycle": [
+    {"id": "received", "label": "Received", "auto": false},
+    {"id": "published", "label": "Published", "auto": false},
+    {"id": "routed", "label": "Routed (human-reviewed)", "auto": false},
+    {"id": "response_received", "label": "Response received", "auto": false},
+    {"id": "no_response", "label": "No response after N days", "auto": "elapsed_label_only"},
+    {"id": "closed", "label": "Closed", "auto": false}
+  ],
+  "hardRules": [
+    "Not a poll, ranking, endorsement, or national opinion survey",
+    "Published-only public surfaces",
+    "No invented contacts or auto-messaging of officials",
+    "Every public count must show n, date range, pilot caveat"
+  ]
+}
