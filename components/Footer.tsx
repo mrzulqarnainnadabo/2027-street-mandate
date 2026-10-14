@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ISEYC_SEAL_SRC, ISEYC_EMAIL, ISEYC_WEB, PRODUCT_NAME } from "@/lib/brand";
+import { CIVIC_BRAIN_URL, ISEYC_SEAL_SRC, ISEYC_EMAIL, ISEYC_WEB, PRODUCT_NAME } from "@/lib/brand";
 
 export default function Footer() {
   return (
@@ -55,6 +55,14 @@ export default function Footer() {
           <Link href="/about" className="text-gold-400 underline-offset-2 hover:underline">
             Charter
           </Link>
+          <a
+            href={CIVIC_BRAIN_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gold-400 underline-offset-2 hover:underline"
+          >
+            Civic Brain
+          </a>
         </nav>
 
         <div className="mt-6 flex flex-col gap-1 border-t border-cream/10 pt-5 text-[11px] text-cream/60 sm:flex-row sm:items-center sm:justify-between">
