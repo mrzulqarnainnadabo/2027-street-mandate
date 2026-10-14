@@ -87,7 +87,7 @@ export default function Hero({
 
       {showCounts && !loading && (
         <p className="mt-2 text-[11px] leading-snug text-forest-500">
-          Building Nigeria's public civic record. Counts are published records only — not
+          Pilot data. Not representative of Nigeria. Counts are published records only — not
           votes and not a survey of all Nigerians. Coverage reflects states with Published
           records, not national completeness.{" "}
           <Link href="/methodology" className="font-semibold underline underline-offset-2">
