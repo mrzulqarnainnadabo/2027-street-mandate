@@ -23,7 +23,7 @@ export default function Footer() {
           </div>
           <p className="max-w-xs text-xs leading-relaxed text-cream/75">
             A reviewed public record of citizen demands on public office — organised by place and
-            responsibility. Not a poll, ranking, or campaign tool.
+            responsibility. Not a poll. Not an endorsement. Duty over personality.
           </p>
         </div>
 
@@ -65,7 +65,10 @@ export default function Footer() {
           </a>
         </nav>
 
-        <div className="mt-6 flex flex-col gap-1 border-t border-cream/10 pt-5 text-[11px] text-cream/60 sm:flex-row sm:items-center sm:justify-between">
+        <p className="mt-6 border-t border-cream/10 pt-5 text-[11px] text-cream/60">
+          ISEYC | Strictly Non-Partisan | www.iseyc.com.ng
+        </p>
+        <div className="mt-3 flex flex-col gap-1 text-[11px] text-cream/60 sm:flex-row sm:items-center sm:justify-between">
           <a
             href={ISEYC_WEB}
             target="_blank"
