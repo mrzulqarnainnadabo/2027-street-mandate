@@ -12,4 +12,4 @@ export const PRODUCT_NAME_LEGACY = "ISEYC 2027 Civic Mandate";
 export const PRODUCT_TAGLINE =
   "Don't tell us who you'll vote for. Tell them what they must deliver.";
 export const PRODUCT_DEFINITION =
-  "A non-partisan public record of what citizens ask public office to deliver — and, over time, source-backed proposals and profiles. Not a poll. Not an endorsement.";
+  "A non-partisan public record of published, human-reviewed civic demands — pilot coverage by place and duty. Not a national survey. Not a poll. Not an endorsement.";

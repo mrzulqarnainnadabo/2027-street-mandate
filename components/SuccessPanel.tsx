@@ -32,17 +32,18 @@ export default function SuccessPanel({
   const reference = mandateId ? `ISEYC-${mandateId.slice(0, 8).toUpperCase()}` : null;
 
   const shareBody = [
-    "I submitted a civic mandate on Civic Mandate Nigeria (under review).",
+    "I submitted a civic demand on Civic Mandate Nigeria (under review — not public yet).",
     "",
     `"${sentence}"`,
     `— from ${state}`,
     "",
+    "A reviewed public record of service demands — not a poll.",
     "Don’t tell them who you’ll vote for. Tell them what they must deliver.",
     "",
     `Add yours: ${homeUrl}`,
   ].join("\n");
 
-  const tweetText = `I submitted a civic mandate with ISEYC (under review).\n\n"${sentence}" — ${state}\n\nTell them what they must deliver → ${homeUrl}`;
+  const tweetText = `I submitted a civic demand with ISEYC (under review — not public yet).\n\n"${sentence}" — ${state}\n\nNot a poll. Tell them what they must deliver → ${homeUrl}`;
 
   async function onNative() {
     const result = await shareNative({
