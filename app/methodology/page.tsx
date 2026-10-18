@@ -62,7 +62,7 @@ export default function MethodologyPage() {
           </section>
 
           <section className="border-b border-forest-500/10 pb-5">
-            <h2 className="font-display text-base font-bold text-forest-900">Corrections &amp; sources</h2>
+            <h2 className="font-display text-base font-bold text-forest-900">Corrections & sources</h2>
             <p className="mt-2">
               Public political claims should carry inspectable sources. Request corrections via{" "}
               <a className="font-semibold underline" href={`mailto:${ISEYC_EMAIL}`}>
@@ -73,11 +73,42 @@ export default function MethodologyPage() {
             </p>
           </section>
 
-          <section>
+          <section className="border-b border-forest-500/10 pb-5">
             <h2 className="font-display text-base font-bold text-forest-900">Non-partisanship</h2>
             <p className="mt-2">
               Government, CSOs, NGOs, and parties may participate through equal process. Partners do
               not own the record, moderate competitors, or buy preferential ranking.
+            </p>
+          </section>
+
+          <section className="border-b border-forest-500/10 pb-5">
+            <h2 className="font-display text-base font-bold text-forest-900">Pilot scope and data limits</h2>
+            <p className="mt-2">
+              Coverage reflects states and LGAs with human-reviewed published records only. Counts are
+              not a national survey, not public opinion, and not representative of all Nigerians.
+              Empty states mean no published records yet for that filter — not zero problems on the ground.
+            </p>
+          </section>
+
+          <section className="rounded-md border border-forest-500/15 bg-white p-4">
+            <h2 className="font-display text-base font-bold text-forest-900">
+              Request a conversation
+            </h2>
+            <p className="mt-2">
+              CSOs, universities, journalists, public institutions and development partners may request
+              a conversation about methodology, data access boundaries, or pilot collaboration.
+              Equal process. No paid rankings. No fabricated endorsements.
+            </p>
+            <p className="mt-3">
+              <a
+                className="inline-flex min-h-[44px] items-center rounded-md bg-forest-800 px-4 text-sm font-semibold text-white"
+                href={`mailto:${ISEYC_EMAIL}?subject=Civic%20Mandate%20partnership%20conversation`}
+              >
+                Email {ISEYC_EMAIL}
+              </a>
+            </p>
+            <p className="mt-2 text-xs text-forest-600">
+              We do not list unverified institutional partners on this page.
             </p>
           </section>
         </div>
