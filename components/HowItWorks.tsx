@@ -1,98 +1,57 @@
 "use client";
 
 import Link from "next/link";
-import { useLang } from "@/components/LanguageProvider";
 import { CIVIC_BRAIN_URL } from "@/lib/brand";
 
-/**
- * Four-step citizen journey: submit → review → publish → understand/route.
- */
 const STEPS = [
-  {
-    n: "1",
-    title: "Submit a concrete demand",
-    body: "Name the service, the place, and the office you believe should deliver — or say you are unsure.",
-  },
-  {
-    n: "2",
-    title: "Human review",
-    body: "ISEYC checks for clarity, safety, and non-partisanship. Submission does not guarantee publication.",
-  },
-  {
-    n: "3",
-    title: "Public record",
-    body: "Only Published records appear on Civic Pulse, State Briefs, and Civic Intelligence.",
-  },
-  {
-    n: "4",
-    title: "Understand & route",
-    body: "Track your receipt. Published records can be explained in Civic Brain. Routing recommends an office for human review — it does not contact officials for you.",
-  },
+  { n: "1", title: "Submit", body: "Service + place" },
+  { n: "2", title: "Review", body: "Human check" },
+  { n: "3", title: "Publish", body: "If approved" },
+  { n: "4", title: "Track", body: "Receipt + Brain" },
 ] as const;
 
 export default function HowItWorks() {
-  const { t } = useLang();
-
   return (
-    <section className="border-b border-forest-500/10 px-4 py-7" aria-labelledby="how-heading">
+    <section className="border-b border-forest-500/10 px-4 py-6" aria-labelledby="how-heading">
       <h2
         id="how-heading"
         className="text-center font-display text-sm font-bold tracking-wide text-forest-800"
       >
         How it works
       </h2>
-      <p className="mx-auto mt-1.5 max-w-md text-center text-[12px] leading-snug text-forest-600">
-        Submitting does not guarantee government action. It creates a reviewed public record of what
-        was asked.
+      <p className="mx-auto mt-1 max-w-sm text-center text-[11px] text-forest-600">
+        Submission is not government action — it is a reviewed public record of what was asked.
       </p>
 
-      <ol className="mx-auto mt-5 grid max-w-xl gap-3 sm:grid-cols-2">
+      <ol className="mx-auto mt-4 flex max-w-lg items-stretch justify-between gap-1">
         {STEPS.map((s) => (
-          <li
-            key={s.n}
-            className="flex gap-3 rounded-md border border-forest-500/10 bg-white px-3 py-3"
-          >
-            <span
-              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-forest-50 font-display text-sm font-bold tabular-nums text-gold-700"
-              aria-hidden
-            >
+          <li key={s.n} className="flex flex-1 flex-col items-center text-center">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-forest-800 font-display text-sm font-bold text-cream">
               {s.n}
             </span>
-            <div>
-              <p className="text-sm font-semibold text-forest-900">{s.title}</p>
-              <p className="mt-0.5 text-[11px] leading-snug text-forest-600">{s.body}</p>
-            </div>
+            <p className="mt-2 text-[12px] font-bold text-forest-900">{s.title}</p>
+            <p className="text-[10px] text-forest-600">{s.body}</p>
           </li>
         ))}
       </ol>
 
-      <p className="mx-auto mt-4 max-w-md text-center text-[11px] leading-snug text-forest-600">
-        Unsure which office delivers a duty?{" "}
-        <Link href="/map" className="font-semibold underline underline-offset-2">
-          Open the responsibility map
+      <div className="mx-auto mt-4 flex max-w-md flex-wrap justify-center gap-x-3 gap-y-1 text-center text-[11px]">
+        <Link href="/map" className="font-semibold text-forest-800 underline underline-offset-2">
+          Responsibility map
         </Link>
-        . For published-record questions and routing recommendations,{" "}
+        <span className="text-forest-400">·</span>
         <a
           href={CIVIC_BRAIN_URL}
-          target="_blank"
+          className="font-semibold text-forest-800 underline underline-offset-2"
           rel="noopener noreferrer"
-          className="font-semibold underline underline-offset-2"
         >
           Civic Brain
-        </a>{" "}
-        (recommendation only — no auto-send).
-      </p>
-
-      <p className="mx-auto mt-3 max-w-md text-center text-[10px] leading-snug text-forest-500">
-        {t("how.footer")}{" "}
-        <Link href="/methodology" className="font-semibold underline underline-offset-2">
+        </a>
+        <span className="text-forest-400">·</span>
+        <Link href="/methodology" className="font-semibold text-forest-800 underline underline-offset-2">
           Methodology
         </Link>
-        {" · "}
-        <Link href="/about" className="font-semibold underline underline-offset-2">
-          {t("how.charter")}
-        </Link>
-      </p>
+      </div>
     </section>
   );
 }
