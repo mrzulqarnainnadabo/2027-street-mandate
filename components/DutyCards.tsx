@@ -11,7 +11,7 @@ export default function DutyCards({
 }) {
   return (
     <section className="px-4 pt-6" aria-labelledby="duty-step-heading">
-      <div className="mb-4 text-center">
+      <div className="motion-fade-up mb-4 text-center">
         <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-forest-500">
           Step 01
         </p>
@@ -36,7 +36,7 @@ export default function DutyCards({
               type="button"
               onClick={() => onSelect(m.id)}
               aria-pressed={active}
-              className={`flex min-h-[52px] items-center gap-3 rounded-md border px-3 py-3 text-left transition active:scale-[0.99] ${
+              className={`motion-card flex min-h-[52px] items-center gap-3 rounded-md border px-3 py-3 text-left transition active:scale-[0.99] ${
                 active
                   ? "border-forest-500 bg-forest-50 ring-1 ring-forest-500"
                   : "border-forest-500/12 bg-white hover:border-forest-500/30"

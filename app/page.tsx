@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import HowItWorks from "@/components/HowItWorks";
 import TrustStandards from "@/components/TrustStandards";
+import PartnersStrip from "@/components/PartnersStrip";
 import DutyCards from "@/components/DutyCards";
 import FormPanel from "@/components/FormPanel";
 import SuccessPanel from "@/components/SuccessPanel";
@@ -82,29 +83,33 @@ export default function Home() {
       <Header />
       <main>
         <Hero total={stats.total} states={stats.states} pulseStatus={stats.status} />
-        <TrustStandards />
 
         {!done ? (
           <>
-            <HowItWorks />
             {draftRestored && duty ? (
               <p className="mx-4 mb-2 rounded-md border border-forest-500/15 bg-forest-50 px-3 py-2 text-center text-[11px] text-forest-700">
-                Draft restored on this device. Nothing is public until you submit and ISEYC marks the
-                record Published.
+                Draft restored on this device. Nothing is public until ISEYC marks it Published.
               </p>
             ) : null}
             <div id="mandate-form" className="scroll-mt-20">
               <DutyCards selected={duty} onSelect={setDuty} />
               {duty && <FormPanel duty={duty} onSuccess={handleSuccess} />}
             </div>
+
+            <HowItWorks />
+            <TrustStandards />
+            <PartnersStrip />
           </>
         ) : (
-          <SuccessPanel
-            sentence={lastSentence}
-            state={lastState}
-            mandateId={lastMandateId}
-            onReset={reset}
-          />
+          <>
+            <SuccessPanel
+              sentence={lastSentence}
+              state={lastState}
+              mandateId={lastMandateId}
+              onReset={reset}
+            />
+            <PartnersStrip />
+          </>
         )}
 
         <div id="civic-pulse" className="scroll-mt-16">
