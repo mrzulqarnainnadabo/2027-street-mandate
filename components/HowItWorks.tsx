@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useLang } from "@/components/LanguageProvider";
+import { CIVIC_BRAIN_URL } from "@/lib/brand";
 
 /**
- * Four-step citizen journey: submit → review → publish → follow-up.
- * Kept intentionally short for ~10-second comprehension on mobile.
+ * Four-step citizen journey: submit → review → publish → understand/route.
  */
 const STEPS = [
   {
@@ -21,12 +21,12 @@ const STEPS = [
   {
     n: "3",
     title: "Public record",
-    body: "Only Approved Published records appear on Civic Pulse, State Briefs, and Civic Intelligence.",
+    body: "Only Published records appear on Civic Pulse, State Briefs, and Civic Intelligence.",
   },
   {
     n: "4",
-    title: "Follow-up",
-    body: "Track status with your receipt link. Published records can be shared; responses and outcomes are shown only when verified.",
+    title: "Understand & route",
+    body: "Track your receipt. Published records can be explained in Civic Brain. Routing recommends an office for human review — it does not contact officials for you.",
   },
 ] as const;
 
@@ -71,7 +71,16 @@ export default function HowItWorks() {
         <Link href="/map" className="font-semibold underline underline-offset-2">
           Open the responsibility map
         </Link>
-        . Labels are Primary, Shared, or Unclear — not rankings of people.
+        . For published-record questions and routing recommendations,{" "}
+        <a
+          href={CIVIC_BRAIN_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold underline underline-offset-2"
+        >
+          Civic Brain
+        </a>{" "}
+        (recommendation only — no auto-send).
       </p>
 
       <p className="mx-auto mt-3 max-w-md text-center text-[10px] leading-snug text-forest-500">
