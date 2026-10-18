@@ -9,21 +9,23 @@ const ITEMS = [
   { title: "Private by default", body: "Contacts stay off the wall" },
 ] as const;
 
+const DELAY = ["", "motion-delay-1", "motion-delay-2", "motion-delay-3"] as const;
+
 export default function TrustStandards() {
   return (
     <section className="border-b border-forest-500/10 px-4 py-5" aria-label="Standards">
       <div className="mx-auto grid max-w-xl grid-cols-2 gap-2 sm:grid-cols-4">
-        {ITEMS.map((item) => (
+        {ITEMS.map((item, i) => (
           <div
             key={item.title}
-            className="rounded-lg border border-forest-500/10 bg-white px-2.5 py-3 text-center"
+            className={`motion-fade-up ${DELAY[i]} motion-card rounded-lg border border-forest-500/10 bg-white px-2.5 py-3 text-center`}
           >
             <p className="text-[11px] font-bold text-forest-900">{item.title}</p>
             <p className="mt-0.5 text-[10px] leading-snug text-forest-600">{item.body}</p>
           </div>
         ))}
       </div>
-      <p className="mt-3 text-center text-[11px] text-forest-600">
+      <p className="motion-fade-in motion-delay-4 mt-3 text-center text-[11px] text-forest-600">
         <Link href="/about" className="font-semibold underline underline-offset-2">
           Charter
         </Link>
