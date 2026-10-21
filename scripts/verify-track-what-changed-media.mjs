@@ -35,6 +35,17 @@ ok(story.includes("requiresHumanApproval"), "requiresHumanApproval field");
 const page = read("app/mandate/[id]/page.tsx");
 ok(page.includes("TrackMandateButton"), "detail has track");
 ok(page.includes("WhatChangedTimeline"), "detail has timeline");
+ok(page.includes("ResolutionTracker"), "detail has resolution tracker");
+
+const res = read("lib/resolution-tracker.ts");
+ok(
+  res.includes("AI inference") || res.includes("Never invent") || res.includes("never invent"),
+  "resolution no invent"
+);
+ok(res.includes("Published"), "resolution includes published");
+ok(res.includes("resolvedOnPublicRecord"), "resolution requires explicit flag");
+ok(res.includes("not a government performance score"), "resolution not performance score");
+
 ok(page.includes("MandateStoryDraftPanel"), "detail has media draft");
 
 if (failed) {
