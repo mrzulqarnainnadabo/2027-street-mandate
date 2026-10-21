@@ -40,6 +40,12 @@ export default function TrackedPage() {
                 <p className="mt-1.5 text-xs text-forest-500">
                   {[t.state, t.duty].filter(Boolean).join(" · ")}
                 </p>
+                <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-forest-600">
+                  Published · outcome not on public record
+                </p>
+                <p className="mt-0.5 text-[10px] text-forest-500">
+                  Open the record to view the full resolution tracker. Tracking is local only.
+                </p>
                 <div className="mt-3 flex flex-wrap gap-4 text-xs font-semibold">
                   <Link href={`/mandate/${t.id}`} className="text-forest-700 underline underline-offset-2">
                     Open record
