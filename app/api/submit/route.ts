@@ -11,6 +11,7 @@ import {
   MAX_SENTENCE,
 } from "@/lib/constants";
 import { campaignSloganRejection } from "@/lib/demand-quality";
+import { notifyAdminsOfNewSubmission } from "@/lib/notify-new-submission";
 
 export async function POST(req: NextRequest) {
   try {
@@ -72,7 +73,6 @@ export async function POST(req: NextRequest) {
     const ip = clientIpFromRequest(req);
     const deviceKey =
       typeof deviceId === "string" && deviceId.trim() ? deviceId.trim().slice(0, 64) : "";
-    // Count only validated attempts so form retries do not exhaust the window.
     const rate = checkRateLimit(`submit:${ip}:${deviceKey}`, 8, 15 * 60 * 1000);
     if (!rate.ok) {
       return NextResponse.json(
@@ -96,6 +96,16 @@ export async function POST(req: NextRequest) {
       ageBand: typeof ageBand === "string" ? ageBand : undefined,
       gender: typeof gender === "string" ? gender : undefined,
       deviceId: typeof deviceId === "string" && deviceId ? deviceId : "unknown",
+    });
+
+    void notifyAdminsOfNewSubmission({
+      id: String(id),
+      sentence: sentence.trim(),
+      duty: String(dutyId),
+      office: String(office),
+      state: String(state),
+      lga: typeof lga === "string" ? lga : undefined,
+      submittedAtIso: new Date().toISOString(),
     });
 
     return NextResponse.json({ ok: true, id });
