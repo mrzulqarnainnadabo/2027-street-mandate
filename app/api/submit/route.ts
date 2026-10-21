@@ -10,6 +10,7 @@ import {
   MIN_SENTENCE,
   MAX_SENTENCE,
 } from "@/lib/constants";
+import { campaignSloganRejection } from "@/lib/demand-quality";
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,6 +35,12 @@ export async function POST(req: NextRequest) {
     if (sentence.trim().length > MAX_SENTENCE) {
       return NextResponse.json({ error: `Max ${MAX_SENTENCE} characters.` }, { status: 400 });
     }
+
+    const campaignBlock = campaignSloganRejection(sentence);
+    if (campaignBlock) {
+      return NextResponse.json({ error: campaignBlock }, { status: 400 });
+    }
+
     if (typeof dutyId !== "string" || !DUTIES.some((d) => d.id === dutyId)) {
       return NextResponse.json({ error: "Invalid duty category." }, { status: 400 });
     }
