@@ -1,35 +1,29 @@
 /**
- * Demand quality gate — hard-reject clear non-civic / campaign text at intake.
- * Soft guidance remains in the form; this blocks only unambiguous slogans.
+ * Deterministic demand-quality signals for Civic Mandate Nigeria.
+ *
+ * Hard-reject: clear campaign / vote-instruction slogans (not civic service demands).
+ * Soft hint: retained for UI coaching.
+ *
+ * Does NOT ban mentioning parties, officeholders, or institutions when the
+ * text still asks for a public-service or accountability outcome.
  */
 
-export type DemandQualityResult =
-  | { ok: true }
-  | { ok: false; code: "CAMPAIGN_SLOGAN" | "TOO_VAGUE"; message: string };
+/** Clear vote/campaign instruction patterns — explainable, narrow. */
+const CLEAR_CAMPAIGN =
+  /\b(vote\s+for|vote\s+out|vote\s+the|cast\s+your\s+vote\s+for|ballot\s+for|elect\s+|re[- ]?elect\b|campaign\s+for|support\s+for\s+(the\s+)?(pdp|apc|lp|nnpp|sdp|adc)\b|(pdp|apc|lp|nnpp|sdp|adc)\s+(candidate|party)\b|who\s+should\s+(i|we)\s+vote\b|endorsement\s+for\b)\b/i;
 
-const CAMPAIGN_PATTERNS: RegExp[] = [
-  /\bvote\s+for\s+(our\s+)?party\b/i,
-  /\bvote\s+for\s+[a-z]{2,}\b/i,
-  /\bsupport\s+our\s+candidate\b/i,
-  /\belect\s+(our\s+)?(party|candidate)\b/i,
-  /\bparty\s+now\s+and\s+forever\b/i,
-  /\bdonat(e|ion)\s+(to\s+)?(our\s+)?(campaign|party)\b/i,
-];
+/**
+ * Returns a user-facing error if the sentence is a clear campaign slogan.
+ * Null means intake may proceed (human moderation remains the publication gate).
+ */
+export function campaignSloganRejection(sentence: string): string | null {
+  const t = sentence.trim();
+  if (t.length < 12) return null;
+  if (!CLEAR_CAMPAIGN.test(t)) return null;
+  return "This reads as campaign or voting instruction, not a civic service demand. Please name a concrete public service or outcome that public office should deliver — not who to vote for.";
+}
 
-export function assessDemandQuality(sentence: string): DemandQualityResult {
-  const t = (sentence || "").trim();
-  if (!t) {
-    return { ok: false, code: "TOO_VAGUE", message: "Write a concrete public-service demand." };
-  }
-  for (const re of CAMPAIGN_PATTERNS) {
-    if (re.test(t)) {
-      return {
-        ok: false,
-        code: "CAMPAIGN_SLOGAN",
-        message:
-          "This looks like campaign or party language. Civic Mandate records public-service demands only — not votes, parties, or candidates.",
-      };
-    }
-  }
-  return { ok: true };
+/** Soft UI hint (same rule as hard reject for consistency). */
+export function campaignLanguageHint(sentence: string): string | null {
+  return campaignSloganRejection(sentence);
 }
