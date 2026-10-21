@@ -12,6 +12,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TrackMandateButton from "@/components/TrackMandateButton";
 import WhatChangedTimeline from "@/components/WhatChangedTimeline";
+import ResolutionTracker from "@/components/ResolutionTracker";
 import MandateStoryDraftPanel from "@/components/MandateStoryDraftPanel";
 
 type Props = { params: Promise<{ id: string }> };
@@ -139,6 +140,19 @@ export default async function MandateDetailPage({ params }: Props) {
         <div className="mt-4">
           <TrackMandateButton id={m.id} sentence={m.sentence} state={m.state} duty={m.duty} />
         </div>
+
+        <ResolutionTracker
+          mandate={{
+            id: m.id,
+            sentence: m.sentence,
+            state: m.state,
+            lga: m.lga,
+            duty: m.duty,
+            office: m.office,
+            created: m.created,
+            status: "Published",
+          }}
+        />
 
         <WhatChangedTimeline
           mandate={{
