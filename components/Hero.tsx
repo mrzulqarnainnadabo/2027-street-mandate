@@ -38,10 +38,10 @@ export default function Hero({
           Submit a demand
         </a>
         <Link
-          href="/intelligence"
+          href="/explore"
           className="inline-flex min-h-[48px] items-center rounded-md border border-forest-500/20 bg-white px-4 text-sm font-semibold text-forest-800 transition hover:border-forest-500/40 hover:bg-forest-50"
         >
-          See published records
+          Explore published demands
         </Link>
       </div>
 
