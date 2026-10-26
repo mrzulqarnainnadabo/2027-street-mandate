@@ -11,6 +11,7 @@ const NAV = [
   { href: "/states", label: "States" },
   { href: "/blueprints", label: "Blueprints" },
   { href: "/profiles", label: "Profiles" },
+  { href: "/explore", label: "Explore" },
   { href: "/intelligence", label: "Intelligence" },
   { href: "/brief", label: "Brief" },
   { href: "/methodology", label: "Methodology" },
@@ -59,7 +60,6 @@ export default function Header() {
           </div>
         </Link>
 
-        {/* Desktop nav */}
         <nav
           className="hidden items-center gap-1 md:flex"
           aria-label="Primary"
@@ -78,7 +78,6 @@ export default function Header() {
           </div>
         </nav>
 
-        {/* Mobile: language + menu */}
         <div className="flex items-center gap-2 md:hidden">
           <LanguageSwitcher />
           <button
@@ -104,7 +103,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile drawer */}
       {open ? (
         <div
           id="mobile-nav"
