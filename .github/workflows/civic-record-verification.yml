@@ -20,3 +20,5 @@ jobs:
       - run: npm test
       - run: npx tsc --noEmit
       - run: npm run build
+      - name: Verify live published-only observation API
+        run: node scripts/verify-live-community-observations.mjs
