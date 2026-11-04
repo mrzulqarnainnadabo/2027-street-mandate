@@ -13,8 +13,11 @@ async function getJson(url) {
     headers: { accept: "application/json", "user-agent": "ISEYC-Community-Observation-Smoke/1.0" },
     signal: AbortSignal.timeout(20_000),
   });
-  assert.equal(response.status, 200, `Expected HTTP 200 from ${url}, received ${response.status}`);
-  return response.json();
+  const raw = await response.text();
+  let body;
+  try { body = JSON.parse(raw); } catch { body = { raw: raw.slice(0, 1000) }; }
+  assert.equal(response.status, 200, `Expected HTTP 200 from ${url}, received ${response.status}: ${JSON.stringify(body).slice(0, 1500)}`);
+  return body;
 }
 
 const firstUrl = new URL(BASE);
