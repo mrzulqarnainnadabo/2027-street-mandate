@@ -73,7 +73,7 @@ If the Notion query exceeds the safe retrieval cap, `truncatedUpstream` is true.
 
 ## Integration sequence
 
-1. Configure `NOTION_COMMUNITY_OBSERVATIONS_DATABASE_ID` in Vercel for Preview and Production.
+1. Configure `NOTION_COMMUNITY_OBSERVATIONS_DATA_SOURCE_ID` in Vercel for Preview and Production.
 2. Deploy the Mandate intake and public API.
 3. Verify a new report appears privately with New / Unverified / Pending states.
 4. Complete a controlled two-review test; confirm it is invisible until both publication gates are satisfied.
