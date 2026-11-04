@@ -64,6 +64,7 @@ export async function GET(req: NextRequest) {
       error: "COMMUNITY_OBSERVATIONS_UNAVAILABLE",
       message: "Published community observations are temporarily unavailable.",
       contractVersion: "0.1.0",
+      diagnosticCode: communityObservationErrorCode(error),
     }, { status: 503, headers: { ...HEADERS } });
   }
 }
