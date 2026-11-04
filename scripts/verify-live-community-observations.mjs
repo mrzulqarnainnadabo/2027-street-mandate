@@ -10,7 +10,7 @@ const MAX_PAGES = 20;
 const MAX_ATTEMPTS = 8;
 const RETRY_DELAY_MS = 15_000;
 
-async function getJson(url) {
+async function getJson(url, options = {}) {
   let response;
   let body;
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
