@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     const placeOrFacility = text(body.placeOrFacility, 180);
     const observedOn = text(body.observedOn, 10);
     const evidenceLink = text(body.evidenceLink, 2000);
-    const evidenceTypes = Array.isArray(body.evidenceTypes)
+    const evidenceTypes: string[] = Array.isArray(body.evidenceTypes)
       ? body.evidenceTypes.filter((value: unknown): value is string => typeof value === "string")
       : [];
 
@@ -78,13 +78,13 @@ export async function POST(req: NextRequest) {
     if (!sourceContext || sourceContext.length < 15) {
       return NextResponse.json({ error: "Explain how you know this information (at least 15 characters)." }, { status: 400 });
     }
-    if (!REPORT_TYPES.includes(reportType as (typeof REPORT_TYPES)[number])) {
+    if (!reportType || !REPORT_TYPES.includes(reportType as (typeof REPORT_TYPES)[number])) {
       return NextResponse.json({ error: "Choose a valid report type." }, { status: 400 });
     }
-    if (!SECTORS.includes(sector as (typeof SECTORS)[number])) {
+    if (!sector || !SECTORS.includes(sector as (typeof SECTORS)[number])) {
       return NextResponse.json({ error: "Choose a valid sector." }, { status: 400 });
     }
-    if (!STATES.includes(state as (typeof STATES)[number])) {
+    if (!state || !STATES.includes(state as (typeof STATES)[number])) {
       return NextResponse.json({ error: "Choose a valid state." }, { status: 400 });
     }
     if (body.lga !== undefined && (typeof body.lga !== "string" || body.lga.trim().length > 120)) {
