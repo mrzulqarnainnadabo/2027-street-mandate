@@ -37,6 +37,9 @@ assert.match(page, /Submit report privately/);
 assert.match(page, /No name, phone number, email, demographic profile or device fingerprint/);
 assert.match(header, /href: "\/report"/);
 
+assert.match(intake, /"Review Gate": \{ select: \{ name: "Pending" \} \}/);
+assert.match(intake, /Review Gate.*Dual review complete/s);
+
 const sample = {
   status: "New",
   verificationStatus: "Unverified",
