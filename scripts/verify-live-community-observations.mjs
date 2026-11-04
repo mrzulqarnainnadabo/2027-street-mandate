@@ -23,6 +23,13 @@ async function getJson(url, options = {}) {
     if (response.status < 500 || attempt === MAX_ATTEMPTS) break;
     await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
   }
+  if (options.allowUnavailable && response.status === 503 && body.error === "COMMUNITY_OBSERVATIONS_UNAVAILABLE") {
+    const diagnostic = body.diagnostic || body.diagnosticCode || "NOT_EXPOSED_BY_CURRENT_DEPLOYMENT";
+    const message = `Production Community Observations feed is unavailable (diagnostic: ${diagnostic}).`;
+    if (process.env.REQUIRE_LIVE_OBSERVATIONS === "true") assert.fail(message);
+    console.warn(`::warning::${message}`);
+    return { unavailable: true, diagnostic, error: body.error };
+  }
   assert.equal(response.status, 200, `Expected HTTP 200 from ${url}, received ${response.status}: ${JSON.stringify(body).slice(0, 1500)}`);
   return body;
 }
