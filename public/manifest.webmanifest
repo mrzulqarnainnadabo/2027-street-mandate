@@ -1,11 +1,11 @@
 {
-  "name": "ISEYC 2027 Civic Mandate",
-  "short_name": "ISEYC Mandate",
-  "description": "Non-partisan civic demands: what public office must deliver.",
+  "name": "Civic Mandate Nigeria",
+  "short_name": "Civic Mandate",
+  "description": "Published community demands. Clear public responsibilities.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FDFAF2",
-  "theme_color": "#0F4D34",
+  "theme_color": "#072A20",
   "lang": "en",
   "icons": [
     {

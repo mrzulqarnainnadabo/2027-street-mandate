@@ -26,11 +26,11 @@ export default function Hero({
       </p>
 
       <h1 className="motion-fade-up motion-delay-1 mt-2 max-w-xl font-display text-[1.55rem] font-bold leading-[1.25] text-forest-900 sm:text-[1.85rem]">
-        Tell them what must be delivered
+        Make public-service demands visible
       </h1>
 
       <p className="motion-fade-up motion-delay-2 mt-2 max-w-md text-[13px] leading-snug text-forest-700">
-        Submit a concrete public-service demand. ISEYC reviews it. Only published records enter the public record.
+        Submit a concrete public-service demand. ISEYC reviews it before publication. Only approved records enter the public civic record.
       </p>
 
       <div className="motion-fade-up motion-delay-3 mt-4 flex flex-wrap gap-2.5">

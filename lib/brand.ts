@@ -10,6 +10,6 @@ export const PRODUCT_NAME = "Civic Mandate Nigeria";
 /** Legacy display line kept for continuity until founder approves full rename. */
 export const PRODUCT_NAME_LEGACY = "ISEYC 2027 Civic Mandate";
 export const PRODUCT_TAGLINE =
-  "Don't tell us who you'll vote for. Tell them what they must deliver.";
+  "Published community demands. Clear public responsibilities.";
 export const PRODUCT_DEFINITION =
-  "A non-partisan public record of published, human-reviewed civic demands — pilot coverage by place and duty. Not a national survey. Not a poll. Not an endorsement.";
+  "A non-partisan public record of human-reviewed community demands, linked to public duties and responsible institutions. Published coverage is a pilot, not a representative national survey.";
