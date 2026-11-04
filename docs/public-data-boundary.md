@@ -49,3 +49,14 @@ Community Observations is a distinct dataset from Civic Mandate demands.
 - The public mapper exposes only the approved report fields. Source Context, Reviewer Notes, reviewer identities, review dates and any contact details remain private.
 - A published report remains unverified unless a separate verification process changes its verification status.
 - Similar reports are not automatically independent corroboration, and counts are not prevalence estimates.
+
+
+## Evidence Vault public boundary
+
+- The private ISEYC Evidence Vault is exposed only through `GET /api/v1/evidence-records`.
+- A record is public only when Publication Status is Published AND Review Gate is Dual review complete.
+- Reviewer identities and review dates are never returned.
+- SOURCE_CONFIRMED means a source is reachable and identified; it does not mean the content corroborates a community report.
+- CONTENT_CORROBORATED is required before an evidence relation can be published as Corroborates.
+- Corroborates and Contradicts require a linked Community Observation ID, content-checked source link and matching verification state.
+- National evidence remains national context and cannot verify a named LGA, ward or facility.
