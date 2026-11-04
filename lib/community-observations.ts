@@ -64,7 +64,8 @@ export async function submitCommunityObservation(input: CommunityObservationInpu
     "Evidence Type": { multi_select: input.evidenceTypes.map((name) => ({ name })) },
     "Source Context": { rich_text: richText(input.sourceContext) },
     Status: { select: { name: "New" } },
-    "Verification Status": { select: { name: "Unverified" } },\n    "Review Gate": { select: { name: "Pending" } },
+    "Verification Status": { select: { name: "Unverified" } },
+    "Review Gate": { select: { name: "Pending" } },
   };
 
   if (input.observedOn) properties["Observed On"] = { date: { start: input.observedOn } };
@@ -164,7 +165,10 @@ export async function getPublishedCommunityObservations(): Promise<{
   for (let pageNumber = 0; pageNumber < MAX_PUBLISHED_PAGES; pageNumber += 1) {
     const response: any = await notion.databases.query({
       database_id: databaseId,
-      filter: { and: [\n        { property: "Status", select: { equals: "Published" } },\n        { property: "Review Gate", select: { equals: "Dual review complete" } },\n      ] },
+      filter: { and: [
+        { property: "Status", select: { equals: "Published" } },
+        { property: "Review Gate", select: { equals: "Dual review complete" } },
+      ] },
       sorts: [{ timestamp: "created_time", direction: "descending" }],
       page_size: PAGE_SIZE,
       ...(cursor ? { start_cursor: cursor } : {}),
