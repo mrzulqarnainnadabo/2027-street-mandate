@@ -35,6 +35,8 @@ assert.match(submit, /not public until it has been reviewed and approved/);
 assert.match(publish, /getPublishedCommunityObservations/);
 assert.match(publish, /publicationBoundary: "published-only"/);
 assert.match(publish, /truncatedUpstream/);
+assert.match(publish, /diagnosticCode: communityObservationErrorCode\(error\)/);
+assert.match(intake, /function communityObservationErrorCode\(error: unknown\)/);
 assert.match(page, /How do you know\?/);
 assert.match(page, /Submit report privately/);
 assert.match(page, /No name, phone number, email, demographic profile or device fingerprint/);
