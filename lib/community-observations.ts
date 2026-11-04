@@ -111,7 +111,7 @@ function verificationStatus(value: string): PublicCommunityObservation["verifica
 /** Explicit public allowlist. Source Context and Reviewer Notes never leave the private review workspace. */
 export function mapPublishedCommunityObservation(page: any): PublicCommunityObservation | null {
   const p = page?.properties || {};
-  if (readSelect(p.Status) !== "Published") return null;
+  if (readSelect(p.Status) !== "Published" || readSelect(p["Review Gate"]) !== "Dual review complete") return null;
 
   const title = readTitle(p.Name);
   const description = readRichText(p.Description);
@@ -164,7 +164,7 @@ export async function getPublishedCommunityObservations(): Promise<{
   for (let pageNumber = 0; pageNumber < MAX_PUBLISHED_PAGES; pageNumber += 1) {
     const response: any = await notion.databases.query({
       database_id: databaseId,
-      filter: { property: "Status", select: { equals: "Published" } },
+      filter: { and: [\n        { property: "Status", select: { equals: "Published" } },\n        { property: "Review Gate", select: { equals: "Dual review complete" } },\n      ] },
       sorts: [{ timestamp: "created_time", direction: "descending" }],
       page_size: PAGE_SIZE,
       ...(cursor ? { start_cursor: cursor } : {}),
