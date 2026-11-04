@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - chore/live-community-observations-smoke
     paths:
       - scripts/verify-live-community-observations.mjs
       - .github/workflows/live-community-observations.yml
