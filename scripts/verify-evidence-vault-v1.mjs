@@ -17,7 +17,7 @@ assert.match(module, /evidenceRelation === "Contradicts"/);
 assert.match(module, /verification !== "DISPUTED"/);
 assert.match(module, /evidenceLinkReview !== "Content checked"/);
 assert.match(module, /linkedObservationId/);
-assert.match(module, /SOURCE_CONFIRMED/);
+assert.match(route, /SOURCE_CONFIRMED/);
 assert.match(module, /CONTENT_CORROBORATED/);
 
 assert.match(route, /publicationBoundary: "published-and-dual-reviewed-only"/);
