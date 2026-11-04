@@ -31,6 +31,9 @@ export default function Footer() {
           className="mt-8 flex flex-wrap gap-x-4 gap-y-2 text-[12px] font-medium"
           aria-label="Footer"
         >
+          <Link href="/report" className="text-gold-400 underline-offset-2 hover:underline">
+            Report an observation
+          </Link>
           <Link href="/" className="text-gold-400 underline-offset-2 hover:underline">
             Home
           </Link>
