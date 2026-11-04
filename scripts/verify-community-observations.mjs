@@ -12,7 +12,7 @@ const publish = read("app/api/v1/community-observations/route.ts");
 const page = read("app/report/page.tsx");
 const header = read("components/Header.tsx");
 
-assert.match(intake, /NOTION_COMMUNITY_OBSERVATIONS_DATABASE_ID/);
+assert.match(intake, /NOTION_COMMUNITY_OBSERVATIONS_DATA_SOURCE_ID/);
 assert.match(intake, /COMMUNITY_OBSERVATION_CONTRACT_VERSION = "0\.1\.0"/);
 assert.match(intake, /Status: \{ select: \{ name: "New" \} \}/);
 assert.match(intake, /"Verification Status": \{ select: \{ name: "Unverified" \} \}/);
@@ -22,7 +22,7 @@ assert.doesNotMatch(intake, /Device Fingerprint|Age Band|Gender|email|phone/i);
 
 assert.match(submit, /checkRateLimit/);
 assert.match(submit, /clientIpFromRequest/);
-assert.match(submit, /NOTION_COMMUNITY_OBSERVATIONS_DATABASE_ID|submitCommunityObservation/);
+assert.match(submit, /NOTION_COMMUNITY_OBSERVATIONS_DATA_SOURCE_ID|submitCommunityObservation/);
 assert.match(submit, /containsContactDetails/);
 assert.match(submit, /evidenceTypes/);
 assert.match(submit, /protocol !== "https:"/);
