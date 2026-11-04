@@ -64,7 +64,7 @@ export async function submitCommunityObservation(input: CommunityObservationInpu
     "Evidence Type": { multi_select: input.evidenceTypes.map((name) => ({ name })) },
     "Source Context": { rich_text: richText(input.sourceContext) },
     Status: { select: { name: "New" } },
-    "Verification Status": { select: { name: "Unverified" } },
+    "Verification Status": { select: { name: "Unverified" } },\n    "Review Gate": { select: { name: "Pending" } },
   };
 
   if (input.observedOn) properties["Observed On"] = { date: { start: input.observedOn } };
