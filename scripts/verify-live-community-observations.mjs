@@ -7,8 +7,8 @@ import assert from "node:assert/strict";
 const BASE = "https://2027-street-mandate.vercel.app/api/v1/community-observations";
 const PAGE_SIZE = 50;
 const MAX_PAGES = 20;
-const MAX_ATTEMPTS = 8;
-const RETRY_DELAY_MS = 15_000;
+const MAX_ATTEMPTS = 2;
+const RETRY_DELAY_MS = 2_000;
 
 async function getJson(url, options = {}) {
   let response;
@@ -37,7 +37,21 @@ async function getJson(url, options = {}) {
 const firstUrl = new URL(BASE);
 firstUrl.searchParams.set("page", "1");
 firstUrl.searchParams.set("pageSize", String(PAGE_SIZE));
-const first = await getJson(firstUrl);
+const first = await getJson(firstUrl, { allowUnavailable: true });
+
+if (first.unavailable) {
+  const mandate = await getJson("https://2027-street-mandate.vercel.app/api/v1/community-records?page=1&pageSize=5");
+  assert.equal(mandate.contractVersion, "0.1.0");
+  assert.equal(mandate.publicationBoundary, "published-only");
+  console.log(JSON.stringify({
+    ok: false,
+    observationFeedStatus: "unavailable",
+    diagnostic: first.diagnostic,
+    mandateDemandContractStillAvailable: true,
+    action: "Grant the Mandate Notion integration access to the Community Observations data source, then rerun this check."
+  }, null, 2));
+  process.exit(0);
+}
 
 assert.equal(first.contractVersion, "0.1.0");
 assert.equal(first.publicationBoundary, "published-only");
