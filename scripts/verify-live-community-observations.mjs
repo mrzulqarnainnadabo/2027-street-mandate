@@ -7,15 +7,22 @@ import assert from "node:assert/strict";
 const BASE = "https://2027-street-mandate.vercel.app/api/v1/community-observations";
 const PAGE_SIZE = 50;
 const MAX_PAGES = 20;
+const MAX_ATTEMPTS = 8;
+const RETRY_DELAY_MS = 15_000;
 
 async function getJson(url) {
-  const response = await fetch(url, {
-    headers: { accept: "application/json", "user-agent": "ISEYC-Community-Observation-Smoke/1.0" },
-    signal: AbortSignal.timeout(20_000),
-  });
-  const raw = await response.text();
+  let response;
   let body;
-  try { body = JSON.parse(raw); } catch { body = { raw: raw.slice(0, 1000) }; }
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
+    response = await fetch(url, {
+      headers: { accept: "application/json", "user-agent": "ISEYC-Community-Observation-Smoke/1.0" },
+      signal: AbortSignal.timeout(20_000),
+    });
+    const raw = await response.text();
+    try { body = JSON.parse(raw); } catch { body = { raw: raw.slice(0, 1000) }; }
+    if (response.status < 500 || attempt === MAX_ATTEMPTS) break;
+    await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+  }
   assert.equal(response.status, 200, `Expected HTTP 200 from ${url}, received ${response.status}: ${JSON.stringify(body).slice(0, 1500)}`);
   return body;
 }
