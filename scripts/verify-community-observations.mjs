@@ -13,6 +13,9 @@ const page = read("app/report/page.tsx");
 const header = read("components/Header.tsx");
 
 assert.match(intake, /NOTION_COMMUNITY_OBSERVATIONS_DATA_SOURCE_ID/);
+assert.match(intake, /Notion-Version/);
+assert.match(intake, /2026-03-11/);
+assert.match(intake, /data_sources\\//);
 assert.match(intake, /COMMUNITY_OBSERVATION_CONTRACT_VERSION = "0\.1\.0"/);
 assert.match(intake, /Status: \{ select: \{ name: "New" \} \}/);
 assert.match(intake, /"Verification Status": \{ select: \{ name: "Unverified" \} \}/);
