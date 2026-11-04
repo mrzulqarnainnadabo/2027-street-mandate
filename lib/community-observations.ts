@@ -1,10 +1,7 @@
-import { Client } from "@notionhq/client";
-
 export const COMMUNITY_OBSERVATION_CONTRACT_VERSION = "0.1.0" as const;
 const MAX_PUBLISHED_PAGES = 20;
 const PAGE_SIZE = 100;
-
-const notion = new Client({ auth: process.env.NOTION_TOKEN });
+const NOTION_API_VERSION = "2026-03-11";
 
 export type CommunityObservationInput = {
   title: string;
@@ -42,16 +39,47 @@ export type PublicCommunityObservation = {
   publishedAt: string | null;
 };
 
+type NotionApiError = Error & { code?: string; status?: number };
+
+async function notionRequest(path: string, method: "GET" | "POST", body?: unknown): Promise<any> {
+  const token = process.env.NOTION_TOKEN;
+  if (!token) throw new Error("Community observation Notion token is not configured.");
+
+  const response = await fetch("https://api.notion.com/v1/" + path, {
+    method,
+    headers: {
+      Authorization: "Bearer " + token,
+      "Notion-Version": NOTION_API_VERSION,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    ...(body ? { body: JSON.stringify(body) } : {}),
+    cache: "no-store",
+  });
+
+  const raw = await response.text();
+  let payload: any = {};
+  try { payload = raw ? JSON.parse(raw) : {}; } catch { payload = {}; }
+  if (!response.ok) {
+    const error = new Error(typeof payload.message === "string" ? payload.message : "Notion API request failed.") as NotionApiError;
+    error.code = typeof payload.code === "string" ? payload.code : "notion_api_error";
+    error.status = response.status;
+    throw error;
+  }
+  return payload;
+}
+
+function dataSourceId(): string {
+  const id = process.env.NOTION_COMMUNITY_OBSERVATIONS_DATA_SOURCE_ID;
+  if (!id) throw new Error("Community observation data source is not configured.");
+  return id;
+}
+
 function richText(value: string) {
   return value ? [{ type: "text", text: { content: value.slice(0, 1900) } }] : [];
 }
 
 export async function submitCommunityObservation(input: CommunityObservationInput): Promise<string> {
-  const databaseId = process.env.NOTION_COMMUNITY_OBSERVATIONS_DATABASE_ID;
-  if (!process.env.NOTION_TOKEN || !databaseId) {
-    throw new Error("Community observation intake is not configured.");
-  }
-
   const properties: Record<string, unknown> = {
     Name: { title: [{ type: "text", text: { content: input.title.slice(0, 120) } }] },
     "Report Type": { select: { name: input.reportType } },
@@ -71,11 +99,11 @@ export async function submitCommunityObservation(input: CommunityObservationInpu
   if (input.observedOn) properties["Observed On"] = { date: { start: input.observedOn } };
   if (input.evidenceLink) properties["Evidence Link"] = { url: input.evidenceLink };
 
-  const page = await notion.pages.create({
-    parent: { database_id: databaseId },
-    properties: properties as any,
+  const page = await notionRequest("pages", "POST", {
+    parent: { type: "data_source_id", data_source_id: dataSourceId() },
+    properties,
   });
-  return page.id;
+  return String(page.id);
 }
 
 function readRichText(property: any): string {
@@ -123,7 +151,7 @@ export function mapPublishedCommunityObservation(page: any): PublicCommunityObse
 
   const uniqueId = p["Report ID"]?.unique_id;
   const displayId = uniqueId && Number.isInteger(uniqueId.number)
-    ? `${uniqueId.prefix || "CR"}-${uniqueId.number}`
+    ? (uniqueId.prefix || "CR") + "-" + uniqueId.number
     : null;
   const evidenceLink = typeof p["Evidence Link"]?.url === "string" ? p["Evidence Link"].url : null;
 
@@ -153,18 +181,13 @@ export async function getPublishedCommunityObservations(): Promise<{
   records: PublicCommunityObservation[];
   truncated: boolean;
 }> {
-  const databaseId = process.env.NOTION_COMMUNITY_OBSERVATIONS_DATABASE_ID;
-  if (!process.env.NOTION_TOKEN || !databaseId) {
-    throw new Error("Community observation intake is not configured.");
-  }
-
+  const id = dataSourceId();
   const pages: any[] = [];
   let cursor: string | undefined;
   let truncated = false;
 
   for (let pageNumber = 0; pageNumber < MAX_PUBLISHED_PAGES; pageNumber += 1) {
-    const response: any = await notion.databases.query({
-      database_id: databaseId,
+    const response = await notionRequest("data_sources/" + id + "/query", "POST", {
       filter: { and: [
         { property: "Status", select: { equals: "Published" } },
         { property: "Review Gate", select: { equals: "Dual review complete" } },
@@ -186,4 +209,16 @@ export async function getPublishedCommunityObservations(): Promise<{
     records: pages.map(mapPublishedCommunityObservation).filter((record): record is PublicCommunityObservation => record !== null),
     truncated,
   };
+}
+
+/** A non-sensitive category suitable for a public 503 response and smoke-test diagnostics. */
+export function communityObservationErrorCode(error: unknown): string {
+  const value = error as NotionApiError;
+  if (/not configured/i.test(String(value?.message || ""))) return "CONFIGURATION_MISSING";
+  if (value?.status === 401 || value?.code === "unauthorized") return "NOTION_TOKEN_UNAUTHORIZED";
+  if (value?.status === 403 || value?.code === "restricted_resource") return "NOTION_ACCESS_DENIED";
+  if (value?.status === 404 || value?.code === "object_not_found") return "NOTION_DATA_SOURCE_NOT_FOUND_OR_NOT_SHARED";
+  if (value?.status === 400 || value?.code === "validation_error") return "NOTION_REQUEST_VALIDATION_FAILED";
+  if (value?.status === 429 || value?.code === "rate_limited") return "NOTION_RATE_LIMITED";
+  return "NOTION_UPSTREAM_UNAVAILABLE";
 }
