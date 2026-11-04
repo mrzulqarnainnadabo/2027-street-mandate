@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getPublishedCommunityObservations } from "@/lib/community-observations";
+import { communityObservationErrorCode, getPublishedCommunityObservations } from "@/lib/community-observations";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
