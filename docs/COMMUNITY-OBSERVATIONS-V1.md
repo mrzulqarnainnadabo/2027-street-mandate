@@ -73,7 +73,7 @@ If the Notion query exceeds the safe retrieval cap, `truncatedUpstream` is true.
 
 ## Integration sequence
 
-1. Configure `NOTION_COMMUNITY_OBSERVATIONS_DATA_SOURCE_ID` in Vercel for Preview and Production.
+1. Configure `NOTION_TOKEN` and `NOTION_COMMUNITY_OBSERVATIONS_DATA_SOURCE_ID` for each Vercel environment that will execute the integration (Production and, if preview API testing is required, Preview). The data-source ID must be the Notion collection ID, not the parent database ID.
 2. Deploy the Mandate intake and public API.
 3. Verify a new report appears privately with New / Unverified / Pending states.
 4. Complete a controlled two-review test; confirm it is invisible until both publication gates are satisfied.
@@ -82,3 +82,12 @@ If the Notion query exceeds the safe retrieval cap, `truncatedUpstream` is true.
 7. Allow Civic Brain to reason over these observations only with their source, location, date, evidence basis and verification state attached.
 
 No demo or synthetic records should be mixed into this live feed.
+
+
+## Operational check — 4 November 2026
+
+- The production Vercel project has `NOTION_TOKEN` configured for Production and `NOTION_COMMUNITY_OBSERVATIONS_DATA_SOURCE_ID` configured for Production and Preview.
+- The configured data-source ID was checked against the Notion data source for **ISEYC Community Observations** and matches the source ID.
+- The connected Notion workspace query currently returns zero rows, including zero records satisfying both `Status = Published` and `Review Gate = Dual review complete`. A healthy public endpoint should therefore return HTTP 200 with an empty `records` array and `total = 0`; an empty feed is valid.
+- The production endpoint currently returns HTTP 503. The Vercel integration token's access to the data source has not yet been confirmed. The API now returns a non-sensitive diagnostic category (for example, unauthorized, access denied, or data source not found) so the remaining cause can be identified after the next production deployment.
+- Preview currently does not have a `NOTION_TOKEN` environment value; preview API calls should not be treated as integration tests until that is configured.
