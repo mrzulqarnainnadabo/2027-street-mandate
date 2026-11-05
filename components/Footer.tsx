@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CIVIC_BRAIN_URL, ISEYC_SEAL_SRC, ISEYC_EMAIL, ISEYC_WEB, PRODUCT_NAME } from "@/lib/brand";
+import { CIVIC_BRAIN_URL, ISEYC_SEAL_SRC, ISEYC_EMAIL, ISEYC_WEB, PRODUCT_NAME } from "@/lib/brand";\nconst OBSERVATORY_URL = "https://iseyc-civic-intelligence-observator.vercel.app";
 
 export default function Footer() {
   return (
@@ -58,6 +58,9 @@ export default function Footer() {
           <Link href="/about" className="text-gold-400 underline-offset-2 hover:underline">
             Charter
           </Link>
+          <a href={OBSERVATORY_URL} target="_blank" rel="noopener noreferrer" className="text-gold-400 underline-offset-2 hover:underline">
+            Civic Intelligence Observatory
+          </a>
           <a
             href={CIVIC_BRAIN_URL}
             target="_blank"
@@ -68,6 +71,19 @@ export default function Footer() {
           </a>
         </nav>
 
+        <div className="mt-6 border-t border-cream/10 pt-5">
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gold-400">ISEYC departments</p>
+          <nav className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-[12px]" aria-label="ISEYC departments">
+            {[
+              ["Education & Capacity Building", "education"],
+              ["Health & Well-being", "health"],
+              ["Software & Technology", "software-technology"],
+              ["Civic Department", "civic"],
+            ].map(([label, department]) => (
+              <a key={department} href={`${OBSERVATORY_URL}/#/departments/${department}`} target="_blank" rel="noopener noreferrer" className="text-gold-400 underline-offset-2 hover:underline">{label}</a>
+            ))}
+          </nav>
+        </div>
         <p className="mt-6 border-t border-cream/10 pt-5 text-[11px] text-cream/60">
           ISEYC | Strictly Non-Partisan | www.iseyc.com.ng
         </p>
