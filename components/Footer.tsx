@@ -36,7 +36,7 @@ export default function Footer() {
             Report an observation
           </Link>
           <Link href="/" className="text-gold-400 underline-offset-2 hover:underline">
-            Home
+            Civic Mandate Nigeria
           </Link>
           <Link href="/intelligence" className="text-gold-400 underline-offset-2 hover:underline">
             Intelligence
