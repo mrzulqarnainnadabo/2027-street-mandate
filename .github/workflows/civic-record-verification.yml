@@ -16,6 +16,8 @@ jobs:
         with:
           node-version: 20
       - run: npm install
+      - name: Audit dependency vulnerabilities
+        run: npm audit --audit-level=high
       - run: npm test
       - run: npx tsc --noEmit
       - run: npm run build
