@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ISEYC_SEAL_SRC, PRODUCT_NAME } from "@/lib/brand";
+import { ISEYC_SEAL_SRC, PRODUCT_NAME, CIVIC_BRAIN_URL, CIVIC_OBSERVATORY_URL } from "@/lib/brand";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLang } from "@/components/LanguageProvider";
 
@@ -89,7 +89,7 @@ export default function Header() {
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? (
+            <nav className="border-t border-forest-500/10 bg-white/80" aria-label="ISEYC products and departments">\n        <div className="mx-auto flex max-w-3xl items-center gap-2 overflow-x-auto px-4 py-2 text-[11px] font-semibold">\n          <span className="shrink-0 uppercase tracking-wider text-forest-500">ISEYC systems</span>\n          <span aria-current="page" className="shrink-0 rounded bg-forest-50 px-2.5 py-1.5 text-forest-900">Mandate</span>\n          <a className="shrink-0 rounded px-2.5 py-1.5 text-forest-700 hover:bg-forest-50" href={CIVIC_BRAIN_URL} target="_blank" rel="noopener noreferrer">Brain</a>\n          <a className="shrink-0 rounded px-2.5 py-1.5 text-forest-700 hover:bg-forest-50" href={CIVIC_OBSERVATORY_URL + "#/departments/education"} target="_blank" rel="noopener noreferrer">Observatory</a>\n          <span className="mx-1 h-5 shrink-0 border-l border-forest-500/15" />\n          {["Education & Capacity Building", "Health & Well-being", "Software & Technology", "Civic Department"].map((label, index) => (\n            <a key={label} className="shrink-0 rounded px-2 py-1.5 text-forest-600 hover:bg-forest-50" href={CIVIC_OBSERVATORY_URL + "#/departments/" + ["education", "health", "software-technology", "civic"][index]} target="_blank" rel="noopener noreferrer">{label}</a>\n          ))}\n        </div>\n      </nav>\n\n      {open ? (
               <span className="text-lg leading-none" aria-hidden>
                 ×
               </span>
