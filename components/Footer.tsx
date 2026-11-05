@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { CIVIC_BRAIN_URL, ISEYC_SEAL_SRC, ISEYC_EMAIL, ISEYC_WEB, PRODUCT_NAME } from "@/lib/brand";\nconst OBSERVATORY_URL = "https://iseyc-civic-intelligence-observator.vercel.app";
+import { CIVIC_BRAIN_URL, ISEYC_SEAL_SRC, ISEYC_EMAIL, ISEYC_WEB, PRODUCT_NAME } from "@/lib/brand";
+const OBSERVATORY_URL = "https://iseyc-civic-intelligence-observator.vercel.app";
 
 export default function Footer() {
   return (
