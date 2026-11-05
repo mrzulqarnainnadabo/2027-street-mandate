@@ -120,19 +120,12 @@ export async function POST(req: NextRequest) {
       message:
         "Received. This is not publication. ISEYC dual-review is required before any public Blueprint record appears.",
     });
-  } catch (err: any) {
-    console.error("Blueprint submit error:", err);
-    const message = String(err?.message || "");
-    const configFailure = /not configured|Notion|schema rejected/i.test(message);
+  } catch {
+    // Keep upstream provider, database and schema details out of public responses and logs.
+    console.error("Blueprint intake failed.");
     return NextResponse.json(
-      {
-        error: configFailure
-          ? message.includes("schema")
-            ? message
-            : "Blueprint intake is temporarily unavailable."
-          : message || "Could not save blueprint. Please try again.",
-      },
-      { status: configFailure ? 503 : 500 }
+      { error: "Blueprint intake is temporarily unavailable. Please try again later." },
+      { status: 503 }
     );
   }
 }
