@@ -2,6 +2,7 @@
  * Contract tests for Public Blueprint intake (no network / no Notion).
  */
 import assert from "node:assert/strict";
+import fs from "node:fs";
 
 function assertNotRankingCopy(text) {
   const bad =
@@ -57,4 +58,10 @@ const intakeCopy = "Received. This is not publication. ISEYC dual-review is requ
 assert.match(intakeCopy, /not publication/i);
 assert.match(intakeCopy, /dual-review/i);
 
+const civicSubmitRoute = fs.readFileSync("app/api/submit/route.ts", "utf8");
+const blueprintSubmitRoute = fs.readFileSync("app/api/blueprints/submit/route.ts", "utf8");
+for (const [name, source] of [["civic", civicSubmitRoute], ["blueprint", blueprintSubmitRoute]]) {
+  assert.match(source, /temporarily unavailable\. Please try again later\./, name + " uses a generic public failure message");
+  assert.doesNotMatch(source, /err\?\.message|message\.includes\(["']schema["']\)/, name + " does not expose upstream error details");
+}
 console.log("verify-blueprint-submit: ok");
