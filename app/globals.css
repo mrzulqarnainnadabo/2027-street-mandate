@@ -4,10 +4,10 @@
 
 :root {
   color-scheme: light;
-  --forest: #0f4d34;
-  --deep: #16201b;
-  --gold: #c99a2e;
-  --cream: #fdfaf2;
+  --forest: #0b3d2e;
+  --deep: #072a20;
+  --gold: #c4a35a;
+  --cream: #f7f3e9;
   --line: rgba(15, 77, 52, 0.14);
 }
 
@@ -28,8 +28,8 @@ body {
 }
 
 ::selection {
-  background: #c99a2e;
-  color: #16201b;
+  background: #c4a35a;
+  color: #072a20;
 }
 
 a:focus-visible,
