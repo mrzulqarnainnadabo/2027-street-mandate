@@ -89,7 +89,13 @@ export default function Header() {
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? (
+            <nav className="mx-auto flex max-w-3xl items-center gap-4 overflow-x-auto border-t border-forest-500/10 px-4 py-2 text-[11px] font-semibold whitespace-nowrap" aria-label="ISEYC products">
+        <Link href="/" aria-current="page" className="text-forest-900">Mandate</Link>
+        <a href="https://iseyc-civic-brain.vercel.app" target="_blank" rel="noopener noreferrer" className="text-forest-700 hover:text-forest-900">Brain</a>
+        <a href="https://iseyc-civic-intelligence-observator.vercel.app" target="_blank" rel="noopener noreferrer" className="text-forest-700 hover:text-forest-900">Observatory</a>
+      </nav>
+
+      {open ? (
               <span className="text-lg leading-none" aria-hidden>
                 ×
               </span>
@@ -112,6 +118,19 @@ export default function Header() {
           aria-label="Site navigation"
         >
           <nav className="mx-auto flex max-w-3xl flex-col px-2 py-2" aria-label="Mobile primary">
+            <div className="border-b border-forest-500/10 px-3 py-2 text-[11px] font-bold uppercase tracking-wide text-forest-500">ISEYC products</div>
+            <Link href="/" className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50" onClick={() => setOpen(false)}>Civic Mandate Nigeria</Link>
+            <a href="https://iseyc-civic-brain.vercel.app" target="_blank" rel="noopener noreferrer" className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50">Civic Brain</a>
+            <a href="https://iseyc-civic-intelligence-observator.vercel.app" target="_blank" rel="noopener noreferrer" className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50">Civic Intelligence Observatory</a>
+            <div className="border-b border-forest-500/10 px-3 py-2 text-[11px] font-bold uppercase tracking-wide text-forest-500">Departments</div>
+            {[
+              ["Education & Capacity Building", "education"],
+              ["Health & Well-being", "health"],
+              ["Software & Technology", "software-technology"],
+              ["Civic Department", "civic"],
+            ].map(([label, department]) => (
+              <a key={department} href={`https://iseyc-civic-intelligence-observator.vercel.app/#/departments/${department}`} target="_blank" rel="noopener noreferrer" className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50">{label}</a>
+            ))}
             {NAV.map((item) => (
               <Link
                 key={item.href}
