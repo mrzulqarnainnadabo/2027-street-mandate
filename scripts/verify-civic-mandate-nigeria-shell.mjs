@@ -58,6 +58,19 @@ const header = read("components/Header.tsx");
 ok(header.includes("/states"), "header links states");
 ok(header.includes("/profiles"), "header links profiles");
 ok(header.includes("/methodology") || header.includes("Method"), "header links methodology");
+ok(header.includes("CIVIC_BRAIN_URL"), "header links Civic Brain");
+ok(header.includes("CIVIC_OBSERVATORY_URL"), "header links Civic Intelligence Observatory");
+for (const department of ["education", "health", "software-technology", "civic"]) {
+  ok(header.includes(department), `header links ${department} department workspace`);
+}
+const footer = read("components/Footer.tsx");
+ok(footer.includes("CIVIC_BRAIN_URL") && footer.includes("CIVIC_OBSERVATORY_URL"), "footer links both ISEYC intelligence products");
+for (const department of ["education", "health", "software-technology", "civic"]) {
+  ok(footer.includes(department), `footer links ${department} department workspace`);
+}
+const brandUrl = read("lib/brand.ts");
+ok(brandUrl.includes("https://iseyc-civic-intelligence-observatory.vercel.app/"), "Observatory URL uses canonical project hostname");
+ok(!brandUrl.includes("iseyc-civic-intelligence-observator.vercel.app"), "no misspelled Observatory hostname");
 
 const constants = read("lib/constants.ts");
 ok(constants.includes("\"FCT\""), "FCT in STATES");
