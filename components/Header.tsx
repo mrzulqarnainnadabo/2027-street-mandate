@@ -19,6 +19,14 @@ const NAV = [
   { href: "/tracked", label: "Tracked" },
 ] as const;
 
+const OBSERVATORY_URL = "https://iseyc-civic-intelligence-observator.vercel.app";
+const DEPARTMENTS = [
+  ["Education & Capacity Building", "education"],
+  ["Health & Well-being", "health"],
+  ["Software & Technology", "software-technology"],
+  ["Civic Department", "civic"],
+] as const;
+
 export default function Header() {
   const { t } = useLang();
   const [open, setOpen] = useState(false);
@@ -39,105 +47,50 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-forest-500/12 bg-cream/98 backdrop-blur-sm">
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3">
-        <Link
-          href="/"
-          className="flex min-w-0 items-center gap-2.5"
-          onClick={() => setOpen(false)}
-        >
-          <img
-            src={ISEYC_SEAL_SRC}
-            alt="ISEYC official seal"
-            width={36}
-            height={36}
-            className="h-9 w-9 shrink-0 rounded-full bg-white object-contain ring-1 ring-forest-500/15"
-          />
+        <Link href="/" className="flex min-w-0 items-center gap-2.5" onClick={() => setOpen(false)}>
+          <img src={ISEYC_SEAL_SRC} alt="ISEYC official seal" width={36} height={36} className="h-9 w-9 shrink-0 rounded-full bg-white object-contain ring-1 ring-forest-500/15" />
           <div className="min-w-0 text-left">
-            <div className="truncate font-display text-[13px] font-bold leading-tight text-forest-800 sm:text-sm">
-              {PRODUCT_NAME}
-            </div>
-            <div className="hidden truncate text-[10px] text-forest-500 sm:block">
-              {t("header.tagline")}
-            </div>
+            <div className="truncate font-display text-[13px] font-bold leading-tight text-forest-800 sm:text-sm">{PRODUCT_NAME}</div>
+            <div className="hidden truncate text-[10px] text-forest-500 sm:block">{t("header.tagline")}</div>
           </div>
         </Link>
 
-        <nav
-          className="hidden items-center gap-1 md:flex"
-          aria-label="Primary"
-        >
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
           {NAV.filter((n) => n.href !== "/").map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="rounded px-2.5 py-1.5 text-[12px] font-semibold text-forest-700 transition hover:bg-forest-50 hover:text-forest-900"
-            >
+            <Link key={item.href} href={item.href} className="rounded px-2.5 py-1.5 text-[12px] font-semibold text-forest-700 transition hover:bg-forest-50 hover:text-forest-900">
               {item.label === "Brief" ? t("header.brief") : item.label}
             </Link>
           ))}
-          <div className="ml-1 border-l border-forest-500/15 pl-2">
-            <LanguageSwitcher />
-          </div>
+          <div className="ml-1 border-l border-forest-500/15 pl-2"><LanguageSwitcher /></div>
         </nav>
 
         <div className="flex items-center gap-2 md:hidden">
           <LanguageSwitcher />
-          <button
-            type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-md border border-forest-500/15 bg-white text-forest-800"
-            aria-expanded={open}
-            aria-controls="mobile-nav"
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((v) => !v)}
-          >
-            <nav className="mx-auto flex max-w-3xl items-center gap-4 overflow-x-auto border-t border-forest-500/10 px-4 py-2 text-[11px] font-semibold whitespace-nowrap" aria-label="ISEYC products">
-        <Link href="/" aria-current="page" className="text-forest-900">Mandate</Link>
-        <a href="https://iseyc-civic-brain.vercel.app" target="_blank" rel="noopener noreferrer" className="text-forest-700 hover:text-forest-900">Brain</a>
-        <a href="https://iseyc-civic-intelligence-observator.vercel.app" target="_blank" rel="noopener noreferrer" className="text-forest-700 hover:text-forest-900">Observatory</a>
-      </nav>
-
-      {open ? (
-              <span className="text-lg leading-none" aria-hidden>
-                ×
-              </span>
-            ) : (
-              <span className="flex flex-col gap-1" aria-hidden>
-                <span className="block h-0.5 w-4 bg-forest-700" />
-                <span className="block h-0.5 w-4 bg-forest-700" />
-                <span className="block h-0.5 w-4 bg-forest-700" />
-              </span>
-            )}
+          <button type="button" className="flex h-10 w-10 items-center justify-center rounded-md border border-forest-500/15 bg-white text-forest-800" aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? "Close menu" : "Open menu"} onClick={() => setOpen((v) => !v)}>
+            {open ? <span className="text-lg leading-none" aria-hidden>×</span> : <span className="flex flex-col gap-1" aria-hidden><span className="block h-0.5 w-4 bg-forest-700" /><span className="block h-0.5 w-4 bg-forest-700" /><span className="block h-0.5 w-4 bg-forest-700" /></span>}
           </button>
         </div>
       </div>
 
+      <nav className="mx-auto flex max-w-3xl items-center gap-4 overflow-x-auto border-t border-forest-500/10 px-4 py-2 text-[11px] font-semibold whitespace-nowrap" aria-label="ISEYC products">
+        <Link href="/" aria-current="page" className="text-forest-900">Mandate</Link>
+        <a href="https://iseyc-civic-brain.vercel.app" target="_blank" rel="noopener noreferrer" className="text-forest-700 hover:text-forest-900">Brain</a>
+        <a href={OBSERVATORY_URL} target="_blank" rel="noopener noreferrer" className="text-forest-700 hover:text-forest-900">Observatory</a>
+      </nav>
+
       {open ? (
-        <div
-          id="mobile-nav"
-          className="border-t border-forest-500/10 bg-cream md:hidden"
-          role="dialog"
-          aria-label="Site navigation"
-        >
+        <div id="mobile-nav" className="border-t border-forest-500/10 bg-cream md:hidden" role="dialog" aria-label="Site navigation">
           <nav className="mx-auto flex max-w-3xl flex-col px-2 py-2" aria-label="Mobile primary">
             <div className="border-b border-forest-500/10 px-3 py-2 text-[11px] font-bold uppercase tracking-wide text-forest-500">ISEYC products</div>
             <Link href="/" className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50" onClick={() => setOpen(false)}>Civic Mandate Nigeria</Link>
             <a href="https://iseyc-civic-brain.vercel.app" target="_blank" rel="noopener noreferrer" className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50">Civic Brain</a>
-            <a href="https://iseyc-civic-intelligence-observator.vercel.app" target="_blank" rel="noopener noreferrer" className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50">Civic Intelligence Observatory</a>
+            <a href={OBSERVATORY_URL} target="_blank" rel="noopener noreferrer" className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50">Civic Intelligence Observatory</a>
             <div className="border-b border-forest-500/10 px-3 py-2 text-[11px] font-bold uppercase tracking-wide text-forest-500">Departments</div>
-            {[
-              ["Education & Capacity Building", "education"],
-              ["Health & Well-being", "health"],
-              ["Software & Technology", "software-technology"],
-              ["Civic Department", "civic"],
-            ].map(([label, department]) => (
-              <a key={department} href={`https://iseyc-civic-intelligence-observator.vercel.app/#/departments/${department}`} target="_blank" rel="noopener noreferrer" className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50">{label}</a>
+            {DEPARTMENTS.map(([label, department]) => (
+              <a key={department} href={`${OBSERVATORY_URL}/#/departments/${department}`} target="_blank" rel="noopener noreferrer" className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50">{label}</a>
             ))}
             {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50"
-                onClick={() => setOpen(false)}
-              >
+              <Link key={item.href} href={item.href} className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50" onClick={() => setOpen(false)}>
                 {item.label === "Brief" ? t("header.brief") : item.label}
               </Link>
             ))}
