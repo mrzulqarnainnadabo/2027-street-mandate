@@ -16,6 +16,8 @@ jobs:
         with:
           node-version: 20
       - run: npm install
+      - name: Generate CI-only dependency lock for audit
+        run: npm install --package-lock-only --ignore-scripts
       - name: Audit dependency vulnerabilities
         run: npm audit --audit-level=high
       - run: npm test
