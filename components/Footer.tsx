@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CIVIC_BRAIN_URL, ISEYC_SEAL_SRC, ISEYC_EMAIL, ISEYC_WEB, PRODUCT_NAME } from "@/lib/brand";
+import { CIVIC_BRAIN_URL, CIVIC_OBSERVATORY_URL, ISEYC_SEAL_SRC, ISEYC_EMAIL, ISEYC_WEB, PRODUCT_NAME } from "@/lib/brand";
 
 export default function Footer() {
   return (
@@ -68,7 +68,7 @@ export default function Footer() {
           </a>
         </nav>
 
-        <p className="mt-6 border-t border-cream/10 pt-5 text-[11px] text-cream/60">
+        <div className="mt-5 border-t border-cream/10 pt-4">\n          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gold-400">ISEYC departments</p>\n          <div className="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-[12px]">\n            {["Education & Capacity Building", "Health & Well-being", "Software & Technology", "Civic Department"].map((label, index) => <a key={label} href={CIVIC_OBSERVATORY_URL + "#/departments/" + ["education", "health", "software-technology", "civic"][index]} target="_blank" rel="noopener noreferrer" className="text-cream/80 underline-offset-2 hover:text-gold-400 hover:underline">{label}</a>)}\n          </div>\n        </div>\n        <p className="mt-6 border-t border-cream/10 pt-5 text-[11px] text-cream/60">
           ISEYC | Strictly Non-Partisan | www.iseyc.com.ng
         </p>
         <div className="mt-3 flex flex-col gap-1 text-[11px] text-cream/60 sm:flex-row sm:items-center sm:justify-between">
