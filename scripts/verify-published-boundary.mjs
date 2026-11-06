@@ -49,4 +49,26 @@ assert.equal(isPublicEligible("Flagged"), false);
 assert.equal(isPublicEligible("Draft"), false);
 assert.equal(isPublicEligible(""), false);
 
-console.log("verify-published-boundary: PASS (Published-only + private field exclusion)");
+
+const pilotNotice = fs.readFileSync("components/PilotNotice.tsx", "utf8");
+for (const path of ["app/page.tsx", "app/explore/page.tsx", "app/brief/page.tsx", "app/intelligence/page.tsx"]) {
+  const page = fs.readFileSync(path, "utf8");
+  assert.match(page, /PilotNotice/, `${path} renders the persistent pilot notice`);
+  if (path === "app/brief/page.tsx") {
+    assert.equal((page.match(/<PilotNotice \/>/g) || []).length, 2,
+      "brief renders pilot notice in both success and unavailable states");
+  }
+}
+assert.match(pilotNotice, /National pilot/);
+assert.match(pilotNotice, /not a representative/);
+assert.match(pilotNotice, /ranking/);
+assert.match(pilotNotice, /unavailable data/);
+
+// Every public list surface must route through a Published-only server query.
+const communityRecordsRoute = fs.readFileSync("app/api/v1/community-records/route.ts", "utf8");
+const pulseQuery = notion.match(/export async function getPublishedPulse[\s\S]*?^}/m)?.[0] || "";
+assert.match(communityRecordsRoute, /getPublishedPulse|Published/);
+assert.match(pulseQuery, /Published/);
+assert.match(pulseRoute, /getPublishedPulse/);
+
+console.log("verify-published-boundary: PASS (Published-only + private field exclusion + pilot framing)");

@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import type { CivicIntelligenceSnapshot } from "@/lib/civic-intelligence";
 import { PRODUCT_NAME } from "@/lib/brand";
+import PilotNotice from "@/components/PilotNotice";
 
 type LoadState =
   | { status: "loading" }
@@ -59,6 +60,7 @@ export default function IntelligencePage() {
     <div className="mx-auto min-h-screen max-w-3xl">
       <Header />
       <main className="px-4 py-8">
+        <PilotNotice />
         <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">
           Civic Intelligence · Published records only
         </p>
