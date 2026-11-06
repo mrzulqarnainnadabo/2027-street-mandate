@@ -4,11 +4,11 @@
 
 :root {
   color-scheme: light;
-  --forest: #0b3d2e;
-  --deep: #072a20;
-  --gold: #c4a35a;
-  --cream: #f7f3e9;
-  --line: rgba(15, 77, 52, 0.14);
+  --forest: #123b2f;
+  --deep: #202923;
+  --gold: #a7833f;
+  --cream: #faf9f5;
+  --line: rgba(25, 75, 59, 0.12);
 }
 
 * {
@@ -28,8 +28,8 @@ body {
 }
 
 ::selection {
-  background: #c4a35a;
-  color: #072a20;
+  background: #a7833f;
+  color: #202923;
 }
 
 a:focus-visible,
@@ -37,7 +37,7 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid #0f4d34;
+  outline: 2px solid #194b3b;
   outline-offset: 2px;
 }
 
@@ -53,8 +53,8 @@ textarea:focus-visible {
 }
 
 .field-control:focus {
-  border-color: #0f4d34;
-  box-shadow: 0 0 0 1px #0f4d34;
+  border-color: #194b3b;
+  box-shadow: 0 0 0 1px #194b3b;
 }
 
 .civic-action {
@@ -73,7 +73,7 @@ textarea:focus-visible {
 }
 
 .civic-action:hover {
-  background: #0a3524;
+  background: #194b3b;
 }
 
 .civic-action:active {
@@ -113,8 +113,8 @@ textarea:focus-visible {
 }
 
 @keyframes iseyc-soft-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(15, 77, 52, 0.12); }
-  50% { box-shadow: 0 0 0 6px rgba(15, 77, 52, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(25, 75, 59, 0.12); }
+  50% { box-shadow: 0 0 0 6px rgba(25, 75, 59, 0); }
 }
 
 .motion-fade-up {
@@ -145,8 +145,8 @@ textarea:focus-visible {
 
 .motion-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(15, 77, 52, 0.08);
-  border-color: rgba(15, 77, 52, 0.22);
+  box-shadow: 0 6px 16px rgba(25, 75, 59, 0.08);
+  border-color: rgba(25, 75, 59, 0.20);
 }
 
 .motion-card:active {
