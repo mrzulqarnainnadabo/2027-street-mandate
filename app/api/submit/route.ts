@@ -109,19 +109,12 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ ok: true, id });
-  } catch (err: any) {
-    console.error("Submit error:", err);
-    const message = String(err?.message || "");
-    const configFailure =
-      /not configured|Notion not configured|missing Notion|Share the database/i.test(message);
-
+  } catch {
+    // Keep upstream provider, database and schema details out of public responses and logs.
+    console.error("Civic submission failed.");
     return NextResponse.json(
-      {
-        error: configFailure
-          ? "Civic submission is temporarily unavailable. Please try again later."
-          : message || "Could not save your mandate. Please try again.",
-      },
-      { status: configFailure ? 503 : 500 }
+      { error: "Civic submission is temporarily unavailable. Please try again later." },
+      { status: 503 }
     );
   }
 }
