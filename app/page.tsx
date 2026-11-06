@@ -12,6 +12,7 @@ import SuccessPanel from "@/components/SuccessPanel";
 import LivePulse from "@/components/LivePulse";
 import Footer from "@/components/Footer";
 import { loadDraft } from "@/lib/draft";
+import PilotNotice from "@/components/PilotNotice";
 
 export default function Home() {
   const [duty, setDuty] = useState<string | null>(null);
@@ -82,6 +83,7 @@ export default function Home() {
     <div className="mx-auto min-h-screen max-w-3xl">
       <Header />
       <main>
+        <PilotNotice />
         <Hero total={stats.total} states={stats.states} pulseStatus={stats.status} />
 
         {!done ? (
