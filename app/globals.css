@@ -4,11 +4,11 @@
 
 :root {
   color-scheme: light;
-  --forest: #0b3d2e;
-  --deep: #072a20;
-  --gold: #c4a35a;
-  --cream: #f7f3e9;
-  --line: rgba(15, 77, 52, 0.14);
+  --forest: #123b2f;
+  --deep: #202923;
+  --gold: #a7833f;
+  --cream: #faf9f5;
+  --line: #e4e6df;
 }
 
 * {
@@ -37,7 +37,7 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid #0f4d34;
+  outline: 2px solid #194b3b;
   outline-offset: 2px;
 }
 
@@ -53,8 +53,8 @@ textarea:focus-visible {
 }
 
 .field-control:focus {
-  border-color: #0f4d34;
-  box-shadow: 0 0 0 1px #0f4d34;
+  border-color: #194b3b;
+  box-shadow: 0 0 0 1px #194b3b;
 }
 
 .civic-action {
@@ -73,7 +73,7 @@ textarea:focus-visible {
 }
 
 .civic-action:hover {
-  background: #0a3524;
+  background: #194b3b;
 }
 
 .civic-action:active {
