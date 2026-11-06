@@ -47,11 +47,11 @@ export default function Header() {
     <header className="sticky top-0 z-40 border-b border-forest-500/12 bg-cream/98 backdrop-blur-sm">
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3">
         <Link href="/" className="flex min-w-0 items-center gap-2.5" onClick={() => setOpen(false)}>
-          <img src={ISEYC_SEAL_SRC} alt="ISEYC official seal" width={36} height={36}
-            className="h-9 w-9 shrink-0 rounded-full bg-white object-contain ring-1 ring-forest-500/15" />
+          <img src={ISEYC_SEAL_SRC} alt="ISEYC official seal" width={30} height={30}
+            className="h-[30px] w-[30px] shrink-0 rounded-full bg-white object-contain ring-1 ring-forest-500/15" />
           <div className="min-w-0 text-left">
             <div className="truncate font-display text-[13px] font-bold leading-tight text-forest-800 sm:text-sm">{PRODUCT_NAME}</div>
-            <div className="hidden truncate text-[10px] text-forest-500 sm:block">{t("header.tagline")}</div>
+            <div className="hidden max-w-[250px] text-[9px] leading-tight text-forest-600 sm:block">Initiative for Sustainable Evolution for Youth and Community</div>
           </div>
         </Link>
 
