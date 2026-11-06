@@ -318,6 +318,7 @@ function BriefInner() {
 
   return (
     <main className="px-4 py-8">
+      <PilotNotice />
       <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600 no-print">
         Weekly field instrument · Data for delivery
       </p>
