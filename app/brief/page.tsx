@@ -15,6 +15,7 @@ import {
   shareX,
 } from "@/lib/share";
 import { weekOfLabel } from "@/lib/week-of";
+import PilotNotice from "@/components/PilotNotice";
 
 type Voice = {
   id: string;
@@ -297,6 +298,7 @@ function BriefInner() {
   if (error) {
     return (
       <main className="px-4 py-8">
+      <PilotNotice />
         <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-600">
           Data for delivery
         </p>
