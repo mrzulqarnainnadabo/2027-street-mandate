@@ -54,6 +54,10 @@ const pilotNotice = fs.readFileSync("components/PilotNotice.tsx", "utf8");
 for (const path of ["app/page.tsx", "app/explore/page.tsx", "app/brief/page.tsx", "app/intelligence/page.tsx"]) {
   const page = fs.readFileSync(path, "utf8");
   assert.match(page, /PilotNotice/, `${path} renders the persistent pilot notice`);
+  if (path === "app/brief/page.tsx") {
+    assert.equal((page.match(/<PilotNotice \/>/g) || []).length, 2,
+      "brief renders pilot notice in both success and unavailable states");
+  }
 }
 assert.match(pilotNotice, /National pilot/);
 assert.match(pilotNotice, /not a representative/);
