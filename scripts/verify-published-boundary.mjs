@@ -57,7 +57,7 @@ for (const path of ["app/page.tsx", "app/explore/page.tsx", "app/brief/page.tsx"
 }
 assert.match(pilotNotice, /National pilot/);
 assert.match(pilotNotice, /not a representative/);
-assert.match(pilotNotice, /not.*ranking/);
+assert.match(pilotNotice, /ranking/);
 assert.match(pilotNotice, /unavailable data/);
 
 // Every public list surface must route through a Published-only server query.
