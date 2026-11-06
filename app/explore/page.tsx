@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PublishedExplorer from "@/components/PublishedExplorer";
 import Link from "next/link";
+import PilotNotice from "@/components/PilotNotice";
 
 export const metadata = {
   title: "Explore published demands · Civic Mandate Nigeria",
@@ -14,6 +15,7 @@ export default function ExplorePage() {
     <div className="flex min-h-screen flex-col bg-cream">
       <Header />
       <main className="flex-1">
+        <PilotNotice />
         <div className="border-b border-forest-500/10 px-4 py-4">
           <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-2">
             <p className="text-xs text-forest-600">
