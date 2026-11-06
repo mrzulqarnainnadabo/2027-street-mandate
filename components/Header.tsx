@@ -51,7 +51,7 @@ export default function Header() {
             className="h-[30px] w-[30px] shrink-0 rounded-full bg-white object-contain ring-1 ring-forest-500/15" />
           <div className="min-w-0 text-left">
             <div className="truncate font-display text-[13px] font-bold leading-tight text-forest-800 sm:text-sm">{PRODUCT_NAME}</div>
-            <div className="hidden max-w-[250px] text-[9px] leading-tight text-forest-600 sm:block">Initiative for Sustainable Evolution for Youth and Community</div>
+            <div className="max-w-[180px] text-[9px] leading-tight text-forest-600">Initiative for Sustainable Evolution for Youth and Community</div>
           </div>
         </Link>
 
