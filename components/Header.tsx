@@ -19,7 +19,10 @@ const NAV = [
   { href: "/brief", label: "Brief" },
   { href: "/methodology", label: "Methodology" },
   { href: "/tracked", label: "Tracked" },
-] as const;
+ ] as const;
+
+const PRIMARY_NAV = NAV.filter((item) => ["/", "/learn", "/explore", "/intelligence", "/report", "/#mandate-form"].includes(item.href));
+const MORE_NAV = NAV.filter((item) => ["/states", "/blueprints", "/profiles", "/brief", "/methodology", "/tracked"].includes(item.href));
 
 const DEPARTMENTS = [
   ["Education & Capacity Building", "education"],
@@ -57,13 +60,24 @@ export default function Header() {
           </div>
         </Link>
 
-        <nav className="hidden max-w-[min(58vw,760px)] items-center gap-1 overflow-x-auto whitespace-nowrap md:flex" aria-label="Primary">
-          {NAV.map((item) => (
+        <nav className="hidden items-center gap-1 whitespace-nowrap md:flex" aria-label="Primary">
+          {PRIMARY_NAV.map((item) => (
             <Link key={item.href} href={item.href}
               className="rounded px-2 py-1.5 text-[11px] font-semibold text-forest-700 transition hover:bg-forest-50 hover:text-forest-900">
-              {item.label === "Brief" ? t("header.brief") : item.label}
+              {item.label}
             </Link>
           ))}
+          <details className="relative">
+            <summary className="cursor-pointer list-none rounded px-2 py-1.5 text-[11px] font-semibold text-forest-700 transition hover:bg-forest-50">More <span aria-hidden="true">⌄</span></summary>
+            <div className="absolute right-0 top-full z-50 mt-2 min-w-48 rounded-lg border border-forest-500/15 bg-white p-1.5 shadow-lg">
+              {MORE_NAV.map((item) => (
+                <Link key={item.href} href={item.href}
+                  className="block rounded px-3 py-2.5 text-xs font-semibold text-forest-700 hover:bg-forest-50">
+                  {item.label === "Brief" ? t("header.brief") : item.label}
+                </Link>
+              ))}
+            </div>
+          </details>
           <div className="ml-1 border-l border-forest-500/15 pl-2"><LanguageSwitcher /></div>
         </nav>
 
