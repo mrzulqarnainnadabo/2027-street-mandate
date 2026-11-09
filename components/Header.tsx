@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ISEYC_SEAL_SRC, ISEYC_WORDMARK_SRC, PRODUCT_NAME, CIVIC_BRAIN_URL, CIVIC_OBSERVATORY_URL } from "@/lib/brand";
+import { ISEYC_WORDMARK_SRC, PRODUCT_NAME, CIVIC_BRAIN_URL, CIVIC_OBSERVATORY_URL } from "@/lib/brand";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLang } from "@/components/LanguageProvider";
 
