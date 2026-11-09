@@ -10,18 +10,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Operator authorization required." }, { status: 401 });
   }
 
-  let body: {
-    id?: unknown;
-    action?: unknown;
-    reviewer?: unknown;
-    notes?: unknown;
-    decision?: unknown;
-  } | null = null;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
+  const parsed = await readJsonBodyLimited(request, 16 * 1024);
+  if (!parsed.ok) {
+    return NextResponse.json({ error: parsed.error }, { status: parsed.status });
   }
+  const body = parsed.value && typeof parsed.value === "object" && !Array.isArray(parsed.value)
+    ? parsed.value as { id?: unknown; action?: unknown; reviewer?: unknown; notes?: unknown; decision?: unknown }
+    : null;
 
   const result = await performBlueprintReviewMutation({
     id: typeof body?.id === "string" ? body.id : "",
