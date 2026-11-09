@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { performBlueprintReviewMutation } from "@/lib/civic-record/blueprint-review-service";
 import { isAuthorizedOperatorRequest } from "@/lib/server/operator-auth";
+import { readJsonBodyLimited } from "@/lib/server/read-json-body";
 
 export const dynamic = "force-dynamic";
 
