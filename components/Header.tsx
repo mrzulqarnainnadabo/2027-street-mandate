@@ -8,6 +8,7 @@ import { useLang } from "@/components/LanguageProvider";
 
 const NAV = [
   { href: "/", label: "Home" },
+  { href: "/learn", label: "Citizen Guide" },
   { href: "/states", label: "States" },
   { href: "/blueprints", label: "Blueprints" },
   { href: "/profiles", label: "Profiles" },
@@ -55,10 +56,10 @@ export default function Header() {
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+        <nav className="hidden max-w-[68vw] items-center gap-1 overflow-x-auto whitespace-nowrap md:flex" aria-label="Primary">
           {NAV.filter((n) => n.href !== "/").map((item) => (
             <Link key={item.href} href={item.href}
-              className="rounded px-2 py-1.5 text-[11px] font-semibold text-forest-700 transition hover:bg-forest-50 hover:text-forest-900">
+              className="shrink-0 rounded px-2 py-1.5 text-[11px] font-semibold text-forest-700 transition hover:bg-forest-50 hover:text-forest-900">
               {item.label === "Brief" ? t("header.brief") : item.label}
             </Link>
           ))}
