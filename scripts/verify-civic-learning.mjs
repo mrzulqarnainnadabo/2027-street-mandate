@@ -37,8 +37,6 @@ const explore = read("app/explore/page.tsx");
 for (const href of ['"/states"', '"/blueprints"', '"/profiles"', '"/intelligence"', '"/brief"', '"/tracked"']) {
   ok(explore.includes(href), "Explore hub preserves " + href);
 }
-if (failed) { console.error(`\\n${failed} failure(s)`); process.exit(1); }
-console.log("\\nAll civic-learning-first experience checks passed.");
 
 const brand = read("public/iseyc-wordmark.svg");
 const seal = read("public/iseyc-seal.svg");
@@ -47,3 +45,6 @@ ok(brand.includes('href="/iseyc-seal.svg"'), "full wordmark uses the supplied of
 ok(brand.includes("Empowering Youth, Shaping Communities"), "wordmark carries the approved institutional tagline");
 ok(seal.includes("ISEYC official seal"), "official seal remains present");
 ok(brandGuide.includes("The supplied official seal is the source of truth"), "brand guide protects the official emblem");
+
+if (failed) { console.error(`\\n${failed} failure(s)`); process.exit(1); }
+console.log("\\nAll civic-learning-first experience checks passed.");
