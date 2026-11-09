@@ -8,15 +8,11 @@ import { useLang } from "@/components/LanguageProvider";
 
 const NAV = [
   { href: "/", label: "Home" },
-  { href: "/states", label: "States" },
-  { href: "/blueprints", label: "Blueprints" },
-  { href: "/profiles", label: "Profiles" },
+  { href: "/learn", label: "Learn" },
   { href: "/explore", label: "Explore" },
-  { href: "/intelligence", label: "Intelligence" },
+  { href: "/#mandate-form", label: "Submit a demand" },
   { href: "/report", label: "Report an observation" },
-  { href: "/brief", label: "Brief" },
   { href: "/methodology", label: "Methodology" },
-  { href: "/tracked", label: "Tracked" },
 ] as const;
 
 const DEPARTMENTS = [
@@ -56,7 +52,7 @@ export default function Header() {
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
-          {NAV.filter((n) => n.href !== "/").map((item) => (
+          {NAV.map((item) => (
             <Link key={item.href} href={item.href}
               className="rounded px-2 py-1.5 text-[11px] font-semibold text-forest-700 transition hover:bg-forest-50 hover:text-forest-900">
               {item.label === "Brief" ? t("header.brief") : item.label}
