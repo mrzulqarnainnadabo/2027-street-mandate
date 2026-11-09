@@ -13,7 +13,7 @@ export const STORAGE_KEY = "iseyc_locale";
 type Dict = Record<string, string>;
 
 const en: Dict = {
-  "header.tagline": "Public civic record · pilot · non-partisan",
+  "header.tagline": "Rights · responsibilities · public participation",
   "header.brief": "Brief",
   "header.charter": "Charter",
   "hero.kicker": "ISEYC · Public civic record (pilot) · Civic Mandate Nigeria",
@@ -88,7 +88,7 @@ const en: Dict = {
 
 const pcm: Dict = {
   ...en,
-  "header.tagline": "Public civic record · pilot · no party side",
+  "header.tagline": "Rights · responsibilities · public participation",
   "hero.title1": "No be who you go vote for make you yarn.",
   "hero.title2": "Yarn wetin dem must deliver.",
   "hero.body":
