@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { CIVIC_BRAIN_URL } from "@/lib/brand";
 
 const GUIDES = [
   {number:"01",title:"Know your rights",description:"Understand the protections in Chapter IV of the Constitution.",href:"/learn#rights",meta:"Constitution · Sections 33–46"},
@@ -13,7 +14,7 @@ const GUIDES = [
 
 export default function CitizenHome({onSubmitDemand}:{onSubmitDemand:()=>void}) {
   return <div className="mx-auto min-h-screen max-w-5xl">
-    <section className="relative overflow-hidden border-b border-forest-500/10 bg-gradient-to-br from-forest-950 via-forest-900 to-[#263d32] px-4 py-9 text-white sm:py-14">
+    <section className="relative overflow-hidden border-b border-forest-500/10 bg-forest-950 px-4 py-9 text-white sm:py-14">
       <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-20 h-72 w-72 rounded-full border border-white/10" />
       <div aria-hidden="true" className="pointer-events-none absolute -right-4 -top-8 h-48 w-48 rounded-full border border-gold-400/20" />
       <div className="relative mx-auto grid max-w-4xl gap-8 md:grid-cols-[1.2fr_.8fr] md:items-center">
@@ -81,6 +82,16 @@ export default function CitizenHome({onSubmitDemand}:{onSubmitDemand:()=>void}) 
             <button type="button" onClick={onSubmitDemand} className="inline-flex min-h-10 items-center rounded-md bg-forest-900 px-3 text-xs font-semibold text-white">Submit a public demand</button>
           </div>
         </article>
+      </div>
+    </section>
+    <section className="border-t border-forest-500/10 bg-white px-4 py-8 sm:py-10" aria-labelledby="systems-heading">
+      <div className="mx-auto max-w-4xl">
+        <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="text-[10px] font-bold uppercase tracking-[.16em] text-gold-700">ISEYC civic intelligence system</p><h2 id="systems-heading" className="mt-1 font-display text-2xl font-bold text-forest-950">One mission. Three connected products.</h2></div><span className="text-[10px] text-forest-500">Record · Interpret · Explore</span></div>
+        <div className="mt-5 grid gap-3 md:grid-cols-3">
+          <article className="rounded-xl border border-forest-500/12 bg-cream p-4"><p className="text-[10px] font-bold uppercase tracking-wide text-gold-700">01 · Citizen entry</p><h3 className="mt-2 font-display text-lg font-bold text-forest-950">Civic Mandate Nigeria</h3><p className="mt-2 text-xs leading-5 text-forest-700">Citizens learn, report what they experience and submit specific public-service demands. Human review comes before publication.</p><Link href="/explore" className="mt-3 inline-flex text-xs font-bold text-forest-900 underline underline-offset-4">Explore public records →</Link></article>
+          <article className="rounded-xl border border-forest-500/12 bg-cream p-4"><p className="text-[10px] font-bold uppercase tracking-wide text-gold-700">02 · Interpretation</p><h3 className="mt-2 font-display text-lg font-bold text-forest-950">Civic Brain</h3><p className="mt-2 text-xs leading-5 text-forest-700">Connects published community records with available official evidence and explains what is known, uncertain and missing.</p><a href={CIVIC_BRAIN_URL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex text-xs font-bold text-forest-900 underline underline-offset-4">Open Civic Brain ↗</a></article>
+          <article className="rounded-xl border border-forest-500/12 bg-cream p-4"><p className="text-[10px] font-bold uppercase tracking-wide text-gold-700">03 · Evidence foundation</p><h3 className="mt-2 font-display text-lg font-bold text-forest-950">Civic Intelligence Observatory</h3><p className="mt-2 text-xs leading-5 text-forest-700">The national evidence library will connect official statistics, source records, geography and departmental research. Public release is in development.</p><span className="mt-3 inline-flex text-[10px] font-bold uppercase tracking-wide text-forest-500">In development</span></article>
+        </div>
       </div>
     </section>
   </div>;
