@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { CIVIC_BRAIN_URL, ISEYC_SEAL_SRC } from "@/lib/brand";
+import { CIVIC_BRAIN_URL, CIVIC_OBSERVATORY_URL, ISEYC_SEAL_SRC } from "@/lib/brand";
 
 export const metadata: Metadata = {
   title: "Civic Learning | Civic Mandate Nigeria",
@@ -116,7 +116,7 @@ export default function CivicLearningPage() {
             <div className="mt-5 grid gap-3 md:grid-cols-3">
               <div className="rounded-lg border border-white/12 bg-white/[0.05] p-4"><p className="text-[10px] font-bold uppercase tracking-wide text-gold-300">01 · Record</p><h3 className="mt-2 font-display text-lg font-bold">Civic Mandate Nigeria</h3><p className="mt-2 text-xs leading-relaxed text-cream/70">Citizens record what their communities experience and what public institutions are asked to address.</p><Link href="/#mandate-form" className="mt-3 inline-flex text-xs font-bold text-gold-300 underline underline-offset-4">Submit a demand ↗</Link></div>
               <div className="rounded-lg border border-white/12 bg-white/[0.05] p-4"><p className="text-[10px] font-bold uppercase tracking-wide text-gold-300">02 · Interpret</p><h3 className="mt-2 font-display text-lg font-bold">Civic Brain</h3><p className="mt-2 text-xs leading-relaxed text-cream/70">Understand published records, compare them with available evidence and see what remains unknown.</p><a href={CIVIC_BRAIN_URL} target="_blank" rel="noreferrer" className="mt-3 inline-flex text-xs font-bold text-gold-300 underline underline-offset-4">Open Civic Brain ↗</a></div>
-              <div className="rounded-lg border border-white/12 bg-white/[0.05] p-4"><p className="text-[10px] font-bold uppercase tracking-wide text-gold-300">03 · Explore</p><h3 className="mt-2 font-display text-lg font-bold">Civic Intelligence Observatory</h3><p className="mt-2 text-xs leading-relaxed text-cream/70">The national evidence library is being built to connect official data, community records and transparent research methods.</p><span className="mt-3 inline-flex text-xs font-semibold text-cream/55">Evidence foundation in development</span></div>
+              <div className="rounded-lg border border-white/12 bg-white/[0.05] p-4"><p className="text-[10px] font-bold uppercase tracking-wide text-gold-300">03 · Explore</p><h3 className="mt-2 font-display text-lg font-bold">Civic Intelligence Observatory</h3><p className="mt-2 text-xs leading-relaxed text-cream/70">The national evidence library is being built to connect official data, community records and transparent research methods.</p><a href={CIVIC_OBSERVATORY_URL} target="_blank" rel="noreferrer" className="mt-3 inline-flex text-xs font-bold text-gold-300 underline underline-offset-4">Explore national evidence ↗</a></div>
             </div>
           </section>
 
