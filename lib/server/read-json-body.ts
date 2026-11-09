@@ -11,7 +11,7 @@ export async function readJsonBodyLimited(
   maxBytes: number,
 ): Promise<LimitedJsonResult> {
   const declaredLength = request.headers.get("content-length");
-  if (declaredLength && /^\\d+$/.test(declaredLength) && Number(declaredLength) > maxBytes) {
+  if (declaredLength && /^\d+$/.test(declaredLength) && Number(declaredLength) > maxBytes) {
     return { ok: false, status: 413, error: "Request body is too large." };
   }
 
