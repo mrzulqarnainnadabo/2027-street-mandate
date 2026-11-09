@@ -46,6 +46,7 @@ export default function Footer() {
         </div>
 
         <nav className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-[12px] font-medium" aria-label="Methodology and charter">
+          <Link href="/learn" className="text-gold-400 underline-offset-2 hover:underline">Citizen Guide</Link>
           <Link href="/methodology" className="text-gold-400 underline-offset-2 hover:underline">Methodology</Link>
           <Link href="/about" className="text-gold-400 underline-offset-2 hover:underline">Non-partisan charter</Link>
           <Link href="/report" className="text-gold-400 underline-offset-2 hover:underline">Report an observation</Link>
