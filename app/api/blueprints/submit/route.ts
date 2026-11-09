@@ -4,6 +4,7 @@ import { checkRateLimit, clientIpFromRequest } from "@/lib/rate-limit";
 import { submitBlueprintRecord } from "@/lib/civic-record/submit-blueprint";
 import { validateBlueprintDraft } from "@/lib/civic-record/validate-blueprint";
 import { assertNotRankingCopy } from "@/lib/civic-record/firewall";
+import { readJsonBodyLimited } from "@/lib/server/read-json-body";
 
 const OFFICE_IDS = OFFICES.map((o) => o.id).filter((id) => id !== "Unsure");
 const DUTY_IDS = DUTIES.map((d) => d.id);
@@ -11,7 +12,11 @@ const STATEMENT_CLASSES = ["ACTOR_STATEMENT", "OFFICIAL_RECORD", "MEDIA_REPORT"]
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const parsed = await readJsonBodyLimited(req, 16 * 1024);
+    if (!parsed.ok) {
+      return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+    }
+    const body = parsed.value;
     if (!body || typeof body !== "object" || Array.isArray(body)) {
       return NextResponse.json({ error: "Invalid submission." }, { status: 400 });
     }
