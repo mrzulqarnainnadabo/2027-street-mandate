@@ -82,6 +82,7 @@ export default function Header() {
                 className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50"
                 onClick={() => setOpen(false)}>{item.label === "Brief" ? t("header.brief") : item.label}</Link>
             ))}
+            <Link href="/?action=submit" className="mx-3 my-2 inline-flex min-h-11 items-center justify-center rounded-md bg-forest-900 px-4 text-sm font-bold text-white" onClick={() => setOpen(false)}>Submit a demand</Link>
           </nav>
         </div>
       ) : null}
@@ -94,8 +95,7 @@ export default function Header() {
           <span className="shrink-0 rounded px-2.5 py-1.5 text-forest-500" title="Public Observatory release is in development">Observatory · in development</span>
           <span className="mx-1 h-5 shrink-0 border-l border-forest-500/15" />
           {DEPARTMENTS.map(([label, id]) => (
-            <a key={id} className="shrink-0 rounded px-2 py-1.5 text-forest-600 hover:bg-forest-50"
-              href={CIVIC_OBSERVATORY_URL + "#/departments/" + id} target="_blank" rel="noopener noreferrer">{label}</a>
+            <span key={id} className="shrink-0 rounded px-2 py-1.5 text-forest-500" title="Department workspace release is in development">{label}</span>
           ))}
         </div>
       </nav>
