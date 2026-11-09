@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import HowItWorks from "@/components/HowItWorks";
-import TrustStandards from "@/components/TrustStandards";
+import CitizenHome from "@/components/CitizenHome";
 import PartnersStrip from "@/components/PartnersStrip";
 import DutyCards from "@/components/DutyCards";
 import FormPanel from "@/components/FormPanel";
@@ -22,12 +20,6 @@ export default function Home() {
   const [lastState, setLastState] = useState("");
   const [lastMandateId, setLastMandateId] = useState<string | undefined>(undefined);
   const [draftRestored, setDraftRestored] = useState(false);
-  const [stats, setStats] = useState<{
-    total: number;
-    states: number;
-    status: "loading" | "ready" | "unavailable";
-  }>({ total: 0, states: 0, status: "loading" });
-
   useEffect(() => {
     const d = loadDraft();
     if (d?.duty) {
@@ -36,32 +28,6 @@ export default function Home() {
       setDraftRestored(true);
     }
   }, []);
-
-  useEffect(() => {
-    let alive = true;
-    fetch("/api/pulse")
-      .then(async (r) => {
-        if (!r.ok) throw new Error("pulse unavailable");
-        return r.json();
-      })
-      .then((d) => {
-        if (!alive) return;
-        if (d?.error || !Array.isArray(d?.voices)) {
-          throw new Error("malformed pulse");
-        }
-        setStats({
-          total: typeof d.total === "number" ? d.total : d.voices.length,
-          states: typeof d.states === "number" ? d.states : 0,
-          status: "ready",
-        });
-      })
-      .catch(() => {
-        if (alive) setStats((s) => ({ ...s, status: "unavailable" }));
-      });
-    return () => {
-      alive = false;
-    };
-  }, [done]);
 
   function handleSuccess(sentence: string, state: string, mandateId?: string) {
     setLastSentence(sentence);
