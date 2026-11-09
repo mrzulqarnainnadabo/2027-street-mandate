@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -20,7 +21,7 @@ const SOURCES = [
   { title: "National Ethics and Integrity Policy", publisher: "Independent Corrupt Practices Commission", href: "https://icpc.gov.ng/wp-content/uploads/2024/10/National-Ethics-and-Integrity-Policy_Nigeria-at-60.pdf", note: "National ethics and the values named in Section 23 of the Constitution" },
 ];
 
-function LearningCard({ number, title, subtitle, children, id }: { number: string; title: string; subtitle: string; children: React.ReactNode; id: string }) {
+function LearningCard({ number, title, subtitle, children, id }: { number: string; title: string; subtitle: string; children: ReactNode; id: string }) {
   return (
     <section id={id} className="scroll-mt-24 rounded-xl border border-forest-500/12 bg-white p-5 shadow-sm sm:p-6">
       <div className="flex items-start gap-4">
