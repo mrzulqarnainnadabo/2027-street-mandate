@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ISEYC_SEAL_SRC, PRODUCT_NAME, CIVIC_BRAIN_URL } from "@/lib/brand";
+import { ISEYC_SEAL_SRC, PRODUCT_NAME, PRODUCT_TAGLINE, CIVIC_BRAIN_URL } from "@/lib/brand";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const NAV = [
@@ -45,7 +45,7 @@ export default function Header() {
             className="h-9 w-9 shrink-0 rounded-full bg-white object-contain ring-1 ring-forest-500/15" />
           <div className="min-w-0 text-left">
             <div className="truncate font-display text-[13px] font-bold leading-tight text-forest-800 sm:text-sm">{PRODUCT_NAME}</div>
-            <div className="hidden truncate text-[10px] text-forest-500 sm:block">{t("header.tagline")}</div>
+            <div className="hidden truncate text-[10px] text-forest-500 sm:block">{PRODUCT_TAGLINE}</div>
           </div>
         </Link>
 
@@ -53,7 +53,7 @@ export default function Header() {
           {NAV.filter((n) => n.href !== "/").map((item) => (
             <Link key={item.href} href={item.href}
               className="shrink-0 rounded px-2 py-1.5 text-[11px] font-semibold text-forest-700 transition hover:bg-forest-50 hover:text-forest-900">
-              {item.label === "Brief" ? t("header.brief") : item.label}
+              {item.label}
             </Link>
           ))}
           <Link href="/?action=submit" className="ml-1 inline-flex min-h-9 shrink-0 items-center rounded-md bg-forest-900 px-3 text-[11px] font-bold text-white">Submit a demand</Link>
