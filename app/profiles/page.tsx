@@ -25,7 +25,7 @@ export default function ProfilesPage() {
       <div className="mx-auto max-w-4xl">
         <p className="text-[10px] font-bold uppercase tracking-[.16em] text-gold-700">Civic understanding · source-linked</p>
         <h1 className="mt-2 font-display text-2xl font-bold text-forest-950 sm:text-3xl">Public institutions & offices</h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-forest-700">Understand who does what, where authority comes from and where to find official information. These are institutional profiles — not candidate pages, endorsements or rankings.</p>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-forest-700">Understand who does what, where authority comes from and where to find official information. These are institutional profiles, not endorsements, rankings, recommendations or candidate pages.</p>
         <p className="mt-3 rounded-md border border-forest-500/15 bg-forest-50 px-3 py-2 text-xs leading-5 text-forest-700">No ISEYC endorsement. A source-linked institutional profile is not a recommendation, quality rating or statement of support.</p>
         <div className="mt-5 flex flex-wrap gap-2"><Link href="/learn#government" className="inline-flex min-h-10 items-center rounded-md bg-forest-900 px-4 text-xs font-semibold text-white">How government works →</Link><Link href="/map" className="inline-flex min-h-10 items-center rounded-md border border-forest-500/20 bg-white px-4 text-xs font-semibold text-forest-900">Responsibility map</Link></div>
         <div className="mt-7 grid gap-3 md:grid-cols-2">
