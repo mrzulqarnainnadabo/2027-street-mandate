@@ -41,7 +41,7 @@ for (const href of ['"/states"', '"/blueprints"', '"/profiles"', '"/intelligence
 const brand = read("public/iseyc-wordmark.svg");
 const seal = read("public/iseyc-seal.svg");
 const brandGuide = read("docs/ISEYC-BRAND-SYSTEM.md");
-ok(brand.includes('href="/iseyc-seal.svg"'), "full wordmark uses the supplied official seal");
+ok(brand.includes('href="data:image/png;base64,'), "full wordmark uses the supplied official seal");
 ok(brand.includes("Empowering Youth, Shaping Communities"), "wordmark carries the approved institutional tagline");
 ok(seal.includes("ISEYC official seal"), "official seal remains present");
 ok(brandGuide.includes("The supplied official seal is the source of truth"), "brand guide protects the official emblem");
