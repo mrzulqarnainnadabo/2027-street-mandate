@@ -41,10 +41,12 @@ for (const href of ['"/states"', '"/blueprints"', '"/profiles"', '"/intelligence
 const brand = read("public/iseyc-wordmark.svg");
 const seal = read("public/iseyc-seal.svg");
 const brandGuide = read("docs/ISEYC-BRAND-SYSTEM.md");
+const architecture = read("public/iseyc-system-architecture.svg");
 ok(brand.includes('href="data:image/png;base64,'), "full wordmark uses the supplied official seal");
 ok(brand.includes("Empowering Youth, Shaping Communities"), "wordmark carries the approved institutional tagline");
 ok(seal.includes("ISEYC official seal"), "official seal remains present");
 ok(brandGuide.includes("The supplied official seal is the source of truth"), "brand guide protects the official emblem");
+for (const label of ["Civic Mandate", "Civic Intelligence", "Civic Brain", "Education", "Health", "Software", "Civic Department", "Digital Operations Centre"]) ok(architecture.includes(label), `system map includes ${label}`);
 
 if (failed) { console.error(`\\n${failed} failure(s)`); process.exit(1); }
 console.log("\\nAll civic-learning-first experience checks passed.");
