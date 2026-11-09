@@ -12,10 +12,15 @@ import {
 } from "@/lib/constants";
 import { campaignSloganRejection } from "@/lib/demand-quality";
 import { notifyAdminsOfNewSubmission } from "@/lib/notify-new-submission";
+import { readJsonBodyLimited } from "@/lib/server/read-json-body";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const parsed = await readJsonBodyLimited(req, 8 * 1024);
+    if (!parsed.ok) {
+      return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+    }
+    const body = parsed.value;
     if (!body || typeof body !== "object" || Array.isArray(body)) {
       return NextResponse.json({ error: "Invalid submission." }, { status: 400 });
     }
