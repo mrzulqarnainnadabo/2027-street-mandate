@@ -27,10 +27,10 @@ export default function Hero({
             ISEYC · Civic Mandate Nigeria · Non-partisan
           </p>
           <h1 className="motion-fade-up motion-delay-1 mt-3 max-w-2xl font-display text-[2rem] font-bold leading-[1.08] tracking-tight text-forest-900 sm:text-[2.8rem]">
-            Make public-service demands visible.
+            Know your rights. Understand public duties. Shape the country we share.
           </h1>
           <p className="motion-fade-up motion-delay-2 mt-3 max-w-xl text-sm leading-relaxed text-forest-700 sm:text-[15px]">
-            Submit a concrete public-service demand. ISEYC reviews it before publication. Only approved records enter the public civic record.
+            Understand how public institutions work, learn your responsibilities, and help create a reviewed public record of what communities ask public office to deliver.
           </p>
           <div className="motion-fade-up motion-delay-3 mt-5 flex flex-wrap gap-2.5">
             <a href="#mandate-form" className="civic-action inline-flex min-h-[48px] items-center">
