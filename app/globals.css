@@ -4,11 +4,19 @@
 
 :root {
   color-scheme: light;
-  --forest: #123b2f;
+  --forest-950: #071f18;
+  --forest: #0b2d22;
+  --forest-800: #123b2f;
+  --forest-700: #194b3b;
+  --forest-100: #e8f0ea;
   --deep: #202923;
+  --muted: #4e5d54;
   --gold: #a7833f;
+  --gold-text: #80621f;
   --cream: #faf9f5;
-  --line: rgba(25, 75, 59, 0.12);
+  --line: #e4e6df;
+  --health: #287a70;
+  --health-soft: #e5f1ee;
 }
 
 * {
