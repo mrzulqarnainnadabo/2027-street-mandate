@@ -9,12 +9,12 @@
     "test": "node scripts/verify-civic-record.mjs && node scripts/verify-demand-quality.mjs && node scripts/verify-operator-auth.mjs && node scripts/verify-share-neutrality.mjs && node scripts/verify-published-boundary.mjs && node scripts/verify-civic-mandate-nigeria-shell.mjs && node scripts/verify-track-what-changed-media.mjs && node scripts/verify-blueprint-submit.mjs && node scripts/verify-civic-intelligence.mjs && node scripts/verify-notify-new-submission.mjs && node scripts/verify-published-explorer.mjs && node scripts/verify-community-records-v1.mjs && node scripts/verify-community-observations.mjs && node scripts/verify-evidence-vault-v1.mjs && node scripts/verify-request-body-limit.mjs"
   },
   "dependencies": {
-    "@notionhq/client": "^2.2.15",
-    "framer-motion": "^11.11.17",
-    "lucide-react": "^0.454.0",
-    "next": "15.5.24",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "@notionhq/client": "^5.31.0",
+    "framer-motion": "^14.10.0",
+    "lucide-react": "^1.70.0",
+    "next": "16.4.5",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
