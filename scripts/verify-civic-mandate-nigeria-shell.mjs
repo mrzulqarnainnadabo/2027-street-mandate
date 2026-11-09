@@ -56,21 +56,31 @@ ok(media.includes("MANDATE_STORY"), "MANDATE_STORY registered");
 
 const header = read("components/Header.tsx");
 ok(header.includes("/states"), "header links states");
-ok(header.includes("/profiles"), "header links profiles");
+ok(header.includes("/explore"), "header links the civic tools hub");
 ok(header.includes("/methodology") || header.includes("Method"), "header links methodology");
 ok(header.includes("CIVIC_BRAIN_URL"), "header links Civic Brain");
-ok(header.includes("CIVIC_OBSERVATORY_URL"), "header links Civic Intelligence Observatory");
+ok(header.includes("Observatory · in development"), "header shows Observatory public-release status");
 for (const department of ["education", "health", "software-technology", "civic"]) {
   ok(header.includes(department), `header links ${department} department workspace`);
 }
 const footer = read("components/Footer.tsx");
-ok(footer.includes("CIVIC_BRAIN_URL") && footer.includes("CIVIC_OBSERVATORY_URL"), "footer links both ISEYC intelligence products");
+ok(footer.includes("CIVIC_BRAIN_URL") && footer.includes("Civic Intelligence Observatory · in development"), "footer links Brain and accurately labels Observatory status");
 for (const department of ["education", "health", "software-technology", "civic"]) {
   ok(footer.includes(department), `footer links ${department} department workspace`);
 }
 const brandUrl = read("lib/brand.ts");
 ok(brandUrl.includes("https://iseyc-civic-intelligence-observatory.vercel.app/"), "Observatory URL uses canonical project hostname");
 ok(!brandUrl.includes("iseyc-civic-intelligence-observator.vercel.app"), "no misspelled Observatory hostname");
+
+const explore = read("app/explore/page.tsx");
+for (const route of ["/blueprints", "/profiles", "/intelligence", "/brief", "/tracked", "/states"]) {
+  ok(explore.includes(route), `Explore hub preserves ${route}`);
+}
+ok(header.includes("/?action=submit"), "header provides a global submit-demand action");
+ok(read("app/page.tsx").includes('params.get("action") === "submit"'), "global submit action opens the demand form");
+const citizenHome = read("components/CitizenHome.tsx");
+ok(citizenHome.includes("One mission. Three connected products."), "citizen home explains the connected product architecture");
+ok(citizenHome.includes("Public release is in development"), "unreleased Observatory is not presented as a live public service");
 
 const constants = read("lib/constants.ts");
 ok(constants.includes("\"FCT\""), "FCT in STATES");
