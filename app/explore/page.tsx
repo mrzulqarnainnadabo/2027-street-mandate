@@ -33,6 +33,19 @@ export default function ExplorePage() {
             </Link>
           </div>
         </div>
+        <section className="mx-auto max-w-3xl px-4 pb-5" aria-labelledby="explore-tools-heading">
+          <div className="mb-3"><p className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-700">Explore the public record</p><h1 id="explore-tools-heading" className="mt-1 font-display text-2xl font-bold text-forest-950">Civic tools & records</h1><p className="mt-1 text-xs text-forest-600">Open a focused tool without crowding the main navigation.</p></div>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {[
+              ["/blueprints", "Public blueprints", "Read documented public proposals."],
+              ["/profiles", "Institutions & offices", "Understand who is responsible for what."],
+              ["/intelligence", "Civic intelligence", "Explore published-record patterns."],
+              ["/brief", "State briefs", "Create a brief from published records."],
+              ["/tracked", "Tracked records", "Keep records on this device."],
+              ["/states", "States & FCT", "Browse records by place."],
+            ].map(([href, title, description]) => <Link key={href} href={href} className="group rounded-lg border border-forest-500/12 bg-white p-3 transition hover:border-forest-500/30 hover:bg-forest-50/60"><span className="block text-sm font-bold text-forest-900">{title}</span><span className="mt-1 block text-[11px] leading-relaxed text-forest-600">{description}</span><span className="mt-2 block text-[10px] font-bold text-gold-700 group-hover:underline">Open ↗</span></Link>)}
+          </div>
+        </section>
         <PublishedExplorer />
         <div className="mx-auto max-w-3xl px-4 pb-10 text-xs leading-relaxed text-forest-600">
           <p>
