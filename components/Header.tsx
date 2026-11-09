@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ISEYC_SEAL_SRC, PRODUCT_NAME, CIVIC_BRAIN_URL } from "@/lib/brand";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { useLang } from "@/components/LanguageProvider";
 
 const NAV = [
   { href: "/", label: "Home" },
@@ -23,7 +22,6 @@ const DEPARTMENTS = [
 ] as const;
 
 export default function Header() {
-  const { t } = useLang();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
