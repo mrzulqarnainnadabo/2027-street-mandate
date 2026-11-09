@@ -39,6 +39,9 @@ export default function Hero({
             <a href="#mandate-form" className="inline-flex min-h-[48px] items-center rounded-md border border-forest-500/20 bg-white px-4 text-sm font-semibold text-forest-800 transition hover:border-forest-500/40 hover:bg-forest-50">
               Submit a demand
             </a>
+            <Link href="/explore" className="inline-flex min-h-[48px] items-center rounded-md px-2 text-sm font-semibold text-forest-800 underline underline-offset-4">
+              Explore published records
+            </Link>
           </div>
           <p className="motion-fade-in motion-delay-5 mt-4 text-[11px] leading-snug text-forest-600">
             Pilot data · Not a poll · Not a ranking ·{" "}
