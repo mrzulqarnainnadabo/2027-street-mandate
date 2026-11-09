@@ -21,6 +21,8 @@ export default function Home() {
   const [lastMandateId, setLastMandateId] = useState<string | undefined>(undefined);
   const [draftRestored, setDraftRestored] = useState(false);
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("action") === "submit") setShowDemandForm(true);
     const d = loadDraft();
     if (d?.duty) {
       setDuty(d.duty);
