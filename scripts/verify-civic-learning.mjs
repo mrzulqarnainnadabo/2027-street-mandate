@@ -39,3 +39,11 @@ for (const href of ['"/states"', '"/blueprints"', '"/profiles"', '"/intelligence
 }
 if (failed) { console.error(`\\n${failed} failure(s)`); process.exit(1); }
 console.log("\\nAll civic-learning-first experience checks passed.");
+
+const brand = read("public/iseyc-wordmark.svg");
+const seal = read("public/iseyc-seal.svg");
+const brandGuide = read("docs/ISEYC-BRAND-SYSTEM.md");
+assert(brand.includes('href="/iseyc-seal.svg"'), "full wordmark uses the supplied official seal");
+assert(brand.includes("Empowering Youth, Shaping Communities"), "wordmark carries the approved institutional tagline");
+assert(seal.includes("ISEYC official seal"), "official seal remains present");
+assert(brandGuide.includes("The supplied official seal is the source of truth"), "brand guide protects the official emblem");
