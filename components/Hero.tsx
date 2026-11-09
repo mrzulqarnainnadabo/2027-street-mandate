@@ -33,15 +33,12 @@ export default function Hero({
             Understand how public institutions work, learn your responsibilities, and help create a reviewed public record of what communities ask public office to deliver.
           </p>
           <div className="motion-fade-up motion-delay-3 mt-5 flex flex-wrap gap-2.5">
-            <a href="#mandate-form" className="civic-action inline-flex min-h-[48px] items-center">
-              Submit a demand <span aria-hidden="true">→</span>
-            </a>
-            <Link
-              href="/explore"
-              className="inline-flex min-h-[48px] items-center rounded-md border border-forest-500/20 bg-white px-4 text-sm font-semibold text-forest-800 transition hover:border-forest-500/40 hover:bg-forest-50"
-            >
-              Explore published demands
+            <Link href="/learn" className="civic-action inline-flex min-h-[48px] items-center">
+              Explore civic learning <span aria-hidden="true">→</span>
             </Link>
+            <a href="#mandate-form" className="inline-flex min-h-[48px] items-center rounded-md border border-forest-500/20 bg-white px-4 text-sm font-semibold text-forest-800 transition hover:border-forest-500/40 hover:bg-forest-50">
+              Submit a demand
+            </a>
           </div>
           <p className="motion-fade-in motion-delay-5 mt-4 text-[11px] leading-snug text-forest-600">
             Pilot data · Not a poll · Not a ranking ·{" "}
