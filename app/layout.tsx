@@ -6,7 +6,7 @@ import { PRODUCT_NAME, PRODUCT_TAGLINE } from "@/lib/brand";
 
 export const metadata: Metadata = {
   title: PRODUCT_NAME,
-  description: `${PRODUCT_TAGLINE} Non-partisan civic mandates by ISEYC.`,
+  description: `${PRODUCT_TAGLINE} A non-partisan citizen-learning and public-participation platform by ISEYC.`,
   icons: { icon: "/iseyc-seal.svg", apple: "/iseyc-seal.svg" },
   manifest: "/manifest.webmanifest",
   appleWebApp: {
