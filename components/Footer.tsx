@@ -22,7 +22,7 @@ export default function Footer() {
             </div>
           </div>
           <p className="max-w-xs text-xs leading-relaxed text-cream/75">
-            A reviewed public record of citizen demands on public office — organised by place and responsibility.
+            A citizen-learning and public-participation platform connecting constitutional rights, public duties and a reviewed public record.
             Not a poll. Not an endorsement. Publication is not independent verification.
           </p>
         </div>
