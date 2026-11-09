@@ -5,7 +5,7 @@ import { PUBLISHED_DEMAND_LABEL } from "@/lib/record-classes";
 export const metadata = {
   title: "About & Non-Partisan Charter | Civic Mandate Nigeria",
   description:
-    "Civic Mandate Nigeria is a non-partisan platform for citizen demands on public office — not candidate rankings.",
+    "Civic Mandate Nigeria is a non-partisan citizen-learning and public-participation platform grounded in the Constitution and public evidence.",
 };
 
 export default function AboutPage() {
@@ -25,7 +25,7 @@ export default function AboutPage() {
       </h1>
       <p className="mt-2 text-center text-sm text-forest-600">Civic Mandate Nigeria</p>
       <p className="mt-3 text-center text-xs font-medium text-gold-600">
-        Don’t tell them who you’ll vote for. Tell them what they must deliver.
+        Know your rights. Understand public duty. Take part.
       </p>
 
       <div className="paper-card mt-8 space-y-4 rounded-2xl p-5 text-sm leading-relaxed text-forest-800">
@@ -37,12 +37,10 @@ export default function AboutPage() {
 
         <h2 className="pt-1 font-display text-base font-bold text-forest-900">What this is</h2>
         <p>
-          A place to state one concrete demand of public office, name the duty and (where you can)
-          the office responsible, and locate it in your state. After review, accepted mandates
-          become a public Civic Pulse — a memory of what citizens asked for.
+          A non-partisan citizen guide to constitutional rights, civic responsibilities, public institutions and peaceful participation. It also helps people document community observations and submit specific public-service demands. After human review, published demands become part of a public civic record.
         </p>
 
-        <h2 className="pt-1 font-display text-base font-bold text-forest-900">What this is not</h2>
+        <h2 className="pt-1 font-display text-base font-bold text-forest-900">Citizen learning standard</h2>\n        <p>Constitutional and civic explainers identify their source and section. They distinguish legal text from ISEYC interpretation, and community reports from verified facts. Patriotism is framed as informed service, respect for rights, peaceful participation and accountability — never as party loyalty or silence.</p>\n\n        <h2 className="pt-1 font-display text-base font-bold text-forest-900">What this is not</h2>
         <ul className="list-disc space-y-1 pl-5">
           <li>Not a candidate ranking or “who is leading” poll</li>
           <li>Not an endorsement of any party or aspirant</li>
