@@ -2,22 +2,27 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ISEYC_SEAL_SRC, PRODUCT_NAME, CIVIC_BRAIN_URL, CIVIC_OBSERVATORY_URL } from "@/lib/brand";
+import { ISEYC_WORDMARK_SRC, PRODUCT_NAME, CIVIC_BRAIN_URL, CIVIC_OBSERVATORY_URL } from "@/lib/brand";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLang } from "@/components/LanguageProvider";
 
 const NAV = [
   { href: "/", label: "Home" },
+  { href: "/learn", label: "Learn" },
   { href: "/states", label: "States" },
   { href: "/blueprints", label: "Blueprints" },
   { href: "/profiles", label: "Profiles" },
   { href: "/explore", label: "Explore" },
   { href: "/intelligence", label: "Intelligence" },
   { href: "/report", label: "Report an observation" },
+  { href: "/#mandate-form", label: "Submit a demand" },
   { href: "/brief", label: "Brief" },
   { href: "/methodology", label: "Methodology" },
   { href: "/tracked", label: "Tracked" },
-] as const;
+ ] as const;
+
+const PRIMARY_NAV = NAV.filter((item) => ["/", "/learn", "/explore", "/intelligence", "/report", "/#mandate-form"].includes(item.href));
+const MORE_NAV = NAV.filter((item) => ["/states", "/blueprints", "/profiles", "/brief", "/methodology", "/tracked"].includes(item.href));
 
 const DEPARTMENTS = [
   ["Education & Capacity Building", "education"],
@@ -47,21 +52,32 @@ export default function Header() {
     <header className="sticky top-0 z-40 border-b border-forest-500/12 bg-cream/98 backdrop-blur-sm">
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3">
         <Link href="/" className="flex min-w-0 items-center gap-2.5" onClick={() => setOpen(false)}>
-          <img src={ISEYC_SEAL_SRC} alt="ISEYC official seal" width={36} height={36}
-            className="h-9 w-9 shrink-0 rounded-full bg-white object-contain ring-1 ring-forest-500/15" />
+          <img src={ISEYC_WORDMARK_SRC} alt="ISEYC — Initiative for Sustainable Evolution for Youth and Community" width={154} height={32}
+            className="h-auto w-[126px] shrink-0 object-contain sm:w-[154px]" />
           <div className="min-w-0 text-left">
             <div className="truncate font-display text-[13px] font-bold leading-tight text-forest-800 sm:text-sm">{PRODUCT_NAME}</div>
             <div className="hidden truncate text-[10px] text-forest-500 sm:block">{t("header.tagline")}</div>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
-          {NAV.filter((n) => n.href !== "/").map((item) => (
+        <nav className="hidden items-center gap-1 whitespace-nowrap md:flex" aria-label="Primary">
+          {PRIMARY_NAV.map((item) => (
             <Link key={item.href} href={item.href}
               className="rounded px-2 py-1.5 text-[11px] font-semibold text-forest-700 transition hover:bg-forest-50 hover:text-forest-900">
-              {item.label === "Brief" ? t("header.brief") : item.label}
+              {item.label}
             </Link>
           ))}
+          <details className="relative">
+            <summary className="cursor-pointer list-none rounded px-2 py-1.5 text-[11px] font-semibold text-forest-700 transition hover:bg-forest-50">More <span aria-hidden="true">⌄</span></summary>
+            <div className="absolute right-0 top-full z-50 mt-2 min-w-48 rounded-lg border border-forest-500/15 bg-white p-1.5 shadow-lg">
+              {MORE_NAV.map((item) => (
+                <Link key={item.href} href={item.href}
+                  className="block rounded px-3 py-2.5 text-xs font-semibold text-forest-700 hover:bg-forest-50">
+                  {item.label === "Brief" ? t("header.brief") : item.label}
+                </Link>
+              ))}
+            </div>
+          </details>
           <div className="ml-1 border-l border-forest-500/15 pl-2"><LanguageSwitcher /></div>
         </nav>
 

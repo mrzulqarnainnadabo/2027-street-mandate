@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import CivicLearningPreview from "@/components/CivicLearningPreview";
 import HowItWorks from "@/components/HowItWorks";
 import TrustStandards from "@/components/TrustStandards";
 import PartnersStrip from "@/components/PartnersStrip";
@@ -85,6 +86,7 @@ export default function Home() {
       <main>
         <PilotNotice />
         <Hero total={stats.total} states={stats.states} pulseStatus={stats.status} />
+        <CivicLearningPreview />
 
         {!done ? (
           <>
