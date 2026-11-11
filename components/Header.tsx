@@ -10,6 +10,7 @@ const NAV = [
   { href: "/learn", label: "Citizen Guide" },
   { href: "/states", label: "States" },
   { href: "/explore", label: "Explore" },
+  { href: "/intelligence", label: "Intelligence" },
   { href: "/report", label: "Report an observation" },
   { href: "/methodology", label: "Methodology" },
 ] as const;
@@ -78,7 +79,7 @@ export default function Header() {
             {NAV.map((item) => (
               <Link key={item.href} href={item.href}
                 className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50"
-                onClick={() => setOpen(false)}>{item.label === "Brief" ? t("header.brief") : item.label}</Link>
+                onClick={() => setOpen(false)}>{item.label}</Link>
             ))}
             <Link href="/?action=submit" className="mx-3 my-2 inline-flex min-h-11 items-center justify-center rounded-md bg-forest-900 px-4 text-sm font-bold text-white" onClick={() => setOpen(false)}>Submit a demand</Link>
           </nav>
