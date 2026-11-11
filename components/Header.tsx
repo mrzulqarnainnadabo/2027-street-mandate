@@ -2,21 +2,17 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ISEYC_SEAL_SRC, PRODUCT_NAME, CIVIC_BRAIN_URL, CIVIC_OBSERVATORY_URL } from "@/lib/brand";
+import { ISEYC_SEAL_SRC, PRODUCT_NAME, PRODUCT_TAGLINE, CIVIC_BRAIN_URL } from "@/lib/brand";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { useLang } from "@/components/LanguageProvider";
 
 const NAV = [
   { href: "/", label: "Home" },
+  { href: "/learn", label: "Citizen Guide" },
   { href: "/states", label: "States" },
-  { href: "/blueprints", label: "Blueprints" },
-  { href: "/profiles", label: "Profiles" },
   { href: "/explore", label: "Explore" },
   { href: "/intelligence", label: "Intelligence" },
   { href: "/report", label: "Report an observation" },
-  { href: "/brief", label: "Brief" },
   { href: "/methodology", label: "Methodology" },
-  { href: "/tracked", label: "Tracked" },
 ] as const;
 
 const DEPARTMENTS = [
@@ -27,7 +23,6 @@ const DEPARTMENTS = [
 ] as const;
 
 export default function Header() {
-  const { t } = useLang();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -45,23 +40,24 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-forest-500/12 bg-cream/98 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3">
+      <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
         <Link href="/" className="flex min-w-0 items-center gap-2.5" onClick={() => setOpen(false)}>
           <img src={ISEYC_SEAL_SRC} alt="ISEYC official seal" width={36} height={36}
             className="h-9 w-9 shrink-0 rounded-full bg-white object-contain ring-1 ring-forest-500/15" />
           <div className="min-w-0 text-left">
             <div className="truncate font-display text-[13px] font-bold leading-tight text-forest-800 sm:text-sm">{PRODUCT_NAME}</div>
-            <div className="hidden truncate text-[10px] text-forest-500 sm:block">{t("header.tagline")}</div>
+            <div className="hidden truncate text-[10px] text-forest-500 sm:block">{PRODUCT_TAGLINE}</div>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+        <nav className="hidden max-w-[68vw] items-center gap-1 overflow-x-auto whitespace-nowrap md:flex" aria-label="Primary">
           {NAV.filter((n) => n.href !== "/").map((item) => (
             <Link key={item.href} href={item.href}
-              className="rounded px-2 py-1.5 text-[11px] font-semibold text-forest-700 transition hover:bg-forest-50 hover:text-forest-900">
-              {item.label === "Brief" ? t("header.brief") : item.label}
+              className="shrink-0 rounded px-2 py-1.5 text-[11px] font-semibold text-forest-700 transition hover:bg-forest-50 hover:text-forest-900">
+              {item.label}
             </Link>
           ))}
+          <Link href="/?action=submit" className="ml-1 inline-flex min-h-9 shrink-0 items-center rounded-md bg-forest-900 px-3 text-[11px] font-bold text-white">Submit a demand</Link>
           <div className="ml-1 border-l border-forest-500/15 pl-2"><LanguageSwitcher /></div>
         </nav>
 
@@ -83,8 +79,9 @@ export default function Header() {
             {NAV.map((item) => (
               <Link key={item.href} href={item.href}
                 className="rounded-md px-3 py-3 text-sm font-semibold text-forest-800 hover:bg-forest-50"
-                onClick={() => setOpen(false)}>{item.label === "Brief" ? t("header.brief") : item.label}</Link>
+                onClick={() => setOpen(false)}>{item.label}</Link>
             ))}
+            <Link href="/?action=submit" className="mx-3 my-2 inline-flex min-h-11 items-center justify-center rounded-md bg-forest-900 px-4 text-sm font-bold text-white" onClick={() => setOpen(false)}>Submit a demand</Link>
           </nav>
         </div>
       ) : null}
@@ -94,11 +91,10 @@ export default function Header() {
           <span className="shrink-0 uppercase tracking-wider text-forest-500">ISEYC systems</span>
           <span aria-current="page" className="shrink-0 rounded bg-forest-50 px-2.5 py-1.5 text-forest-900">Mandate</span>
           <a className="shrink-0 rounded px-2.5 py-1.5 text-forest-700 hover:bg-forest-50" href={CIVIC_BRAIN_URL} target="_blank" rel="noopener noreferrer">Brain</a>
-          <a className="shrink-0 rounded px-2.5 py-1.5 text-forest-700 hover:bg-forest-50" href={CIVIC_OBSERVATORY_URL} target="_blank" rel="noopener noreferrer">Observatory</a>
+          <span className="shrink-0 rounded px-2.5 py-1.5 text-forest-500" title="Public Observatory release is in development">Observatory · in development</span>
           <span className="mx-1 h-5 shrink-0 border-l border-forest-500/15" />
           {DEPARTMENTS.map(([label, id]) => (
-            <a key={id} className="shrink-0 rounded px-2 py-1.5 text-forest-600 hover:bg-forest-50"
-              href={CIVIC_OBSERVATORY_URL + "#/departments/" + id} target="_blank" rel="noopener noreferrer">{label}</a>
+            <span key={id} className="shrink-0 rounded px-2 py-1.5 text-forest-500" title="Department workspace release is in development">{label}</span>
           ))}
         </div>
       </nav>

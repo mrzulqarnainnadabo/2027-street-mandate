@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CIVIC_BRAIN_URL, CIVIC_OBSERVATORY_URL, ISEYC_SEAL_SRC, ISEYC_EMAIL, ISEYC_WEB, PRODUCT_NAME } from "@/lib/brand";
+import { CIVIC_BRAIN_URL, ISEYC_SEAL_SRC, ISEYC_EMAIL, ISEYC_WEB, PRODUCT_NAME } from "@/lib/brand";
 
 const DEPARTMENTS = [
   ["Education & Capacity Building", "education"],
@@ -22,7 +22,7 @@ export default function Footer() {
             </div>
           </div>
           <p className="max-w-xs text-xs leading-relaxed text-cream/75">
-            A reviewed public record of citizen demands on public office — organised by place and responsibility.
+            A citizen-learning and public-participation platform connecting constitutional rights, public duties and a reviewed public record.
             Not a poll. Not an endorsement. Publication is not independent verification.
           </p>
         </div>
@@ -32,20 +32,21 @@ export default function Footer() {
           <nav className="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-[12px] font-medium" aria-label="ISEYC products">
             <span className="text-cream">Civic Mandate Nigeria</span>
             <a href={CIVIC_BRAIN_URL} target="_blank" rel="noopener noreferrer" className="text-gold-400 underline-offset-2 hover:underline">Civic Brain</a>
-            <a href={CIVIC_OBSERVATORY_URL} target="_blank" rel="noopener noreferrer" className="text-gold-400 underline-offset-2 hover:underline">Civic Intelligence Observatory</a>
+            <span className="text-cream/65">Civic Intelligence Observatory · in development</span>
           </nav>
         </div>
 
         <div className="mt-5">
           <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gold-400">Institutional departments</p>
           <nav className="mt-2 flex flex-wrap gap-x-4 gap-y-2 text-[12px]" aria-label="ISEYC departments">
-            {DEPARTMENTS.map(([label, id]) => <a key={id}
-              href={CIVIC_OBSERVATORY_URL + "#/departments/" + id} target="_blank" rel="noopener noreferrer"
-              className="text-cream/80 underline-offset-2 hover:text-gold-400 hover:underline">{label}</a>)}
+            {DEPARTMENTS.map(([label, id]) => <span key={id} className="text-cream/60" title="Department workspace release is in development">{label}</span>)}
           </nav>
         </div>
 
         <nav className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-[12px] font-medium" aria-label="Methodology and charter">
+          <Link href="/learn" className="text-gold-400 underline-offset-2 hover:underline">Citizen Guide</Link>
+          <Link href="/explore" className="text-gold-400 underline-offset-2 hover:underline">Explore</Link>
+          <Link href="/?action=submit" className="text-gold-400 underline-offset-2 hover:underline">Submit a demand</Link>
           <Link href="/methodology" className="text-gold-400 underline-offset-2 hover:underline">Methodology</Link>
           <Link href="/about" className="text-gold-400 underline-offset-2 hover:underline">Non-partisan charter</Link>
           <Link href="/report" className="text-gold-400 underline-offset-2 hover:underline">Report an observation</Link>

@@ -13,7 +13,7 @@ export const STORAGE_KEY = "iseyc_locale";
 type Dict = Record<string, string>;
 
 const en: Dict = {
-  "header.tagline": "Public civic record · pilot · non-partisan",
+  "header.tagline": "Rights · responsibilities · public participation",
   "header.brief": "Brief",
   "header.charter": "Charter",
   "hero.kicker": "ISEYC · Public civic record (pilot) · Civic Mandate Nigeria",
@@ -88,7 +88,7 @@ const en: Dict = {
 
 const pcm: Dict = {
   ...en,
-  "header.tagline": "Public civic record · pilot · no party side",
+  "header.tagline": "Rights · responsibilities · public participation",
   "hero.title1": "No be who you go vote for make you yarn.",
   "hero.title2": "Yarn wetin dem must deliver.",
   "hero.body":
@@ -118,7 +118,7 @@ const pcm: Dict = {
 
 const ha: Dict = {
   ...en,
-  "header.tagline": "Kayan aiki na jama'a · ba na jam'iyya ba",
+  "header.tagline": "Haƙƙoƙi · Nauyi · Shiga cikin al’umma",
   "hero.title1": "Kada ka gaya musu wanda zaka zaba.",
   "hero.title2": "Gaya musu abin da dole su kawo.",
   "hero.body":
@@ -137,7 +137,7 @@ const ha: Dict = {
 
 const yo: Dict = {
   ...en,
-  "header.tagline": "Àkọsílẹ̀ ìjọba · kì í ṣe ẹgbẹ́ òṣèlú",
+  "header.tagline": "Ẹ̀tọ́ · ojúṣe · ìkópa aráàlú",
   "hero.title1": "Má ṣe sọ ẹni tí o máa dìbò fún.",
   "hero.title2": "Sọ ohun tí wọ́n gbọ́dọ̀ ṣe.",
   "hero.body":
@@ -154,7 +154,7 @@ const yo: Dict = {
 
 const ig: Dict = {
   ...en,
-  "header.tagline": "Ndekọ ọha · ọ bụghị ndọrọndọrọ",
+  "header.tagline": "Ikike · ọrụ nwa amaala · itinye aka",
   "hero.title1": "A sịla ha onye ị ga-atụ anya.",
   "hero.title2": "Gwa ha ihe ha ga-eme.",
   "hero.body":

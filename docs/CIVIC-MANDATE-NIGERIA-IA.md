@@ -6,18 +6,19 @@
 
 ## Product definition
 
-Non-partisan civic information platform organising:
+Non-partisan citizen understanding and public participation platform. Its primary assignment is to help people understand their constitutional rights, civic responsibilities, public institutions and ways to participate peacefully. It then connects that understanding to source-backed public evidence and community experience.
 
-1. **Citizen demands** (Mandate lifecycle — preserved)
-2. **Public Blueprints** (proposals; dual-review)
-3. **Source-backed Profiles** (information records, not campaign pages)
-4. **Institutional participation** (equal process; ISEYC keeps methodology control)
+1. **Citizen learning** — rights, responsibilities, constitutional structure, public money, elections and active citizenship.
+2. **Public understanding** — states, institutions, public duties, profiles and explainers.
+3. **Community experience** — published observations and specific public-service demands (human review preserved).
+4. **Public Blueprints** — proposals with dual review and evidence boundaries.
+5. **Tracked public record** — publication status and documented changes, never implied resolution.
 
 ## Routes (target)
 
 | Path | Purpose |
 |------|--------|
-| `/` | Submit demand + Civic Pulse |
+| `/` | Citizen-first home: learn, understand, participate; public record and demand submission are secondary |\n| `/learn` | Citizen Guide: rights, responsibilities, government, public resources, participation and patriotism |
 | `/states` | 36 states + FCT → Brief |
 | `/brief?state=` | State Civic Brief |
 | `/blueprints` | Public Blueprint Register |
@@ -41,4 +42,4 @@ Allowed later (not in this increment): equal-fee technical formatting, instituti
 
 ## Non-goals
 
-No rankings, match scores, campaign CRM, party ownership of the ledger.
+No rankings, match scores, campaign CRM, party ownership of the ledger, or patriotic loyalty tests. Civic learning must distinguish constitutional duties from legal advice and must not equate patriotism with silence or uncritical government support.
