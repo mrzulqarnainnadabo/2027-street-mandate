@@ -30,3 +30,10 @@ assert.match(route, /Access-Control-Allow-Origin/);
 
 assert.doesNotMatch(module, /Reporter Email|Reporter Phone|Device Fingerprint|Primary Reviewer.*records|Secondary Reviewer.*records/);
 console.log("verify-evidence-vault-v1: PASS");
+assert.match(module, /CONFIGURATION_MISSING/);
+assert.match(module, /NOTION_TOKEN_UNAUTHORIZED/);
+assert.match(module, /NOTION_ACCESS_DENIED/);
+assert.match(module, /NOTION_DATA_SOURCE_NOT_FOUND_OR_NOT_SHARED/);
+assert.match(module, /NOTION_REQUEST_VALIDATION_FAILED/);
+assert.match(module, /NOTION_RATE_LIMITED/);
+console.log("evidence vault diagnostic codes: ok");
