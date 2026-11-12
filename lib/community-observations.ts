@@ -41,6 +41,12 @@ export type PublicCommunityObservation = {
 
 type NotionApiError = Error & { code?: string; status?: number };
 
+function isPlausibleNotionId(value: string): boolean {
+  // Notion IDs are 32 hex chars, optionally hyphenated UUID form.
+  const compact = value.replace(/-/g, "").toLowerCase();
+  return /^[0-9a-f]{32}$/.test(compact);
+}
+
 async function notionRequest(path: string, method: "GET" | "POST", body?: unknown): Promise<any> {
   const token = process.env.NOTION_TOKEN;
   if (!token) throw new Error("Community observation Notion token is not configured.");
@@ -70,8 +76,14 @@ async function notionRequest(path: string, method: "GET" | "POST", body?: unknow
 }
 
 function dataSourceId(): string {
-  const id = process.env.NOTION_COMMUNITY_OBSERVATIONS_DATA_SOURCE_ID;
+  const id = process.env.NOTION_COMMUNITY_OBSERVATIONS_DATA_SOURCE_ID?.trim();
   if (!id) throw new Error("Community observation data source is not configured.");
+  if (!isPlausibleNotionId(id)) {
+    const error = new Error("Community observation data source ID is not a valid Notion identifier.") as NotionApiError;
+    error.code = "validation_error";
+    error.status = 400;
+    throw error;
+  }
   return id;
 }
 
