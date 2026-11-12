@@ -37,6 +37,13 @@ assert.match(publish, /publicationBoundary: "published-only"/);
 assert.match(publish, /truncatedUpstream/);
 assert.match(publish, /diagnosticCode: communityObservationErrorCode\(error\)/);
 assert.match(intake, /function communityObservationErrorCode\(error: unknown\)/);
+assert.match(intake, /CONFIGURATION_MISSING/);
+assert.match(intake, /NOTION_TOKEN_UNAUTHORIZED/);
+assert.match(intake, /NOTION_ACCESS_DENIED/);
+assert.match(intake, /NOTION_DATA_SOURCE_NOT_FOUND_OR_NOT_SHARED/);
+assert.match(intake, /NOTION_REQUEST_VALIDATION_FAILED/);
+assert.match(intake, /NOTION_RATE_LIMITED/);
+
 assert.match(page, /How do you know\?/);
 assert.match(page, /Submit report privately/);
 assert.match(page, /No name, phone number, email, demographic profile or device fingerprint/);
