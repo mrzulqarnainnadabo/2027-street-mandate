@@ -16,18 +16,26 @@ export default function ExplorePage() {
       <Header />
       <main className="flex-1">
         <PilotNotice />
-        <div className="border-b border-forest-500/10 px-4 py-4">
-          <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-2">
-            <p className="text-xs text-forest-600">
-              <Link href="/" className="font-semibold text-forest-800 underline-offset-2 hover:underline">
-                Home
-              </Link>
-              {" · "}
-              Explore
-            </p>
+        <div className="border-b border-forest-500/10 px-4 py-5">
+          <div className="mx-auto flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs text-forest-600">
+                <Link href="/" className="font-semibold text-forest-800 underline-offset-2 hover:underline">
+                  Home
+                </Link>
+                {" · "}
+                Explore
+              </p>
+              <h1 className="mt-1 font-display text-xl font-bold text-forest-900 sm:text-2xl">
+                Published civic demands
+              </h1>
+              <p className="mt-1 max-w-xl text-sm text-forest-700">
+                Human-reviewed public records by duty and place. Not a poll, ranking or proof of delivery.
+              </p>
+            </div>
             <Link
               href="/#mandate-form"
-              className="inline-flex min-h-[40px] items-center rounded-md bg-forest-800 px-3 text-xs font-semibold text-cream"
+              className="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-md bg-forest-800 px-4 text-sm font-semibold text-cream"
             >
               Submit a demand
             </Link>
