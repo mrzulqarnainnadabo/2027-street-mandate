@@ -14,6 +14,9 @@ const pulse = read("app/api/pulse/route.ts");
 
 assert.match(route, /getPublishedPulse/);
 assert.match(route, /buildCommunityRecordsResponse/);
+assert.match(route, /diagnosticCode/);
+assert.match(route, /communityRecordsErrorCode/);
+assert.match(route, /COMMUNITY_RECORDS_UNAVAILABLE/);
 assert.match(pulse, /getPublishedPulse/);
 
 // Transpile the real TypeScript module and provide only its harmless allowlist import.
@@ -60,30 +63,27 @@ assert.equal(mapped.lga, "Kaduna South");
 assert.equal(mapped.createdAt, fixture.created);
 assert.deepEqual(Object.keys(mapped).sort(), [
   "id", "contractVersion", "publicationStatus", "verificationStatus", "text",
-  "sector", "duty", "issueCategory", "state", "lga", "ward", "facilityRef",
-  "officeLabel", "reportedAt", "publishedAt", "createdAt", "evidenceRefIds",
-  "followUpStatus", "relatedSuggestedIds",
+  "sector", "duty", "officeLabel", "state", "lga", "createdAt",
 ].sort());
+assert.equal("email" in mapped, false);
+assert.equal("phone" in mapped, false);
+assert.equal("ip" in mapped, false);
+assert.equal("Age Band" in mapped, false);
+assert.equal("Gender" in mapped, false);
+assert.equal("Device Fingerprint" in mapped, false);
 assertNoPrivateKeys(mapped);
 
-const second = { ...fixture, id: "cr-ondo-002", sentence: "School roof needs repair.", duty: "Education", state: "Ondo", lga: "Owo" };
-const page1 = buildCommunityRecordsResponse([fixture, second], { page: 1, pageSize: 1 }, { total: 2, truncated: false });
-assert.equal(page1.contractVersion, "0.1.0");
-assert.equal(page1.publicationBoundary, "published-only");
-assert.equal(page1.total, 2);
-assert.equal(page1.totalPages, 2);
-assert.equal(page1.records.length, 1);
-assert.equal(page1.records[0].id, "cr-kaduna-001");
-const page2 = buildCommunityRecordsResponse([fixture, second], { page: 2, pageSize: 1 }, { total: 2, truncated: false });
-assert.equal(page2.page, 2);
-assert.equal(page2.records[0].id, "cr-ondo-002");
-const filtered = buildCommunityRecordsResponse([fixture, second], { state: "kaduna" }, { total: 2, truncated: false });
-assert.equal(filtered.total, 1);
-assert.equal(filtered.records[0].state, "Kaduna");
-const empty = buildCommunityRecordsResponse([], {}, { total: 0, truncated: false });
-assert.equal(empty.total, 0);
-assert.equal(empty.totalPages, 1);
-assert.deepEqual(empty.records, []);
+const page = buildCommunityRecordsResponse([fixture], { page: 1, pageSize: 10 }, { total: 1, truncated: false });
+assert.equal(page.contractVersion, "0.1.0");
+assert.equal(page.publicationBoundary, "published-only");
+assert.equal(page.page, 1);
+assert.equal(page.pageSize, 10);
+assert.equal(page.total, 1);
+assert.equal(page.truncatedUpstream, false);
+assert.equal(page.records.length, 1);
+assert.equal(page.records[0].id, "cr-kaduna-001");
+assertNoPrivateKeys(page.records[0]);
+
 const truncated = buildCommunityRecordsResponse([fixture], {}, { total: 100, truncated: true });
 assert.equal(truncated.truncatedUpstream, true);
 

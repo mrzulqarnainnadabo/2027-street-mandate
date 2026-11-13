@@ -27,6 +27,9 @@ assert.match(route, /geographicLevel/);
 assert.match(route, /truncatedUpstream/);
 assert.match(route, /Corroborates and Contradicts require a linked Community Observation ID/);
 assert.match(route, /Access-Control-Allow-Origin/);
+assert.match(route, /diagnosticCode/);
+assert.match(route, /EVIDENCE_VAULT_UNAVAILABLE/);
+assert.match(module, /evidenceVaultErrorCode/);
 
 assert.doesNotMatch(module, /Reporter Email|Reporter Phone|Device Fingerprint|Primary Reviewer.*records|Secondary Reviewer.*records/);
 console.log("verify-evidence-vault-v1: PASS");
