@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node scripts/verify-civic-record.mjs && node scripts/verify-demand-quality.mjs && node scripts/verify-operator-auth.mjs && node scripts/verify-share-neutrality.mjs && node scripts/verify-published-boundary.mjs && node scripts/verify-civic-mandate-nigeria-shell.mjs && node scripts/verify-track-what-changed-media.mjs && node scripts/verify-blueprint-submit.mjs && node scripts/verify-civic-intelligence.mjs && node scripts/verify-notify-new-submission.mjs && node scripts/verify-published-explorer.mjs && node scripts/verify-community-records-v1.mjs && node scripts/verify-community-observations.mjs && node scripts/verify-evidence-vault-v1.mjs && node scripts/verify-request-body-limit.mjs"
+    "test": "node scripts/verify-civic-record.mjs && node scripts/verify-demand-quality.mjs && node scripts/verify-operator-auth.mjs && node scripts/verify-share-neutrality.mjs && node scripts/verify-published-boundary.mjs && node scripts/verify-civic-mandate-nigeria-shell.mjs && node scripts/verify-track-what-changed-media.mjs && node scripts/verify-blueprint-submit.mjs && node scripts/verify-civic-intelligence.mjs && node scripts/verify-notify-new-submission.mjs && node scripts/verify-published-explorer.mjs && node scripts/verify-community-records-v1.mjs && node scripts/verify-community-observations.mjs && node scripts/verify-evidence-vault-v1.mjs && node scripts/verify-request-body-limit.mjs && node scripts/verify-mandate-review-lifecycle.mjs"
   },
   "dependencies": {
     "@notionhq/client": "^2.2.15",
