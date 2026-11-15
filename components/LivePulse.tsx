@@ -137,7 +137,7 @@ export default function LivePulse() {
             aria-label="Filter by state"
             className="min-h-[48px] w-full rounded-md border border-forest-500/15 bg-white px-3 text-xs text-forest-700 outline-none focus:border-forest-500"
           >
-            <option value="">All states</option>
+            <option value="">All states and FCT</option>
             {STATES.map((state) => (
               <option key={state} value={state}>
                 {state}
