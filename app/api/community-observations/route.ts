@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { submitCommunityObservation } from "@/lib/community-observations";
 import { checkRateLimit, clientIpFromRequest } from "@/lib/rate-limit";
 import { STATES } from "@/lib/constants";
+import { readJsonBodyLimited } from "@/lib/server/read-json-body";
 
 const REPORT_TYPES = [
   "Service access gap",
@@ -49,7 +50,11 @@ function containsContactDetails(value: string): boolean {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const parsed = await readJsonBodyLimited(req, 16 * 1024);
+    if (!parsed.ok) {
+      return NextResponse.json({ error: parsed.error }, { status: parsed.status });
+    }
+    const body = parsed.value as Record<string, unknown>;
     if (!body || typeof body !== "object" || Array.isArray(body)) {
       return NextResponse.json({ error: "Invalid report." }, { status: 400 });
     }
