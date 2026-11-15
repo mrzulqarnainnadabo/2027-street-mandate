@@ -69,7 +69,7 @@ export default function Hero({
               </div>
               <div className="rounded-lg border border-forest-500/12 bg-forest-50 px-3 py-4">
                 <p className="font-display text-3xl font-bold tabular-nums text-forest-900">{loading ? "…" : showCounts ? states : "—"}</p>
-                <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-forest-600">States represented</p>
+                <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-forest-600">Jurisdictions represented</p>
               </div>
             </div>
           )}
