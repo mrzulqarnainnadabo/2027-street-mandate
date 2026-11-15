@@ -18,6 +18,7 @@ export default function Footer() {
               className="h-10 w-10 rounded-full bg-white object-contain" />
             <div>
               <p className="font-display text-sm font-bold text-cream">{PRODUCT_NAME}</p>
+              <p className="text-[10px] text-cream/75">Empowering Youth, Shaping Communities</p>
               <p className="text-[10px] uppercase tracking-[0.14em] text-gold-400">ISEYC · Non-partisan</p>
             </div>
           </div>

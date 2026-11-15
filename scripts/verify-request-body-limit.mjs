@@ -14,6 +14,7 @@ const routes = [
   ["app/api/submit/route.ts", /8 \* 1024/],
   ["app/api/blueprints/submit/route.ts", /16 \* 1024/],
   ["app/api/operators/blueprints/review/route.ts", /16 \* 1024/],
+  ["app/api/community-observations/route.ts", /16 \* 1024/],
 ];
 
 for (const [path, limit] of routes) {

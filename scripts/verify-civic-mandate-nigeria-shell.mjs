@@ -32,6 +32,13 @@ ok(existsSync(join(root, "lib/media-content-types.ts")), "lib/media-content-type
 const brand = read("lib/brand.ts");
 ok(brand.includes("Civic Mandate Nigeria"), "PRODUCT_NAME includes Civic Mandate Nigeria");
 ok(brand.includes("PRODUCT_NAME_LEGACY"), "legacy product name retained");
+const designSystem = read("docs/DESIGN-SYSTEM.md").toLowerCase();
+const palette = (read("app/globals.css") + read("tailwind.config.js")).toLowerCase();
+ok(designSystem.includes("empowering youth, shaping communities"), "design system uses the approved institutional tagline");
+for (const color of ["#071f18", "#0b2d22", "#123b2f", "#194b3b", "#e8f0ea", "#faf9f5", "#a7833f", "#80621f", "#202923", "#4e5d54", "#e4e6df"]) {
+  ok(designSystem.includes(color), `design system includes canonical palette token ${color}`);
+  ok(palette.includes(color), `Civic Mandate theme includes canonical palette token ${color}`);
+}
 
 const verification = read("lib/verification.ts");
 ok(verification.includes("Unverified"), "Unverified state");
@@ -65,6 +72,7 @@ for (const department of ["education", "health", "software-technology", "civic"]
 }
 const footer = read("components/Footer.tsx");
 ok(footer.includes("CIVIC_BRAIN_URL") && footer.includes("CIVIC_OBSERVATORY_URL"), "footer links both ISEYC intelligence products");
+ok(footer.includes("Empowering Youth, Shaping Communities"), "footer displays the approved institutional tagline");
 for (const department of ["education", "health", "software-technology", "civic"]) {
   ok(footer.includes(department), `footer links ${department} department workspace`);
 }
