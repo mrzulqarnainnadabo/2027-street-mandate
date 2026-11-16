@@ -10,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: ["/", "/map", "/brief", "/about", "/mandate/", "/blueprints"],
       disallow: ["/api/", "/operators", "/operators/"],
     },
-    sitemap: \`${BASE}/sitemap.xml\`,
+    sitemap: `${BASE}/sitemap.xml`,
   };
 }
